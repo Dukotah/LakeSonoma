@@ -4,24 +4,33 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle, ChevronDown } from "lucide-react";
 
 const faqs = [
-  { q: "What is your cancellation policy?", a: "Free cancellation up to 14 days before check-in. 50% refund between 7–14 days. No refund within 7 days of check-in, though we will attempt to rebook your dates." },
-  { q: "What time is check-in and check-out?", a: "Check-in begins at 4:00 PM and check-out is by 11:00 AM. Early check-in and late check-out may be available upon request based on availability." },
-  { q: "Are pets allowed?", a: "Select cabins are pet-friendly. Osprey Point, Cedar Ridge, and Pine Hollow welcome well-behaved dogs. A $75 pet fee per stay applies. Please let us know when booking." },
-  { q: "Is WiFi included?", a: "Yes. All cabins have high-speed fiber internet included at no additional charge." },
-  { q: "What's the minimum stay?", a: "Most properties require a 2-night minimum. The Vineyard Villa and Estate House require a 3-night minimum. Holiday weekends may require 3–4 nights." },
-  { q: "Do you offer gift cards?", a: "Yes! Lake Sonoma Resort gift cards are available in any denomination. Contact us and we'll create a beautifully packaged gift card for any occasion." },
-  { q: "Is there cell service at the resort?", a: "Cell coverage varies. All cabins have WiFi calling capability. We recommend downloading offline maps before arrival." },
-  { q: "Can I host a wedding or event?", a: "Absolutely. Our event coordinator handles weddings, corporate retreats, and milestone celebrations. The Estate House accommodates up to 80 guests for outdoor events." },
+  { q: "What is your cancellation policy?",        a: "Free cancellation up to 14 days before check-in. 50% refund 7–14 days out. No refund within 7 days, though we will attempt to rebook your dates." },
+  { q: "What time is check-in and check-out?",     a: "Check-in begins at 4:00 PM and check-out is by 11:00 AM. Early check-in and late check-out may be available upon request." },
+  { q: "Are pets allowed?",                         a: "Select cabins are pet-friendly. Osprey Point, Cedar Ridge, and Pine Hollow welcome well-behaved dogs. A $75 pet fee per stay applies." },
+  { q: "Is WiFi included?",                         a: "Yes. All cabins have high-speed fiber internet at no additional charge." },
+  { q: "What's the minimum stay?",                  a: "Most properties require a 2-night minimum. The estate properties require 3 nights. Holiday weekends may require 3–4 nights." },
+  { q: "Do you offer gift cards?",                  a: "Yes! Gift cards are available in any denomination with beautifully designed packaging. Contact us to order." },
+  { q: "Can I host an event or wedding?",           a: "Absolutely. Our event coordinator handles weddings, retreats, and milestone celebrations. The Oak Estate accommodates up to 80 guests outdoors." },
+  { q: "Is there cell service at the resort?",      a: "Coverage varies by carrier. All cabins have WiFi calling capability. We recommend downloading offline maps before arrival." },
 ];
+
+const contactInfo = [
+  { icon: Phone, label: "Call Us",      value: "(707) 555-1234",          sub: "Mon–Sun, 8am–8pm PST",        href: "tel:+17075551234" },
+  { icon: Mail,  label: "Email",        value: "hello@lakesonoma.com",     sub: "Response within 4 hours",     href: "mailto:hello@lakesonoma.com" },
+  { icon: MapPin,label: "Location",     value: "Geyserville, CA 95441",    sub: "75 min north of San Francisco",href: "#" },
+  { icon: Clock, label: "Office Hours", value: "7 Days a Week",            sub: "8:00 AM – 8:00 PM PST",       href: "#" },
+];
+
+const subjects = ["General Inquiry", "Booking Assistance", "Event Planning", "Group Reservations", "Activities & Experiences", "Gift Cards", "Feedback"];
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "General Inquiry", message: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [sent,     setSent]     = useState(false);
+  const [loading,  setLoading]  = useState(false);
+  const [openFaq,  setOpenFaq]  = useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +40,7 @@ export default function ContactPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: "contact", ...form }),
     });
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 1200);
+    setTimeout(() => { setLoading(false); setSent(true); }, 1200);
   };
 
   return (
@@ -39,174 +48,162 @@ export default function ContactPage() {
       <Navigation />
 
       {/* Hero */}
-      <div className="pt-32 pb-16 text-center" style={{ background: "linear-gradient(135deg, #1B4332 0%, #0F2942 100%)" }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="text-xs tracking-[0.3em] uppercase font-semibold mb-3" style={{ color: "#D4AF37" }}>Get in Touch</div>
-          <h1 className="text-4xl md:text-6xl font-serif text-white mb-4"
-            style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}>Contact Us</h1>
-          <p className="text-white/60 max-w-xl mx-auto">Our team is here 7 days a week to help plan your perfect stay.</p>
-        </motion.div>
+      <div className="relative pt-40 pb-20 overflow-hidden" style={{ background: "var(--ink)" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 80% 40%, rgba(29,74,40,0.25) 0%, transparent 55%)" }} />
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16 relative z-10">
+          <span className="eyebrow block mb-5">Get in Touch</span>
+          <div className="section-rule" />
+          <h1 className="display-serif text-white" style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}>Contact Us</h1>
+          <p style={{ color: "rgba(255,255,255,0.45)", maxWidth: 480, marginTop: "1.25rem", lineHeight: 1.75 }}>
+            Our team is here 7 days a week to help plan your perfect stay in wine country.
+          </p>
+        </div>
       </div>
 
-      <section className="py-20" style={{ background: "#FAF7F2" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-12">
+      <section className="py-24" style={{ background: "var(--cream)" }}>
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16">
+          <div className="grid lg:grid-cols-[340px_1fr] gap-12">
+
             {/* Contact info */}
-            <div className="space-y-6">
-              {/* Info cards */}
-              {[
-                { icon: Phone, label: "Call Us", value: "(707) 555-1234", sub: "Mon–Sun, 8am–8pm PST", href: "tel:+17075551234" },
-                { icon: Mail, label: "Email", value: "hello@lakesonoma.com", sub: "Response within 4 hours", href: "mailto:hello@lakesonoma.com" },
-                { icon: MapPin, label: "Location", value: "Lake Sonoma Resort", sub: "Geyserville, CA 95441", href: "#" },
-                { icon: Clock, label: "Office Hours", value: "7 Days a Week", sub: "8:00 AM – 8:00 PM PST", href: "#" },
-              ].map((item) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="flex items-start gap-4 p-5 bg-white rounded-sm shadow-md hover:shadow-lg transition-all border border-gray-100"
-                >
-                  <div className="w-10 h-10 rounded-sm flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(27,67,50,0.08)" }}>
-                    <item.icon size={18} style={{ color: "#1B4332" }} />
+            <div className="space-y-4">
+              {contactInfo.map((item) => (
+                <motion.a key={item.label} href={item.href}
+                  initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                  className="flex items-start gap-4 p-5 transition-all"
+                  style={{ background: "white", border: "1px solid var(--cream-dark)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(201,168,76,0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--cream-dark)"; }}>
+                  <div className="w-9 h-9 flex items-center justify-center shrink-0"
+                    style={{ background: "var(--ink)" }}>
+                    <item.icon size={14} style={{ color: "var(--gold)" }} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-[0.1em] text-gray-400 mb-0.5">{item.label}</div>
-                    <div className="font-semibold text-gray-800">{item.value}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{item.sub}</div>
+                    <div className="eyebrow mb-0.5" style={{ color: "var(--stone)" }}>{item.label}</div>
+                    <div className="font-semibold text-sm" style={{ color: "var(--ink)" }}>{item.value}</div>
+                    <div style={{ color: "var(--stone)", fontSize: "0.75rem", marginTop: 2 }}>{item.sub}</div>
                   </div>
                 </motion.a>
               ))}
 
               {/* Quick links */}
-              <div className="bg-white rounded-sm shadow-md p-5 border border-gray-100">
-                <div className="font-semibold text-gray-800 mb-3">Quick Links</div>
-                <div className="space-y-2">
-                  {["Check Availability", "View All Cabins", "Experiences & Activities", "Photo Gallery"].map((l, i) => (
+              <div className="p-6" style={{ background: "var(--ink)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="eyebrow mb-4">Quick Links</div>
+                <div className="space-y-2.5">
+                  {["Check Availability →", "View All Cabins →", "Experiences →", "Photo Gallery →"].map((l, i) => (
                     <a key={l} href={i === 0 ? "/#booking-widget" : i === 1 ? "/accommodations" : i === 2 ? "/activities" : "/gallery"}
-                      className="flex items-center gap-2 text-sm hover:text-green-800 transition-colors"
-                      style={{ color: "#1B4332" }}>
-                      <span style={{ color: "#D4AF37" }}>→</span> {l}
+                      className="block text-sm transition-colors"
+                      style={{ color: "rgba(255,255,255,0.4)" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}>
+                      {l}
                     </a>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Contact form */}
-            <div className="lg:col-span-2">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-sm shadow-xl p-8 border border-gray-100"
-              >
-                {submitted ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
-                      style={{ background: "rgba(27,67,50,0.08)" }}>
-                      <CheckCircle size={32} style={{ color: "#1B4332" }} />
+            {/* Form */}
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              style={{ background: "white", border: "1px solid var(--cream-dark)" }}>
+              <div className="h-[3px]" style={{ background: "linear-gradient(90deg, var(--forest), var(--gold), var(--forest))" }} />
+              <div className="p-8 lg:p-12">
+                {sent ? (
+                  <div className="text-center py-14">
+                    <div className="w-16 h-16 flex items-center justify-center mx-auto mb-6"
+                      style={{ background: "var(--gold)", color: "var(--ink)" }}>
+                      <CheckCircle size={28} strokeWidth={2} />
                     </div>
-                    <h3 className="text-2xl font-serif mb-2" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>Message Sent!</h3>
-                    <p className="text-gray-600">Thank you, {form.name}. We&apos;ll be in touch within 4 hours.</p>
-                    <button onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", subject: "General Inquiry", message: "" }); }}
-                      className="mt-6 px-6 py-3 text-sm font-semibold text-white"
-                      style={{ background: "#1B4332" }}>
-                      Send Another Message
-                    </button>
+                    <h3 className="heading-serif mb-3" style={{ fontSize: "1.8rem", color: "var(--ink)" }}>Message Sent</h3>
+                    <p style={{ color: "var(--stone)" }}>Thank you, {form.name}. We&apos;ll be in touch within 4 hours.</p>
+                    <button onClick={() => { setSent(false); setForm({ name: "", email: "", phone: "", subject: "General Inquiry", message: "" }); }}
+                      className="btn-outline-ink mt-8">Send Another</button>
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-2xl font-serif mb-6" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-                      Send Us a Message
-                    </h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div className="grid sm:grid-cols-2 gap-4">
+                    <h2 className="heading-serif mb-8" style={{ fontSize: "1.8rem", color: "var(--ink)" }}>Send Us a Message</h2>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <div className="grid sm:grid-cols-2 gap-5">
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-gray-500 mb-2">Full Name *</label>
+                          <label className="eyebrow block mb-2" style={{ color: "var(--stone)" }}>Full Name *</label>
                           <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-200 text-sm focus:outline-none focus:border-green-800 transition-colors rounded-sm" />
+                            className="w-full px-4 py-3.5 text-sm focus:outline-none transition-colors"
+                            style={{ background: "var(--cream)", border: "1px solid var(--cream-dark)", color: "var(--ink)" }}
+                            onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+                            onBlur={(e) => (e.target.style.borderColor = "var(--cream-dark)")} />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-gray-500 mb-2">Email *</label>
+                          <label className="eyebrow block mb-2" style={{ color: "var(--stone)" }}>Email *</label>
                           <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-200 text-sm focus:outline-none focus:border-green-800 transition-colors rounded-sm" />
+                            className="w-full px-4 py-3.5 text-sm focus:outline-none transition-colors"
+                            style={{ background: "var(--cream)", border: "1px solid var(--cream-dark)", color: "var(--ink)" }}
+                            onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+                            onBlur={(e) => (e.target.style.borderColor = "var(--cream-dark)")} />
                         </div>
                       </div>
-                      <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="grid sm:grid-cols-2 gap-5">
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-gray-500 mb-2">Phone</label>
+                          <label className="eyebrow block mb-2" style={{ color: "var(--stone)" }}>Phone</label>
                           <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-200 text-sm focus:outline-none focus:border-green-800 transition-colors rounded-sm" />
+                            className="w-full px-4 py-3.5 text-sm focus:outline-none transition-colors"
+                            style={{ background: "var(--cream)", border: "1px solid var(--cream-dark)", color: "var(--ink)" }}
+                            onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+                            onBlur={(e) => (e.target.style.borderColor = "var(--cream-dark)")} />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-gray-500 mb-2">Subject</label>
+                          <label className="eyebrow block mb-2" style={{ color: "var(--stone)" }}>Subject</label>
                           <select value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-200 text-sm focus:outline-none focus:border-green-800 transition-colors rounded-sm bg-white">
-                            <option>General Inquiry</option>
-                            <option>Booking Assistance</option>
-                            <option>Event Planning</option>
-                            <option>Group Reservations</option>
-                            <option>Activities & Experiences</option>
-                            <option>Gift Cards</option>
-                            <option>Feedback</option>
+                            className="w-full px-4 py-3.5 text-sm focus:outline-none bg-white transition-colors"
+                            style={{ border: "1px solid var(--cream-dark)", color: "var(--ink)", background: "var(--cream)" }}>
+                            {subjects.map((s) => <option key={s}>{s}</option>)}
                           </select>
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-[0.1em] text-gray-500 mb-2">Message *</label>
+                        <label className="eyebrow block mb-2" style={{ color: "var(--stone)" }}>Message *</label>
                         <textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
-                          rows={5} className="w-full px-4 py-3 border border-gray-200 text-sm focus:outline-none focus:border-green-800 transition-colors rounded-sm resize-none"
-                          placeholder="How can we help you plan your perfect stay?" />
+                          rows={5} placeholder="How can we help you plan your perfect stay?"
+                          className="w-full px-4 py-3.5 text-sm focus:outline-none transition-colors resize-none"
+                          style={{ background: "var(--cream)", border: "1px solid var(--cream-dark)", color: "var(--ink)" }}
+                          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+                          onBlur={(e) => (e.target.style.borderColor = "var(--cream-dark)")} />
                       </div>
                       <button type="submit" disabled={loading}
-                        className="w-full flex items-center justify-center gap-2 py-4 font-semibold text-sm tracking-[0.1em] uppercase text-white transition-all disabled:opacity-70"
-                        style={{ background: "#1B4332" }}>
-                        <Send size={16} />
-                        {loading ? "Sending..." : "Send Message"}
+                        className="btn-gold w-full justify-center disabled:opacity-70">
+                        <Send size={14} />
+                        {loading ? "Sending…" : "Send Message"}
                       </button>
                     </form>
                   </>
                 )}
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
 
           {/* FAQ */}
-          <div id="faq" className="mt-20">
-            <div className="text-center mb-10">
-              <div className="section-label mb-3" style={{ color: "#D4AF37" }}>FAQs</div>
-              <h2 className="text-3xl font-serif" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>Frequently Asked Questions</h2>
+          <div id="faq" className="mt-24">
+            <div className="mb-14">
+              <span className="eyebrow block mb-4">FAQs</span>
+              <div className="section-rule" />
+              <h2 className="heading-serif" style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", color: "var(--ink)" }}>
+                Frequently Asked Questions
+              </h2>
             </div>
-            <div className="max-w-3xl mx-auto space-y-3">
+            <div className="max-w-3xl space-y-2">
               {faqs.map((faq, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="bg-white rounded-sm shadow-md border border-gray-100 overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="font-semibold text-gray-800 pr-4">{faq.q}</span>
-                    <span className="shrink-0 text-gray-400 text-xl">{openFaq === i ? "−" : "+"}</span>
+                <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: i * 0.04 }}
+                  style={{ background: "white", border: "1px solid var(--cream-dark)" }}>
+                  <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between px-6 py-5 text-left"
+                    style={{ color: "var(--ink)" }}>
+                    <span className="font-semibold text-sm pr-6">{faq.q}</span>
+                    <ChevronDown size={16} style={{ color: "var(--stone)", flexShrink: 0, transform: openFaq === i ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
                   </button>
                   {openFaq === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100"
-                      style={{ paddingTop: "1rem" }}
-                    >
+                    <div className="px-6 pb-5 text-sm leading-relaxed"
+                      style={{ color: "var(--stone)", borderTop: "1px solid var(--cream-dark)", paddingTop: "1rem" }}>
                       {faq.a}
-                    </motion.div>
+                    </div>
                   )}
                 </motion.div>
               ))}

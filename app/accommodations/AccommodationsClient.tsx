@@ -3,194 +3,207 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Bed, Bath, Users, Star, Search, SlidersHorizontal } from "lucide-react";
+import { Bed, Bath, Users, Star, Search, ArrowUpRight } from "lucide-react";
 
 const allCabins = [
-  { id: "osprey-point", name: "Osprey Point", type: "Lakeside Cabin", typeKey: "lakeside", beds: 3, baths: 2, guests: 6, price: 495, rating: 4.97, reviews: 143, tag: "Most Popular", amenities: ["Hot Tub", "Lake Access", "Kayaks", "Fire Pit", "WiFi"], desc: "Panoramic lake views from every room. The crown jewel of our lakeside collection." },
-  { id: "herons-landing", name: "Heron's Landing", type: "Lakeside Cabin", typeKey: "lakeside", beds: 2, baths: 2, guests: 4, price: 445, rating: 4.92, reviews: 98, tag: null, amenities: ["Private Dock", "Lake Access", "Fire Pit", "WiFi"], desc: "An intimate lakeside escape for two couples or a small family." },
-  { id: "lakeview-lodge", name: "Lakeview Lodge", type: "Lakeside Cabin", typeKey: "lakeside", beds: 4, baths: 3, guests: 8, price: 695, rating: 4.94, reviews: 76, tag: "New", amenities: ["Hot Tub", "Lake Access", "Kayaks", "Canoe", "WiFi", "Game Room"], desc: "Our largest lakeside property with a wraparound deck and private beach." },
-  { id: "waters-edge", name: "Water's Edge", type: "Lakeside Cabin", typeKey: "lakeside", beds: 2, baths: 1, guests: 4, price: 395, rating: 4.88, reviews: 112, tag: null, amenities: ["Lake Access", "Fire Pit", "WiFi"], desc: "Cozy and romantic with direct lake access and stunning sunset views." },
-  { id: "cedar-ridge", name: "Cedar Ridge", type: "Forest Retreat", typeKey: "forest", beds: 4, baths: 3, guests: 8, price: 695, rating: 4.95, reviews: 87, tag: "Best for Families", amenities: ["Sauna", "Hot Tub", "Fire Pit", "Game Room", "WiFi"], desc: "Surrounded by ancient redwoods in complete privacy." },
-  { id: "redwood-haven", name: "Redwood Haven", type: "Forest Retreat", typeKey: "forest", beds: 3, baths: 2, guests: 6, price: 545, rating: 4.91, reviews: 64, tag: null, amenities: ["Outdoor Shower", "Fire Pit", "WiFi", "Hammock"], desc: "Perched among old-growth redwoods with a magical forest atmosphere." },
-  { id: "sunset-ridge", name: "Sunset Ridge", type: "Forest Retreat", typeKey: "forest", beds: 2, baths: 2, guests: 4, price: 395, rating: 4.9, reviews: 55, tag: null, amenities: ["Fire Pit", "WiFi", "BBQ", "Hammock"], desc: "Hilltop forest retreat with valley and vineyard views at golden hour." },
-  { id: "pine-hollow", name: "Pine Hollow", type: "Forest Retreat", typeKey: "forest", beds: 3, baths: 2, guests: 6, price: 475, rating: 4.89, reviews: 43, tag: null, amenities: ["Hot Tub", "Fire Pit", "WiFi", "Outdoor Kitchen"], desc: "Hidden gem surrounded by towering pines with a chef&apos;s outdoor kitchen." },
-  { id: "vineyard-villa", name: "Vineyard Villa", type: "Estate House", typeKey: "estate", beds: 5, baths: 4, guests: 10, price: 995, rating: 5.0, reviews: 42, tag: "Ultimate Luxury", amenities: ["Pool", "Wine Cellar", "Home Theater", "Butler Service", "WiFi"], desc: "A full estate with vineyard vistas and resort amenities." },
-  { id: "estate-house", name: "The Oak Estate", type: "Estate House", typeKey: "estate", beds: 6, baths: 5, guests: 12, price: 1295, rating: 4.98, reviews: 28, tag: "Most Exclusive", amenities: ["Pool & Spa", "Wine Cellar", "Theater", "Chef Kitchen", "Concierge"], desc: "Our most exclusive property for milestone celebrations and full group retreats." },
-  { id: "harvest-house", name: "Harvest House", type: "Estate House", typeKey: "estate", beds: 4, baths: 3, guests: 8, price: 795, rating: 4.96, reviews: 36, tag: null, amenities: ["Private Pool", "Vineyard Views", "Fire Pit", "WiFi"], desc: "Surrounded by working vines with a private pool and morning fog views." },
-  { id: "canyon-retreat", name: "Canyon Retreat", type: "Forest Retreat", typeKey: "forest", beds: 2, baths: 2, guests: 4, price: 345, rating: 4.85, reviews: 51, tag: "Best Value", amenities: ["Fire Pit", "WiFi", "Hammock", "BBQ"], desc: "Our most affordable retreat without sacrificing comfort or character." },
+  { id: "osprey-point",   name: "Osprey Point",    type: "Lakeside Cabin",  typeKey: "lakeside", beds: 3, baths: 2, guests: 6,  price: 495,  rating: 4.97, reviews: 143, tag: "Most Popular",    amenities: ["Hot Tub", "Lake Access", "Kayaks", "Fire Pit"],          desc: "Panoramic lake views. The crown jewel of our lakeside collection.",    bg: "linear-gradient(145deg, #051a12, #0d3020, #1a5535, #2a7a4a)" },
+  { id: "herons-landing", name: "Heron's Landing",  type: "Lakeside Cabin",  typeKey: "lakeside", beds: 2, baths: 2, guests: 4,  price: 445,  rating: 4.92, reviews: 98,  tag: null,              amenities: ["Private Dock", "Lake Access", "Fire Pit"],                desc: "An intimate lakeside escape for couples or a small family.",           bg: "linear-gradient(145deg, #051620, #0a2c3a, #104555, #185e70)" },
+  { id: "lakeview-lodge", name: "Lakeview Lodge",   type: "Lakeside Cabin",  typeKey: "lakeside", beds: 4, baths: 3, guests: 8,  price: 695,  rating: 4.94, reviews: 76,  tag: "New",             amenities: ["Hot Tub", "Private Beach", "Kayaks", "Game Room"],        desc: "Our largest lakeside property with a wraparound deck and private beach.",bg: "linear-gradient(145deg, #031820, #073040, #0c4a60, #126580)" },
+  { id: "waters-edge",    name: "Water's Edge",     type: "Lakeside Cabin",  typeKey: "lakeside", beds: 2, baths: 1, guests: 4,  price: 395,  rating: 4.88, reviews: 112, tag: null,              amenities: ["Lake Access", "Fire Pit", "WiFi"],                         desc: "Cozy and romantic with direct lake access and stunning sunsets.",      bg: "linear-gradient(145deg, #041420, #083040, #0e4c62, #166882)" },
+  { id: "cedar-ridge",    name: "Cedar Ridge",      type: "Forest Retreat",  typeKey: "forest",   beds: 4, baths: 3, guests: 8,  price: 695,  rating: 4.95, reviews: 87,  tag: "Best for Families",amenities: ["Sauna", "Hot Tub", "Fire Pit", "Game Room"],              desc: "Surrounded by ancient redwoods in complete privacy.",                 bg: "linear-gradient(145deg, #030e08, #081a0f, #122b1a, #1e4228)" },
+  { id: "redwood-haven",  name: "Redwood Haven",    type: "Forest Retreat",  typeKey: "forest",   beds: 3, baths: 2, guests: 6,  price: 545,  rating: 4.91, reviews: 64,  tag: null,              amenities: ["Outdoor Shower", "Fire Pit", "Hammock"],                   desc: "Perched among old-growth redwoods with a magical forest atmosphere.",  bg: "linear-gradient(145deg, #060f08, #0c1e10, #142e18, #1c3e22)" },
+  { id: "sunset-ridge",   name: "Sunset Ridge",     type: "Forest Retreat",  typeKey: "forest",   beds: 2, baths: 2, guests: 4,  price: 395,  rating: 4.90, reviews: 55,  tag: null,              amenities: ["Valley Views", "Fire Pit", "BBQ"],                         desc: "Hilltop retreat with sweeping vineyard valley views at golden hour.",  bg: "linear-gradient(145deg, #1a0a05, #2d1508, #42200c, #582c10)" },
+  { id: "pine-hollow",    name: "Pine Hollow",      type: "Forest Retreat",  typeKey: "forest",   beds: 3, baths: 2, guests: 6,  price: 475,  rating: 4.89, reviews: 43,  tag: null,              amenities: ["Hot Tub", "Fire Pit", "Outdoor Kitchen"],                  desc: "Hidden gem surrounded by towering pines with an outdoor chef's kitchen.",bg: "linear-gradient(145deg, #080c05, #10180a, #182810, #203616)" },
+  { id: "vineyard-villa", name: "Vineyard Villa",   type: "Estate House",    typeKey: "estate",   beds: 5, baths: 4, guests: 10, price: 995,  rating: 5.00, reviews: 42,  tag: "Ultimate Luxury", amenities: ["Pool", "Wine Cellar", "Theater", "Butler"],               desc: "A full estate with vineyard vistas and resort-level amenities.",       bg: "linear-gradient(145deg, #0a0614, #160a28, #281545, #3d1a70)" },
+  { id: "oak-estate",     name: "The Oak Estate",   type: "Estate House",    typeKey: "estate",   beds: 6, baths: 5, guests: 12, price: 1295, rating: 4.98, reviews: 28,  tag: "Most Exclusive",  amenities: ["Pool & Spa", "Concierge", "Chef Kitchen", "Theater"],     desc: "Our most exclusive estate for milestone celebrations.",               bg: "linear-gradient(145deg, #080414, #121028, #1e1845, #2e2265)" },
+  { id: "harvest-house",  name: "Harvest House",    type: "Estate House",    typeKey: "estate",   beds: 4, baths: 3, guests: 8,  price: 795,  rating: 4.96, reviews: 36,  tag: null,              amenities: ["Private Pool", "Vineyard Views", "Fire Pit"],             desc: "Surrounded by working vines with a private pool and morning fog views.",bg: "linear-gradient(145deg, #140618, #22082a, #340f40, #481658)" },
+  { id: "canyon-retreat", name: "Canyon Retreat",   type: "Forest Retreat",  typeKey: "forest",   beds: 2, baths: 2, guests: 4,  price: 345,  rating: 4.85, reviews: 51,  tag: "Best Value",      amenities: ["Fire Pit", "WiFi", "Hammock"],                             desc: "Our most affordable retreat — zero compromise on comfort or character.", bg: "linear-gradient(145deg, #0c1208, #162010, #202e16, #2a3e1e)" },
 ];
 
-const filters = ["All", "Lakeside Cabin", "Forest Retreat", "Estate House"];
+const FILTERS = ["All", "Lakeside Cabin", "Forest Retreat", "Estate House"];
 
 export default function AccommodationsClient() {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [sortBy, setSortBy] = useState("popular");
-  const [search, setSearch] = useState("");
+  const [filter,   setFilter]   = useState("All");
+  const [sort,     setSort]     = useState("popular");
+  const [search,   setSearch]   = useState("");
   const [maxPrice, setMaxPrice] = useState(2000);
 
-  const filtered = allCabins
-    .filter((c) => activeFilter === "All" || c.type === activeFilter)
+  const cabins = allCabins
+    .filter((c) => filter === "All" || c.type === filter)
     .filter((c) => c.price <= maxPrice)
     .filter((c) => !search || c.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => {
-      if (sortBy === "price-asc") return a.price - b.price;
-      if (sortBy === "price-desc") return b.price - a.price;
-      if (sortBy === "rating") return b.rating - a.rating;
-      return b.reviews - a.reviews;
-    });
+    .sort((a, b) =>
+      sort === "price-asc" ? a.price - b.price :
+      sort === "price-desc" ? b.price - a.price :
+      sort === "rating" ? b.rating - a.rating :
+      b.reviews - a.reviews
+    );
 
   return (
     <>
       {/* Hero */}
-      <div className="relative pt-32 pb-16" style={{ background: "linear-gradient(135deg, #0F2942 0%, #1B4332 100%)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="text-xs tracking-[0.3em] uppercase font-semibold mb-3" style={{ color: "#D4AF37" }}>Our Properties</div>
-            <h1 className="text-4xl md:text-6xl font-serif text-white mb-4"
-              style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-              All Accommodations
-            </h1>
-            <p className="text-white/60 max-w-2xl mx-auto text-lg">
-              12 handcrafted retreats. Each uniquely positioned, thoughtfully designed, and ready to host your perfect escape.
-            </p>
-          </motion.div>
+      <div className="relative pt-40 pb-20 overflow-hidden" style={{ background: "var(--ink)" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse at 20% 60%, rgba(29,74,40,0.3) 0%, transparent 55%)",
+        }} />
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16 text-center relative z-10">
+          <span className="eyebrow block mb-5">Our Properties</span>
+          <div className="section-rule mx-auto" />
+          <h1 className="display-serif text-white" style={{ fontSize: "clamp(3rem, 7vw, 6rem)", marginBottom: "1.25rem" }}>
+            All Accommodations
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.45)", maxWidth: 520, margin: "0 auto", lineHeight: 1.75 }}>
+            Twelve handcrafted retreats — each uniquely positioned, thoughtfully designed,
+            and ready to host your perfect escape.
+          </p>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="sticky top-16 z-20 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Filter bar */}
+      <div className="sticky top-[72px] z-20"
+        style={{ background: "white", borderBottom: "1px solid var(--cream-dark)", boxShadow: "0 2px 20px rgba(0,0,0,0.06)" }}>
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16 py-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            {/* Type filters */}
+            {/* Type pills */}
             <div className="flex gap-2 flex-wrap">
-              {filters.map((f) => (
-                <button key={f}
-                  onClick={() => setActiveFilter(f)}
-                  className="px-4 py-2 text-sm font-medium rounded-sm transition-all duration-200"
+              {FILTERS.map((f) => (
+                <button key={f} onClick={() => setFilter(f)}
+                  className="px-4 py-2 text-xs font-semibold tracking-[0.1em] uppercase transition-all"
                   style={{
-                    background: activeFilter === f ? "#1B4332" : "transparent",
-                    color: activeFilter === f ? "white" : "#374151",
-                    border: `1px solid ${activeFilter === f ? "#1B4332" : "#e5e7eb"}`,
+                    background: filter === f ? "var(--forest)" : "transparent",
+                    color: filter === f ? "white" : "var(--stone)",
+                    border: `1px solid ${filter === f ? "var(--forest)" : "var(--cream-dark)"}`,
                   }}>
                   {f}
                 </button>
               ))}
             </div>
 
-            {/* Search + Sort */}
             <div className="flex gap-3 items-center">
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search cabins..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-8 pr-4 py-2 text-sm border border-gray-200 rounded-sm focus:outline-none focus:border-green-800 w-44"
-                />
+                <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--stone)" }} />
+                <input type="text" placeholder="Search…" value={search} onChange={(e) => setSearch(e.target.value)}
+                  className="pl-8 pr-4 py-2 text-xs focus:outline-none transition-colors w-36"
+                  style={{ border: "1px solid var(--cream-dark)", color: "var(--ink)", background: "var(--cream)" }}
+                  onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+                  onBlur={(e) => (e.target.style.borderColor = "var(--cream-dark)")} />
               </div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 rounded-sm focus:outline-none text-gray-700 bg-white"
-              >
+              <select value={sort} onChange={(e) => setSort(e.target.value)}
+                className="px-3 py-2 text-xs focus:outline-none bg-white"
+                style={{ border: "1px solid var(--cream-dark)", color: "var(--ink)" }}>
                 <option value="popular">Most Popular</option>
                 <option value="rating">Top Rated</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
+                <option value="price-asc">Price ↑</option>
+                <option value="price-desc">Price ↓</option>
               </select>
             </div>
           </div>
 
-          {/* Price range */}
-          <div className="mt-3 flex items-center gap-3">
-            <SlidersHorizontal size={14} className="text-gray-400" />
-            <span className="text-xs text-gray-500">Max price:</span>
+          {/* Price slider */}
+          <div className="mt-3 flex items-center gap-4">
+            <span style={{ color: "var(--stone)", fontSize: "0.7rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>Max price</span>
             <input type="range" min={300} max={2000} step={50} value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               className="w-32 accent-green-800" />
-            <span className="text-xs font-semibold text-gray-700">${maxPrice}/night</span>
-            <span className="text-xs text-gray-400 ml-2">{filtered.length} cabin{filtered.length !== 1 ? "s" : ""}</span>
+            <span style={{ color: "var(--ink)", fontSize: "0.78rem", fontWeight: 600 }}>${maxPrice}/nt</span>
+            <span style={{ color: "var(--stone)", fontSize: "0.72rem" }}>· {cabins.length} cabin{cabins.length !== 1 ? "s" : ""}</span>
           </div>
         </div>
       </div>
 
       {/* Grid */}
-      <section id="lakeside" className="py-16" style={{ background: "#FAF7F2" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filtered.map((cabin, i) => (
-              <motion.div
-                key={cabin.id}
-                initial={{ opacity: 0, y: 30 }}
+      <section id="lakeside" className="py-20" style={{ background: "var(--cream)" }}>
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {cabins.map((cabin, i) => (
+              <motion.div key={cabin.id}
+                initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="bg-white rounded-sm shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 overflow-hidden border border-gray-100"
-              >
+                transition={{ delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                className="cabin-card group"
+                style={{ border: "1px solid var(--cream-dark)" }}>
+
                 {/* Image */}
-                <div className={`relative h-64 overflow-hidden ${
-                  cabin.typeKey === "lakeside" ? "bg-gradient-to-br from-blue-900 to-teal-800" :
-                  cabin.typeKey === "forest" ? "bg-gradient-to-br from-green-900 to-emerald-800" :
-                  "bg-gradient-to-br from-purple-900 to-indigo-900"
-                }`}>
+                <div className="cabin-card-img relative overflow-hidden" style={{ height: 260 }}>
+                  <div className="absolute inset-0 w-full h-full" style={{ background: cabin.bg }}>
+                    {/* Stars */}
+                    {[...Array(15)].map((_, j) => (
+                      <div key={j} className="absolute rounded-full bg-white"
+                        style={{ width: `${Math.random()*1.2+0.4}px`, height: `${Math.random()*1.2+0.4}px`, left: `${Math.random()*100}%`, top: `${Math.random()*50}%`, opacity: Math.random()*0.5+0.1 }} />
+                    ))}
+                    {/* Silhouette */}
+                    <svg className="absolute" style={{ bottom: "28%", left: "18%", width: 70 }} viewBox="0 0 100 80">
+                      <polygon points="50,4 4,38 96,38" fill="rgba(0,0,0,0.9)" />
+                      <rect x="12" y="38" width="76" height="38" fill="rgba(0,0,0,0.9)" />
+                      <rect x="40" y="54" width="20" height="22" fill="rgba(201,168,76,0.35)" />
+                    </svg>
+                    <div className="absolute bottom-0 left-0 right-0 h-[30%]"
+                      style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%)" }} />
+                  </div>
+
                   {cabin.tag && (
-                    <div className="absolute top-3 left-3 z-10 px-3 py-1 text-xs font-semibold tracking-wide uppercase text-white rounded-sm"
-                      style={{ background: "#D4AF37" }}>
+                    <div className="absolute top-4 left-4 z-10 px-3 py-1 text-xs font-bold tracking-[0.1em] uppercase"
+                      style={{ background: "var(--gold)", color: "var(--ink)" }}>
                       {cabin.tag}
                     </div>
                   )}
-                  <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-20">
-                    {cabin.typeKey === "lakeside" ? "🏡" : cabin.typeKey === "forest" ? "🌲" : "🏰"}
-                  </div>
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 bg-white/95 rounded-sm px-2.5 py-1">
-                      <Star size={11} fill="#D4AF37" color="#D4AF37" />
-                      <span className="text-xs font-semibold">{cabin.rating}</span>
-                      <span className="text-xs text-gray-500">({cabin.reviews})</span>
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-10">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5"
+                      style={{ background: "rgba(13,31,23,0.85)", backdropFilter: "blur(10px)" }}>
+                      <Star size={10} fill="var(--gold)" color="var(--gold)" />
+                      <span style={{ color: "white", fontSize: "0.72rem", fontWeight: 600 }}>{cabin.rating}</span>
+                      <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.68rem" }}>({cabin.reviews})</span>
                     </div>
-                    <div className="bg-white/95 rounded-sm px-2.5 py-1">
-                      <span className="text-xs text-gray-500">from </span>
-                      <span className="text-sm font-bold" style={{ color: "#1B4332" }}>${cabin.price}</span>
-                      <span className="text-xs text-gray-500">/nt</span>
+                    <div className="px-2.5 py-1.5"
+                      style={{ background: "rgba(13,31,23,0.85)", backdropFilter: "blur(10px)" }}>
+                      <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.62rem" }}>from </span>
+                      <span style={{ color: "white", fontSize: "0.9rem", fontWeight: 700 }}>${cabin.price}</span>
+                      <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.68rem" }}>/nt</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
-                  <div className="text-xs font-semibold uppercase tracking-[0.15em] mb-1" style={{ color: "#D4AF37" }}>{cabin.type}</div>
-                  <h3 className="text-xl font-serif mb-1" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>{cabin.name}</h3>
-                  <p className="text-xs text-gray-500 mb-3">{cabin.desc}</p>
+                <div className="p-6 bg-white">
+                  <div className="eyebrow mb-1" style={{ color: "var(--gold-dim)" }}>{cabin.type}</div>
+                  <h3 className="heading-serif mb-1" style={{ fontSize: "1.4rem", color: "var(--ink)" }}>{cabin.name}</h3>
+                  <p style={{ color: "var(--stone)", fontSize: "0.82rem", lineHeight: 1.6, marginBottom: "1rem" }}>{cabin.desc}</p>
 
-                  <div className="flex gap-4 py-3 border-y border-gray-100 mb-4">
-                    <div className="flex items-center gap-1 text-xs text-gray-600"><Bed size={12} /> {cabin.beds} BR</div>
-                    <div className="flex items-center gap-1 text-xs text-gray-600"><Bath size={12} /> {cabin.baths} BA</div>
-                    <div className="flex items-center gap-1 text-xs text-gray-600"><Users size={12} /> Up to {cabin.guests}</div>
+                  <div className="flex gap-4 py-3" style={{ borderTop: "1px solid var(--cream-dark)", borderBottom: "1px solid var(--cream-dark)", marginBottom: "1rem" }}>
+                    {[
+                      { Icon: Bed,   v: `${cabin.beds} BD` },
+                      { Icon: Bath,  v: `${cabin.baths} BA` },
+                      { Icon: Users, v: `Up to ${cabin.guests}` },
+                    ].map(({ Icon, v }) => (
+                      <div key={v} className="flex items-center gap-1.5" style={{ color: "var(--stone)", fontSize: "0.72rem" }}>
+                        <Icon size={12} />{v}
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <div className="flex flex-wrap gap-1.5 mb-5">
                     {cabin.amenities.slice(0, 3).map((a) => (
-                      <span key={a} className="text-xs px-2 py-1 rounded-sm"
-                        style={{ background: "rgba(27,67,50,0.06)", color: "#1B4332" }}>{a}</span>
+                      <span key={a} className="text-xs px-2.5 py-1"
+                        style={{ background: "var(--cream)", color: "var(--ink-mid)", fontSize: "0.68rem", letterSpacing: "0.04em" }}>{a}</span>
                     ))}
                     {cabin.amenities.length > 3 && (
-                      <span className="text-xs px-2 py-1 bg-gray-50 text-gray-500 rounded-sm">+{cabin.amenities.length - 3}</span>
+                      <span className="text-xs px-2.5 py-1" style={{ background: "var(--cream)", color: "var(--stone)", fontSize: "0.68rem" }}>+{cabin.amenities.length - 3}</span>
                     )}
                   </div>
 
                   <div className="flex gap-2">
                     <Link href={`/accommodations/${cabin.id}`}
-                      className="flex-1 text-center py-2.5 text-xs font-semibold uppercase tracking-wide border transition-all"
-                      style={{ border: "1.5px solid #1B4332", color: "#1B4332" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = "#1B4332"; e.currentTarget.style.color = "white"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1B4332"; }}>
-                      View Details
+                      className="flex-1 text-center py-2.5 text-xs font-bold tracking-[0.12em] uppercase transition-all group/btn flex items-center justify-center gap-1.5"
+                      style={{ border: "1.5px solid var(--forest)", color: "var(--forest)", background: "transparent" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "var(--forest)"; e.currentTarget.style.color = "white"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--forest)"; }}>
+                      Details <ArrowUpRight size={11} />
                     </Link>
-                    <Link href={`/#booking-widget`}
-                      className="flex-1 text-center py-2.5 text-xs font-semibold uppercase tracking-wide text-white"
-                      style={{ background: "#D4AF37" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = "#b8960a"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = "#D4AF37"; }}>
+                    <Link href="/#booking-widget"
+                      className="flex-1 text-center py-2.5 text-xs font-bold tracking-[0.12em] uppercase transition-all"
+                      style={{ background: "var(--gold)", color: "var(--ink)" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "var(--gold-lt)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "var(--gold)"; }}>
                       Book Now
                     </Link>
                   </div>
@@ -199,15 +212,12 @@ export default function AccommodationsClient() {
             ))}
           </div>
 
-          {filtered.length === 0 && (
-            <div className="text-center py-20 text-gray-500">
-              <div className="text-4xl mb-4">🔍</div>
-              <div className="font-serif text-xl mb-2">No cabins match your filters</div>
-              <button onClick={() => { setActiveFilter("All"); setMaxPrice(2000); setSearch(""); }}
-                className="mt-4 px-6 py-3 text-sm font-semibold text-white"
-                style={{ background: "#1B4332" }}>
-                Reset Filters
-              </button>
+          {cabins.length === 0 && (
+            <div className="text-center py-24">
+              <div className="heading-serif mb-3" style={{ fontSize: "1.6rem", color: "var(--ink)" }}>No cabins match</div>
+              <p style={{ color: "var(--stone)", marginBottom: "1.5rem" }}>Try adjusting your filters</p>
+              <button onClick={() => { setFilter("All"); setMaxPrice(2000); setSearch(""); }}
+                className="btn-outline-ink">Reset Filters</button>
             </div>
           )}
         </div>
