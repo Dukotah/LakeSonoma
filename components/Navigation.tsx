@@ -2,196 +2,139 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Phone } from "lucide-react";
 
-const navLinks = [
-  {
-    label: "Stay",
-    href: "/accommodations",
-    children: [
-      { label: "Lakeside Cabins", href: "/accommodations#lakeside" },
-      { label: "Forest Retreats", href: "/accommodations#forest" },
-      { label: "The Estate House", href: "/accommodations#estate" },
-    ],
-  },
-  {
-    label: "Experiences",
-    href: "/activities",
-    children: [
-      { label: "Wine & Dining", href: "/activities#wine" },
-      { label: "Water Activities", href: "/activities#water" },
-      { label: "Spa & Wellness", href: "/activities#spa" },
-      { label: "Outdoor Adventures", href: "/activities#outdoor" },
-    ],
-  },
-  { label: "Gallery", href: "/gallery" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/contact" },
+const links = [
+  { label: "Stay",        href: "/accommodations" },
+  { label: "Experiences", href: "/activities" },
+  { label: "Gallery",     href: "/gallery" },
+  { label: "About",       href: "/#about" },
+  { label: "Contact",     href: "/contact" },
 ];
 
 export default function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [scrolled, setScrolled]   = useState(false);
+  const [open,    setOpen]        = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-white shadow-lg py-3"
-          : "bg-transparent py-6"
-      }`}
+    <header
+      className="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+      style={{
+        background: scrolled
+          ? "rgba(13,31,23,0.97)"
+          : "transparent",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(201,168,76,0.12)" : "none",
+        padding: scrolled ? "0" : "0",
+      }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: scrolled ? "var(--forest-700)" : "rgba(255,255,255,0.15)", border: "1px solid rgba(212,175,55,0.6)" }}>
-              <span className="text-gold-400 font-serif font-bold text-sm" style={{ color: "#D4AF37" }}>LS</span>
-            </div>
-            <div>
-              <div className={`font-serif font-bold text-xl leading-none transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
-                style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-                Lake Sonoma
-              </div>
-              <div className={`text-xs tracking-[0.2em] uppercase transition-colors ${scrolled ? "text-gray-500" : "text-white/70"}`}>
-                Resort & Retreat
-              </div>
-            </div>
-          </Link>
+      <div className="max-w-[1440px] mx-auto px-8 lg:px-16 flex items-center justify-between h-[72px]">
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <div key={link.label} className="relative"
-                onMouseEnter={() => link.children && setOpenDropdown(link.label)}
-                onMouseLeave={() => setOpenDropdown(null)}>
-                <Link
-                  href={link.href}
-                  className={`flex items-center gap-1 text-sm font-medium tracking-wide transition-colors hover:text-gold-500 ${
-                    scrolled ? "text-gray-700" : "text-white/90"
-                  }`}
-                  style={openDropdown === link.label ? { color: "#D4AF37" } : {}}
-                >
-                  {link.label}
-                  {link.children && <ChevronDown size={14} className={`transition-transform ${openDropdown === link.label ? "rotate-180" : ""}`} />}
-                </Link>
-                <AnimatePresence>
-                  {link.children && openDropdown === link.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-52 bg-white shadow-2xl rounded-sm border border-gray-100 py-2"
-                    >
-                      {link.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-800 transition-colors"
-                          style={{ fontFamily: "var(--font-inter, sans-serif)" }}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </nav>
-
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <a href="tel:+17075551234" className={`flex items-center gap-2 text-sm transition-colors ${scrolled ? "text-gray-600 hover:text-green-800" : "text-white/80 hover:text-white"}`}>
-              <Phone size={14} />
-              <span>(707) 555-1234</span>
-            </a>
-            <Link href="/#booking" className="btn-primary text-xs py-3 px-6" style={{
-              background: "#D4AF37",
-              color: "white",
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "0.75rem 1.5rem",
-              fontWeight: 600,
-              fontSize: "0.75rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              transition: "all 0.3s",
-            }}>
-              Book Your Stay
-            </Link>
-          </div>
-
-          {/* Mobile toggle */}
-          <button
-            className={`lg:hidden p-2 rounded transition-colors ${scrolled ? "text-gray-700" : "text-white"}`}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group shrink-0">
+          <div
+            className="w-9 h-9 flex items-center justify-center"
+            style={{
+              background: "linear-gradient(135deg, var(--gold-dim), var(--gold))",
+              clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+            }}
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <span style={{ fontFamily: "var(--font-playfair, Georgia, serif)", fontStyle: "italic", color: "var(--ink)", fontSize: "0.85rem", fontWeight: 700 }}>
+              LS
+            </span>
+          </div>
+          <div>
+            <div style={{ fontFamily: "var(--font-playfair, Georgia, serif)", color: "white", fontSize: "1.15rem", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.01em" }}>
+              Lake Sonoma
+            </div>
+            <div style={{ color: "var(--gold)", fontSize: "0.58rem", letterSpacing: "0.24em", textTransform: "uppercase", lineHeight: 1 }}>
+              Resort & Retreat
+            </div>
+          </div>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-10">
+          {links.map((l) => (
+            <Link
+              key={l.label}
+              href={l.href}
+              className="relative group text-xs font-semibold tracking-[0.16em] uppercase transition-colors"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.75)")}
+            >
+              {l.label}
+              <span
+                className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full"
+                style={{ background: "var(--gold)" }}
+              />
+            </Link>
+          ))}
+        </nav>
+
+        {/* Right side */}
+        <div className="hidden lg:flex items-center gap-6">
+          <a
+            href="tel:+17075551234"
+            className="flex items-center gap-2 text-xs tracking-wide transition-colors"
+            style={{ color: "rgba(255,255,255,0.5)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
+          >
+            <Phone size={12} />
+            (707) 555-1234
+          </a>
+          <Link href="/#booking-widget" className="btn-gold" style={{ padding: "0.75rem 1.8rem", fontSize: "0.68rem" }}>
+            Reserve Now
+          </Link>
         </div>
+
+        {/* Mobile toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="lg:hidden p-2 text-white"
+          aria-label="Menu"
+        >
+          {open ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <AnimatePresence>
-        {mobileOpen && (
+        {open && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden"
+            style={{ background: "rgba(13,31,23,0.98)", borderTop: "1px solid rgba(201,168,76,0.12)" }}
           >
-            <div className="px-4 py-6 space-y-1">
-              {navLinks.map((link) => (
-                <div key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="block py-3 text-gray-800 font-medium border-b border-gray-100 hover:text-green-800 transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                  {link.children && (
-                    <div className="pl-4 space-y-1 py-1">
-                      {link.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="block py-2 text-sm text-gray-600 hover:text-green-800 transition-colors"
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div className="pt-4">
-                <Link href="/#booking" className="block w-full text-center py-4 font-semibold text-sm tracking-wider uppercase text-white"
-                  style={{ background: "#D4AF37" }}
-                  onClick={() => setMobileOpen(false)}>
-                  Book Your Stay
+            <div className="px-8 py-8 space-y-6">
+              {links.map((l) => (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block text-sm font-semibold tracking-[0.18em] uppercase"
+                  style={{ color: "rgba(255,255,255,0.8)" }}
+                >
+                  {l.label}
                 </Link>
-              </div>
+              ))}
+              <Link href="/#booking-widget" onClick={() => setOpen(false)} className="btn-gold mt-4 w-full justify-center">
+                Reserve Now
+              </Link>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

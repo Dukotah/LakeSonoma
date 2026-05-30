@@ -1,156 +1,194 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Leaf, Waves, Wine, Star } from "lucide-react";
+import { useInView } from "react-intersection-observer";
 
-const features = [
-  {
-    icon: Waves,
-    title: "Lakeside Serenity",
-    description: "Wake up to shimmering water views from your private deck. Kayak at dawn, swim at dusk.",
-  },
-  {
-    icon: Wine,
-    title: "Wine Country at Your Doorstep",
-    description: "50+ world-class wineries within 20 miles. Private tastings and vineyard tours arranged.",
-  },
-  {
-    icon: Leaf,
-    title: "Untouched Nature",
-    description: "2,700 acres of protected wilderness surround our property — hiking, wildlife, and pure silence.",
-  },
-  {
-    icon: Star,
-    title: "Curated Luxury",
-    description: "Every detail considered. Premium linens, chef kitchens, concierge service, and private hot tubs.",
-  },
+const stats = [
+  { n: "15",    s: "Years of Excellence" },
+  { n: "4,800+",s: "Families Hosted" },
+  { n: "12",    s: "Unique Retreats" },
+  { n: "4.97",  s: "Average Star Rating" },
 ];
 
+function CountUp({ n }: { n: string }) {
+  return <span>{n}</span>;
+}
+
 export default function IntroSection() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
+
   return (
-    <section id="intro" className="py-24 md:py-32" style={{ background: "#FAF7F2" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-          {/* Text */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="section-label mb-4" style={{ color: "#D4AF37" }}>Our Story</div>
-            <h2 className="text-4xl md:text-5xl font-serif mb-6 leading-tight" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-              A Sanctuary Where Nature
-              <br />
-              <span style={{ color: "#1B4332" }}>and Luxury Converge</span>
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-6 text-lg">
-              Nestled along the pristine shores of Lake Sonoma, our resort has been welcoming guests seeking
-              the perfect escape since 2008. We blend the wild beauty of Northern California's landscape
-              with thoughtfully designed accommodations that honor the land.
-            </p>
-            <p className="text-gray-600 leading-relaxed mb-8">
-              Each cabin is individually crafted — cedar walls, stone fireplaces, chef-grade kitchens, and
-              private outdoor spaces that make you feel both connected to nature and completely at ease.
-              Our team of hospitality experts is here to ensure every moment exceeds your expectations.
-            </p>
-            <div className="flex flex-wrap gap-6">
-              <div className="text-center">
-                <div className="text-3xl font-serif font-bold" style={{ color: "#1B4332" }}>15+</div>
-                <div className="text-xs text-gray-500 uppercase tracking-[0.15em] mt-1">Years of Excellence</div>
-              </div>
-              <div className="w-px bg-gray-200" />
-              <div className="text-center">
-                <div className="text-3xl font-serif font-bold" style={{ color: "#1B4332" }}>4,800+</div>
-                <div className="text-xs text-gray-500 uppercase tracking-[0.15em] mt-1">Happy Families</div>
-              </div>
-              <div className="w-px bg-gray-200" />
-              <div className="text-center">
-                <div className="text-3xl font-serif font-bold" style={{ color: "#1B4332" }}>12</div>
-                <div className="text-xs text-gray-500 uppercase tracking-[0.15em] mt-1">Unique Retreats</div>
-              </div>
-            </div>
-          </motion.div>
+    <section id="intro" className="bg-linen" ref={ref}>
+      {/* ── Upper: editorial split ── */}
+      <div className="max-w-[1440px] mx-auto grid lg:grid-cols-2 min-h-[680px]">
 
-          {/* Visual */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
+        {/* Left: text block */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col justify-center px-10 py-20 lg:px-20 lg:py-28"
+        >
+          <span className="eyebrow mb-5">Our Story</span>
+          <div className="section-rule" />
+          <h2
+            className="heading-serif mb-8"
+            style={{
+              fontSize: "clamp(2.6rem, 4.5vw, 3.8rem)",
+              color: "var(--ink)",
+              maxWidth: 520,
+            }}
           >
-            <div className="relative h-[500px] rounded-sm overflow-hidden shadow-2xl" style={{
-              background: "linear-gradient(135deg, #1B4332 0%, #0F2942 40%, #2d6a4f 70%, #40916c 100%)",
-            }}>
-              {/* Decorative elements simulating a lake view */}
-              <div className="absolute inset-0 flex flex-col justify-end">
-                <div className="h-1/2" style={{
-                  background: "linear-gradient(0deg, rgba(15,41,66,0.8) 0%, transparent 100%)",
-                }} />
-              </div>
-              {/* Forest silhouette */}
-              <svg className="absolute bottom-1/3 left-0 right-0 w-full" viewBox="0 0 800 200" preserveAspectRatio="none">
-                <path d="M0,200 L0,100 L50,60 L100,90 L150,40 L200,80 L250,30 L300,70 L350,20 L400,65 L450,25 L500,70 L550,35 L600,75 L650,45 L700,80 L750,55 L800,90 L800,200 Z"
-                  fill="rgba(27,67,50,0.8)" />
-                <path d="M0,200 L0,130 L80,90 L160,120 L240,75 L320,105 L400,60 L480,95 L560,70 L640,100 L720,80 L800,110 L800,200 Z"
-                  fill="rgba(15,41,66,0.7)" />
-              </svg>
-              {/* Water reflection */}
-              <div className="absolute bottom-0 left-0 right-0 h-1/3" style={{
-                background: "linear-gradient(0deg, rgba(15,41,66,0.9) 0%, rgba(27,67,50,0.4) 100%)",
-              }}>
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="absolute left-1/4 right-1/4 h-px opacity-30"
-                    style={{
-                      top: `${i * 16 + 8}%`,
-                      background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)",
-                    }} />
-                ))}
-              </div>
-              {/* Moon */}
-              <div className="absolute top-10 right-12 w-14 h-14 rounded-full opacity-80"
-                style={{ background: "radial-gradient(circle, rgba(212,175,55,0.9) 0%, rgba(212,175,55,0.3) 60%, transparent 100%)" }} />
-              {/* Caption */}
-              <div className="absolute bottom-6 left-6 right-6 text-white">
-                <div className="text-xs tracking-[0.2em] uppercase mb-1" style={{ color: "#D4AF37" }}>Lake Sonoma Shoreline</div>
-                <div className="font-serif text-lg">Golden Hour on the Water</div>
-              </div>
-            </div>
-            {/* Award badge */}
-            <div className="absolute -top-5 -right-5 w-24 h-24 rounded-full flex flex-col items-center justify-center text-white shadow-xl"
-              style={{ background: "#D4AF37" }}>
-              <div className="text-xs font-bold text-center leading-tight">BEST<br />RESORT</div>
-              <div className="text-xs opacity-80 mt-0.5">2024</div>
-            </div>
-          </motion.div>
-        </div>
+            A Sanctuary Where Nature{" "}
+            <em style={{ color: "var(--forest-mid)", fontStyle: "italic" }}>and Luxury Converge</em>
+          </h2>
+          <p style={{ color: "var(--stone)", lineHeight: 1.85, fontSize: "1.05rem", maxWidth: 480 }} className="mb-8">
+            Since 2008, Lake Sonoma Resort has welcomed guests seeking the perfect
+            escape — where the pristine shoreline meets vine-covered hillsides and
+            the sky fills with more stars than you can count.
+          </p>
+          <p style={{ color: "var(--stone)", lineHeight: 1.85, fontSize: "1.05rem", maxWidth: 480 }} className="mb-12">
+            Each cabin is individually crafted: cedar walls, stone fireplaces,
+            chef-grade kitchens, and private outdoor spaces that make you feel
+            both rooted in nature and completely at ease.
+          </p>
+          <a href="/#booking-widget" className="btn-gold self-start">
+            Plan Your Escape
+          </a>
+        </motion.div>
 
-        {/* Features grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, i) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group p-8 bg-white rounded-sm border border-gray-100 hover:border-green-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="w-12 h-12 rounded-sm flex items-center justify-center mb-5 transition-colors"
-                style={{ background: "rgba(27,67,50,0.08)" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "#1B4332"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(27,67,50,0.08)"; }}>
-                <feature.icon size={22} style={{ color: "#1B4332" }} />
-              </div>
-              <h3 className="font-serif text-xl mb-3" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-            </motion.div>
+        {/* Right: scenic illustration panel */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          className="relative overflow-hidden"
+          style={{ minHeight: 480 }}
+        >
+          {/* Main scene */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(160deg, #041a0e 0%, #0a2d1a 25%, #133d24 45%, #1e5e38 65%, #2a7a48 80%, #1a4d2e 90%, #041a0e 100%)",
+            }}
+          />
+
+          {/* Sky stars */}
+          {Array.from({ length: 30 }, (_, i) => (
+            <div key={i} className="absolute rounded-full bg-white"
+              style={{
+                width: `${Math.random() * 1.5 + 0.5}px`,
+                height: `${Math.random() * 1.5 + 0.5}px`,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 45}%`,
+                opacity: Math.random() * 0.5 + 0.1,
+              }} />
           ))}
-        </div>
+
+          {/* Moon */}
+          <div className="absolute" style={{
+            width: 50, height: 50,
+            top: "8%", right: "15%",
+            borderRadius: "50%",
+            background: "radial-gradient(circle at 35% 35%, #fdf6e3 0%, #e8d090 50%, rgba(201,168,76,0.2) 80%, transparent 100%)",
+            boxShadow: "0 0 40px 12px rgba(201,168,76,0.12)",
+          }} />
+
+          {/* Hill layers */}
+          <svg className="absolute w-full" style={{ bottom: "38%" }} viewBox="0 0 800 150" preserveAspectRatio="none">
+            <path d="M0,150 L0,90 C80,55 160,40 240,65 C320,88 400,30 480,52 C560,74 640,28 720,48 L800,60 L800,150Z"
+              fill="#041208" opacity="0.9" />
+          </svg>
+          <svg className="absolute w-full" style={{ bottom: "28%" }} viewBox="0 0 800 200" preserveAspectRatio="none">
+            <path d="M0,200 L0,140 C60,100 120,80 180,90 C240,100 300,65 360,78 C420,90 480,55 540,70 C600,85 660,60 720,75 L800,85 L800,200Z"
+              fill="#02080a" />
+          </svg>
+
+          {/* Cabin silhouette */}
+          <svg className="absolute" style={{ bottom: "30%", left: "20%", width: 120 }} viewBox="0 0 120 100">
+            <polygon points="60,5 5,45 115,45" fill="rgba(0,0,0,0.9)" />
+            <rect x="15" y="45" width="90" height="50" fill="rgba(0,0,0,0.9)" />
+            <rect x="50" y="68" width="20" height="27" fill="rgba(201,168,76,0.35)" />
+            <rect x="25" y="56" width="18" height="14" fill="rgba(201,168,76,0.2)" />
+            <rect x="77" y="56" width="18" height="14" fill="rgba(201,168,76,0.2)" />
+            <line x1="50" y1="68" x2="70" y2="68" stroke="rgba(201,168,76,0.15)" strokeWidth="1" />
+          </svg>
+
+          {/* Lake */}
+          <div className="absolute left-0 right-0" style={{
+            bottom: "8%", height: "22%",
+            background: "linear-gradient(180deg, rgba(10,40,25,0.3) 0%, rgba(5,20,14,0.9) 100%)",
+          }}>
+            {Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className="absolute left-[10%] right-[10%]"
+                style={{
+                  top: `${i * 18 + 8}%`, height: 1,
+                  background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.25), rgba(255,255,255,0.12), rgba(201,168,76,0.25), transparent)",
+                }} />
+            ))}
+          </div>
+
+          {/* Shore */}
+          <div className="absolute bottom-0 left-0 right-0 h-[10%]" style={{ background: "rgba(4,10,6,0.95)" }} />
+
+          {/* Caption overlay */}
+          <div
+            className="absolute bottom-0 left-0 right-0 px-8 py-6"
+            style={{ background: "linear-gradient(0deg, rgba(4,10,6,0.9) 0%, transparent 100%)" }}
+          >
+            <span className="eyebrow block mb-1" style={{ color: "rgba(201,168,76,0.7)" }}>Lake Sonoma Shoreline</span>
+            <span
+              className="display-serif text-white"
+              style={{ fontSize: "1.4rem" }}
+            >
+              Golden Hour on the Water
+            </span>
+          </div>
+
+          {/* Award badge */}
+          <div
+            className="absolute top-6 right-6 w-20 h-20 flex flex-col items-center justify-center text-center"
+            style={{
+              background: "var(--gold)",
+              clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+            }}
+          >
+            <span style={{ color: "var(--ink)", fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em", lineHeight: 1.3 }}>
+              BEST<br />RESORT<br />2024
+            </span>
+          </div>
+        </motion.div>
       </div>
+
+      {/* ── Stats bar ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        className="grid grid-cols-2 lg:grid-cols-4"
+        style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
+      >
+        {stats.map((s, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center justify-center py-12 px-6 text-center"
+            style={{ borderRight: i < 3 ? "1px solid rgba(0,0,0,0.06)" : "none" }}
+          >
+            <span
+              className="heading-serif"
+              style={{ fontSize: "2.8rem", color: "var(--forest)", lineHeight: 1 }}
+            >
+              <CountUp n={s.n} />
+            </span>
+            <span
+              style={{ color: "var(--stone)", fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: "0.5rem" }}
+            >
+              {s.s}
+            </span>
+          </div>
+        ))}
+      </motion.div>
     </section>
   );
 }

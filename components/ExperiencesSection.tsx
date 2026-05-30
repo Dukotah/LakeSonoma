@@ -2,133 +2,146 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 const experiences = [
   {
+    num: "01",
     category: "Wine & Dining",
     href: "/activities#wine",
     headline: "Private Wine Country Immersion",
-    description: "Explore 50+ boutique wineries in Alexander Valley. Our wine concierge arranges exclusive barrel tastings, vineyard picnics, and pairings with local artisan chefs.",
-    highlights: ["Private cellar tours", "Harvest experiences", "Chef-led tastings", "Wine education"],
-    color: "from-purple-950 to-indigo-900",
-    accent: "#9333ea",
-    number: "01",
+    body: "Exclusive access to five family-owned wineries not open to the public. Barrel tastings, vineyard picnics, and pairings curated by our in-house sommelier.",
+    highlights: ["Private cellar tours", "Harvest experiences", "Chef-led pairings", "Farmers market tour"],
+    bg: "linear-gradient(145deg, #120620 0%, #1e0835 30%, #2d1055 60%, #3d1a70 80%)",
+    accent: "#a78bfa",
   },
   {
+    num: "02",
     category: "Water Activities",
     href: "/activities#water",
     headline: "The Lake is Your Playground",
-    description: "2,700-acre Lake Sonoma offers world-class bass fishing, kayaking, paddleboarding, and swimming. Launch from your private dock at sunrise.",
-    highlights: ["Kayak & paddleboard", "Guided fishing", "Sunset pontoon tours", "Swimming coves"],
-    color: "from-blue-950 to-teal-900",
-    accent: "#0ea5e9",
-    number: "02",
+    body: "2,700-acre Lake Sonoma offers world-class bass fishing, kayaking, paddleboarding, and swimming. Launch from your private dock at sunrise.",
+    highlights: ["Guided sunrise kayak", "Fishing charter", "Sunset pontoon cruise", "Private swim coves"],
+    bg: "linear-gradient(145deg, #031220 0%, #062035 30%, #0a3050 60%, #0f4568 80%)",
+    accent: "#38bdf8",
   },
   {
+    num: "03",
     category: "Spa & Wellness",
     href: "/activities#spa",
     headline: "Restore Mind, Body & Spirit",
-    description: "From in-cabin massage therapy to forest bathing sessions, our wellness offerings are designed to leave you profoundly restored.",
-    highlights: ["In-cabin massage", "Sound bath sessions", "Yoga in the redwoods", "Couples retreats"],
-    color: "from-rose-950 to-pink-900",
-    accent: "#e11d48",
-    number: "03",
+    body: "In-cabin massage therapy, forest bathing, sound bath meditation under the stars, and private yoga on the lakeside deck.",
+    highlights: ["In-cabin couples massage", "Sound bath nights", "Forest bathing guide", "Cold plunge & sauna"],
+    bg: "linear-gradient(145deg, #1a0810 0%, #2d1020 30%, #421528 60%, #581e34 80%)",
+    accent: "#f472b6",
   },
   {
-    category: "Outdoor Adventures",
+    num: "04",
+    category: "Outdoor Adventure",
     href: "/activities#outdoor",
     headline: "Explore Wild Sonoma",
-    description: "Guided hikes through old-growth forest, mountain biking on single-track trails, stargazing with a private astronomer — adventure in every direction.",
-    highlights: ["Guided hike tours", "Mountain biking", "Stargazing nights", "Wildlife photography"],
-    color: "from-green-950 to-emerald-900",
-    accent: "#10b981",
-    number: "04",
+    body: "Guided hikes through old-growth forest, mountain biking on single-track, horseback rides through the vines, and private stargazing with an astronomer.",
+    highlights: ["Redwood guided hike", "Mountain biking", "Stargazing nights", "Vineyard horseback"],
+    bg: "linear-gradient(145deg, #061408 0%, #0a2010 30%, #102e18 60%, #183d22 80%)",
+    accent: "#4ade80",
   },
 ];
 
 export default function ExperiencesSection() {
   return (
-    <section className="py-24 md:py-32" style={{ background: "#FAF7F2" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-linen py-28 md:py-36">
+      <div className="max-w-[1440px] mx-auto px-8 lg:px-16">
+
         {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="section-label mb-3" style={{ color: "#D4AF37" }}>
-            Curated Experiences
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-serif" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-            More Than a Stay
-          </motion.h2>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+          <div>
+            <motion.span initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="eyebrow block mb-4">
+              Curated Experiences
+            </motion.span>
+            <div className="section-rule" />
+            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="heading-serif" style={{ fontSize: "clamp(2.4rem, 4vw, 3.4rem)", color: "var(--ink)" }}>
+              More Than a Stay
+            </motion.h2>
+          </div>
+          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+            style={{ color: "var(--stone)", maxWidth: 360, lineHeight: 1.75, fontSize: "0.95rem" }}>
+            Every experience is thoughtfully curated, expertly guided, and available
+            exclusively to Lake Sonoma guests.
+          </motion.p>
         </div>
 
-        {/* Experiences */}
-        <div className="space-y-8">
+        {/* Experiences stack */}
+        <div className="space-y-5">
           {experiences.map((exp, i) => (
             <motion.div
-              key={exp.number}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              key={exp.num}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-0 rounded-sm overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500`}
+              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="group grid grid-cols-1 lg:grid-cols-[320px_1fr] overflow-hidden"
+              style={{ border: "1px solid var(--cream-dark)" }}
             >
               {/* Visual panel */}
-              <div className={`relative lg:w-2/5 h-72 lg:h-auto bg-gradient-to-br ${exp.color} flex items-center justify-center overflow-hidden`}>
-                <div className="absolute inset-0 opacity-10"
-                  style={{
-                    backgroundImage: "repeating-linear-gradient(45deg, white 0, white 1px, transparent 0, transparent 50%)",
-                    backgroundSize: "30px 30px",
-                  }} />
-                <div className="relative z-10 text-center text-white p-8">
-                  <div className="text-8xl font-serif font-bold opacity-20 absolute top-4 right-8"
-                    style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}>{exp.number}</div>
-                  <div className="text-xs tracking-[0.3em] uppercase mb-3" style={{ color: exp.accent }}>
-                    {exp.category}
+              <div
+                className="relative overflow-hidden flex flex-col justify-between p-8"
+                style={{ background: exp.bg, minHeight: 220 }}
+              >
+                {/* Decorative number */}
+                <div
+                  className="display-serif select-none absolute -bottom-4 -right-2 pointer-events-none"
+                  style={{ fontSize: "9rem", lineHeight: 1, color: "rgba(255,255,255,0.04)" }}
+                >
+                  {exp.num}
+                </div>
+                <div>
+                  <div className="eyebrow mb-3" style={{ color: exp.accent }}>{exp.category}</div>
+                  <div className="display-serif text-white" style={{ fontSize: "1.05rem" }}>
+                    Available Year-Round
                   </div>
-                  <div className="text-5xl mb-4">
-                    {exp.category === "Wine & Dining" ? "🍷" :
-                     exp.category === "Water Activities" ? "🚣" :
-                     exp.category === "Spa & Wellness" ? "✨" : "🏔️"}
-                  </div>
-                  <div className="text-white/60 text-sm">Available year-round</div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-6 relative z-10">
+                  {exp.highlights.map((h) => (
+                    <span key={h} className="px-3 py-1 text-xs" style={{
+                      background: "rgba(255,255,255,0.08)",
+                      border: `1px solid ${exp.accent}30`,
+                      color: "rgba(255,255,255,0.7)",
+                      letterSpacing: "0.06em",
+                    }}>
+                      {h}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               {/* Content panel */}
-              <div className="lg:w-3/5 bg-white p-8 md:p-12 flex flex-col justify-center">
-                <div className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: exp.accent }}>
-                  {exp.category}
+              <div
+                className="flex flex-col justify-between p-8 lg:p-12 transition-colors duration-300"
+                style={{ background: "white" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--cream)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "white")}
+              >
+                <div>
+                  <h3
+                    className="heading-serif mb-5"
+                    style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.1rem)", color: "var(--ink)" }}
+                  >
+                    {exp.headline}
+                  </h3>
+                  <p style={{ color: "var(--stone)", lineHeight: 1.8, fontSize: "1rem", maxWidth: 560 }}>
+                    {exp.body}
+                  </p>
                 </div>
-                <h3 className="text-3xl font-serif mb-4" style={{ color: "#0F2942", fontFamily: "var(--font-playfair, Georgia, serif)" }}>
-                  {exp.headline}
-                </h3>
-                <p className="text-gray-600 leading-relaxed mb-6 text-lg">
-                  {exp.description}
-                </p>
-                <div className="grid grid-cols-2 gap-3 mb-8">
-                  {exp.highlights.map((h) => (
-                    <div key={h} className="flex items-center gap-2 text-sm text-gray-700">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                        style={{ background: `${exp.accent}20` }}>
-                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: exp.accent }} />
-                      </div>
-                      {h}
-                    </div>
-                  ))}
-                </div>
-                <Link href={exp.href}
-                  className="inline-flex items-center gap-2 font-semibold text-sm tracking-wide group"
-                  style={{ color: "#1B4332" }}>
-                  <span>Explore {exp.category}</span>
-                  <span className="transition-transform group-hover:translate-x-1">→</span>
+                <Link
+                  href={exp.href}
+                  className="inline-flex items-center gap-2 mt-8 text-xs font-bold tracking-[0.16em] uppercase transition-colors group/link"
+                  style={{ color: "var(--forest)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold-dim)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--forest)")}
+                >
+                  Explore {exp.category}
+                  <ArrowUpRight size={13} className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
                 </Link>
               </div>
             </motion.div>

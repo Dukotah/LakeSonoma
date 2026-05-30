@@ -3,88 +3,127 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Globe, Heart, Share2 } from "lucide-react";
 
-const footerLinks = {
+const cols = {
   Stay: [
-    { label: "Lakeside Cabins", href: "/accommodations#lakeside" },
-    { label: "Forest Retreats", href: "/accommodations#forest" },
-    { label: "The Estate House", href: "/accommodations#estate" },
-    { label: "All Properties", href: "/accommodations" },
-    { label: "Availability Calendar", href: "/#booking-widget" },
+    { l: "Lakeside Cabins",   h: "/accommodations#lakeside" },
+    { l: "Forest Retreats",   h: "/accommodations#forest" },
+    { l: "The Estate House",  h: "/accommodations#estate" },
+    { l: "All 12 Properties", h: "/accommodations" },
+    { l: "Availability",      h: "/#booking-widget" },
   ],
   Experiences: [
-    { label: "Wine & Dining", href: "/activities#wine" },
-    { label: "Water Activities", href: "/activities#water" },
-    { label: "Spa & Wellness", href: "/activities#spa" },
-    { label: "Outdoor Adventures", href: "/activities#outdoor" },
-    { label: "All Experiences", href: "/activities" },
+    { l: "Wine & Dining",      h: "/activities#wine" },
+    { l: "Water Activities",   h: "/activities#water" },
+    { l: "Spa & Wellness",     h: "/activities#spa" },
+    { l: "Outdoor Adventure",  h: "/activities#outdoor" },
   ],
   Info: [
-    { label: "About Us", href: "/#about" },
-    { label: "Photo Gallery", href: "/gallery" },
-    { label: "Reviews", href: "/#reviews" },
-    { label: "Local Area Guide", href: "/#local" },
-    { label: "Gift Cards", href: "/contact" },
+    { l: "About Us",     h: "/#about" },
+    { l: "Gallery",      h: "/gallery" },
+    { l: "Reviews",      h: "/#reviews" },
+    { l: "Local Guide",  h: "/#local" },
+    { l: "Gift Cards",   h: "/contact" },
   ],
   Policies: [
-    { label: "Booking Policy", href: "/contact#policies" },
-    { label: "Cancellation Policy", href: "/contact#policies" },
-    { label: "Pet Policy", href: "/contact#policies" },
-    { label: "FAQ", href: "/contact#faq" },
-    { label: "Privacy Policy", href: "/contact#privacy" },
+    { l: "Booking Policy",      h: "/contact#policies" },
+    { l: "Cancellation",        h: "/contact#policies" },
+    { l: "Pet Policy",          h: "/contact#policies" },
+    { l: "FAQ",                 h: "/contact#faq" },
+    { l: "Privacy Policy",      h: "/contact#privacy" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#0a1e30" }}>
-      {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
+    <footer style={{ background: "#060e09" }}>
+      <div
+        className="h-[3px]"
+        style={{ background: "linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent)" }}
+      />
+
+      {/* Main */}
+      <div className="max-w-[1440px] mx-auto px-8 lg:px-16 py-20">
+        <div className="grid grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-12">
+
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.4)" }}>
-                <span className="font-serif font-bold text-sm" style={{ color: "#D4AF37" }}>LS</span>
+          <div className="col-span-2 lg:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
+              <div
+                className="w-9 h-9 flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(135deg, var(--gold-dim), var(--gold))",
+                  clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+                }}
+              >
+                <span style={{ fontFamily: "var(--font-playfair, Georgia, serif)", fontStyle: "italic", color: "var(--ink)", fontSize: "0.85rem", fontWeight: 700 }}>
+                  LS
+                </span>
               </div>
               <div>
-                <div className="font-serif font-bold text-xl text-white leading-none"
-                  style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}>Lake Sonoma</div>
-                <div className="text-xs tracking-[0.2em] uppercase text-white/40">Resort & Retreat</div>
+                <div style={{ fontFamily: "var(--font-playfair, Georgia, serif)", color: "white", fontSize: "1.1rem", fontWeight: 700, lineHeight: 1.1 }}>
+                  Lake Sonoma
+                </div>
+                <div style={{ color: "var(--gold)", fontSize: "0.55rem", letterSpacing: "0.22em", textTransform: "uppercase" }}>
+                  Resort & Retreat
+                </div>
               </div>
             </Link>
-            <p className="text-white/50 text-sm leading-relaxed mb-6">
-              Luxury lakeside retreats in the heart of Sonoma wine country.
-              Where the lake meets the vine, and every moment becomes a memory.
+
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.85rem", lineHeight: 1.8, maxWidth: 280, marginBottom: "1.8rem" }}>
+              Luxury lakeside retreats where the wild beauty of Northern California
+              and curated hospitality exist in perfect balance.
             </p>
-            {/* Social */}
-            <div className="flex gap-3">
+
+            {/* Social row */}
+            <div className="flex gap-2.5">
               {[
-                { icon: Globe, label: "Website" },
-                { icon: Heart, label: "Favorites" },
+                { icon: Globe,  label: "Website" },
+                { icon: Heart,  label: "Save" },
                 { icon: Share2, label: "Share" },
               ].map(({ icon: Icon, label }) => (
-                <a key={label} href="#" aria-label={label}
-                  className="w-9 h-9 rounded-sm flex items-center justify-center transition-all"
-                  style={{ background: "rgba(255,255,255,0.07)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,175,55,0.2)"; (e.currentTarget.firstChild as SVGElement).style.color = "#D4AF37"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; (e.currentTarget.firstChild as SVGElement).style.color = "rgba(255,255,255,0.5)"; }}>
-                  <Icon size={16} style={{ color: "rgba(255,255,255,0.5)", transition: "color 0.2s" }} />
+                <a
+                  key={label}
+                  href="#"
+                  aria-label={label}
+                  className="w-9 h-9 flex items-center justify-center transition-all"
+                  style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.35)" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--gold)";
+                    e.currentTarget.style.color = "var(--gold)";
+                    e.currentTarget.style.background = "rgba(201,168,76,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.35)";
+                    e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  <Icon size={14} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Links */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
-              <div className="text-white font-semibold text-sm uppercase tracking-[0.15em] mb-5">{category}</div>
+          {/* Link columns */}
+          {Object.entries(cols).map(([head, links]) => (
+            <div key={head}>
+              <div
+                className="text-xs font-bold tracking-[0.2em] uppercase mb-6"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+              >
+                {head}
+              </div>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link href={link.href}
-                      className="text-white/45 text-sm hover:text-white transition-colors">
-                      {link.label}
+                {links.map((l) => (
+                  <li key={l.l}>
+                    <Link
+                      href={l.h}
+                      className="text-xs transition-colors"
+                      style={{ color: "rgba(255,255,255,0.32)", letterSpacing: "0.02em" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.32)")}
+                    >
+                      {l.l}
                     </Link>
                   </li>
                 ))}
@@ -94,54 +133,49 @@ export default function Footer() {
         </div>
 
         {/* Contact bar */}
-        <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <a href="tel:+17075551234" className="flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0"
-                style={{ background: "rgba(212,175,55,0.15)" }}>
-                <Phone size={14} style={{ color: "#D4AF37" }} />
-              </div>
-              <div>
-                <div className="text-xs text-white/40 uppercase tracking-[0.1em]">Call Us</div>
-                <div className="text-white/70 text-sm group-hover:text-white transition-colors">(707) 555-1234</div>
-              </div>
+        <div
+          className="mt-16 pt-10 flex flex-wrap gap-8"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          {[
+            { icon: Phone,  text: "(707) 555-1234",             href: "tel:+17075551234" },
+            { icon: Mail,   text: "hello@lakesonoma.com",       href: "mailto:hello@lakesonoma.com" },
+            { icon: MapPin, text: "Geyserville, CA 95441",      href: "#" },
+          ].map(({ icon: Icon, text, href }) => (
+            <a
+              key={text}
+              href={href}
+              className="flex items-center gap-3 group transition-colors"
+              style={{ color: "rgba(255,255,255,0.32)", fontSize: "0.82rem" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.32)")}
+            >
+              <Icon size={13} />
+              {text}
             </a>
-            <a href="mailto:hello@lakesonoma.com" className="flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0"
-                style={{ background: "rgba(212,175,55,0.15)" }}>
-                <Mail size={14} style={{ color: "#D4AF37" }} />
-              </div>
-              <div>
-                <div className="text-xs text-white/40 uppercase tracking-[0.1em]">Email</div>
-                <div className="text-white/70 text-sm group-hover:text-white transition-colors">hello@lakesonoma.com</div>
-              </div>
-            </a>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0"
-                style={{ background: "rgba(212,175,55,0.15)" }}>
-                <MapPin size={14} style={{ color: "#D4AF37" }} />
-              </div>
-              <div>
-                <div className="text-xs text-white/40 uppercase tracking-[0.1em]">Location</div>
-                <div className="text-white/70 text-sm">Geyserville, CA 95441</div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="text-white/30 text-xs">
-              © {new Date().getFullYear()} Lake Sonoma Resort & Retreat. All rights reserved.
-            </div>
-            <div className="flex gap-6 text-white/30 text-xs">
-              <Link href="/contact#privacy" className="hover:text-white/60 transition-colors">Privacy</Link>
-              <Link href="/contact#policies" className="hover:text-white/60 transition-colors">Terms</Link>
-              <Link href="/contact#policies" className="hover:text-white/60 transition-colors">Sitemap</Link>
-            </div>
+      {/* Bottom */}
+      <div
+        className="border-t"
+        style={{ borderColor: "rgba(255,255,255,0.06)" }}
+      >
+        <div className="max-w-[1440px] mx-auto px-8 lg:px-16 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span style={{ color: "rgba(255,255,255,0.18)", fontSize: "0.72rem", letterSpacing: "0.04em" }}>
+            © {new Date().getFullYear()} Lake Sonoma Resort & Retreat. All rights reserved.
+          </span>
+          <div className="flex gap-6">
+            {["Privacy", "Terms", "Sitemap"].map((t) => (
+              <Link key={t} href="/contact#policies"
+                className="text-xs transition-colors"
+                style={{ color: "rgba(255,255,255,0.18)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.18)")}>
+                {t}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
