@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { PATIOS, DAY_USE_FEES } from "@/data/marina";
+import { PATIOS, DAY_USE_FEES, DAY_USE_INCLUDES, DAY_USE_HOURS } from "@/data/marina";
 import { ProductCard } from "@/components/ProductCard";
 import { pageMeta } from "@/lib/seo";
 import { SITE } from "@/data/site";
@@ -24,7 +24,21 @@ export default function PatiosPage() {
         </p>
       </header>
 
-      <section className="mt-8" aria-labelledby="reservable">
+      <section className="mt-8 rounded-2xl bg-sand-50 p-6" aria-labelledby="dayuse-info">
+        <h2 id="dayuse-info" className="text-xl font-bold text-lake-900">Day-use picnic areas</h2>
+        <p className="mt-2 text-pine-900/90">
+          Open daily {DAY_USE_HOURS}. Our day-use patio areas include:
+        </p>
+        <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-pine-900">
+          {DAY_USE_INCLUDES.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span aria-hidden="true" className="text-lake-600">✓</span> {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-10" aria-labelledby="reservable">
         <h2 id="reservable" className="text-2xl font-bold text-lake-900">Reservable patios</h2>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PATIOS.map((p) => (

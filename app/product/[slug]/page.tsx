@@ -117,8 +117,13 @@ export default async function ProductPage({
                 ))}
               </ul>
             )}
+            {product.durations && product.durations.length > 0 && (
+              <p className="mt-3 text-sm text-pine-900">
+                <span className="font-semibold">Available:</span> {product.durations.join(" · ")}
+              </p>
+            )}
             <p className="mt-2 text-xs text-pine-700">
-              Additional durations and exact availability are shown on the booking page.
+              Exact availability and rates for each duration are shown on the booking page.
             </p>
           </div>
 
@@ -156,6 +161,15 @@ export default async function ProductPage({
               </li>
             ))}
           </ul>
+          {product.notes && product.notes.length > 0 && (
+            <ul className="mt-3 space-y-2 text-pine-900">
+              {product.notes.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span aria-hidden="true" className="text-lake-600">•</span> {item}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
 

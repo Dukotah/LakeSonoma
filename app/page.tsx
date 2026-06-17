@@ -1,6 +1,12 @@
 import Link from "next/link";
-import { PRODUCTS, ACTIVITY_LABELS, WHATS_INCLUDED, CANCELLATION_POLICY, type ActivityTag } from "@/data/marina";
-import { REVIEWS, HOURS } from "@/data/site";
+import {
+  PRODUCTS,
+  ACTIVITY_LABELS,
+  WHATS_INCLUDED,
+  CANCELLATION_POLICY,
+  type ActivityTag,
+} from "@/data/marina";
+import { REVIEWS, REVIEW_PLATFORMS, ABOUT_INTRO, STORE_ITEMS, SITE, HOURS } from "@/data/site";
 import { ProductCard } from "@/components/ProductCard";
 
 const FIND_BY_ACTIVITY: { tag: ActivityTag; icon: string }[] = [
@@ -17,41 +23,43 @@ const GROUP_SIZES = [
   { label: "Big group (12)", max: 12 },
 ];
 
+function Stars({ count = 5 }: { count?: number }) {
+  return (
+    <span className="text-sand-400" aria-label={`${count} out of 5 stars`}>
+      {"★".repeat(count)}
+    </span>
+  );
+}
+
 export default function HomePage() {
   const featured = PRODUCTS.filter((p) => p.featured);
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-lake-700 to-lake-900 text-white">
-        <div className="container-page py-16 sm:py-24">
-          <p className="text-sm font-semibold uppercase tracking-widest text-lake-200">
-            Geyserville, California
-          </p>
-          <h1 className="mt-2 max-w-3xl text-4xl font-extrabold leading-tight sm:text-5xl">
-            Your day on Lake Sonoma starts here.
+      {/* ---------- Hero ---------- */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-lake-700 to-lake-950 text-white">
+        <div className="container-page py-20 sm:py-28">
+          <h1 className="text-4xl font-extrabold leading-tight sm:text-6xl">
+            Lake Sonoma Marina
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-lake-100">
-            Pontoons, fishing boats, jet skis, kayaks, and reservable lakeside patios —
-            pick the right one for your group and book the exact boat in a couple of taps.
+          <p className="mt-3 max-w-2xl text-lg font-medium text-lake-100 sm:text-xl">
+            {SITE.tagline}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/rentals" className="btn-primary bg-white text-lake-800 hover:bg-lake-50">
-              Browse rentals
+              Book Now
             </Link>
             <Link href="/patios" className="btn-secondary border-white text-white hover:bg-white/10">
-              Reserve a patio
+              Patios & Day-Use
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Find your boat helper */}
+      {/* ---------- Find your boat (functional upgrade) ---------- */}
       <section className="container-page -mt-10 sm:-mt-12" aria-labelledby="find-your-boat">
         <div className="rounded-2xl border border-lake-100 bg-white p-6 shadow-lg">
-          <h2 id="find-your-boat" className="text-xl font-bold text-lake-900">
-            Find your boat
-          </h2>
+          <h2 id="find-your-boat" className="text-xl font-bold text-lake-900">Find your boat</h2>
           <p className="mt-1 text-sm text-pine-700">What do you want to do on the water?</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {FIND_BY_ACTIVITY.map(({ tag, icon }) => (
@@ -79,77 +87,124 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured */}
-      <section className="container-page py-14" aria-labelledby="featured">
-        <div className="flex items-end justify-between">
-          <h2 id="featured" className="text-2xl font-bold text-lake-900">Popular rentals</h2>
-          <Link href="/rentals" className="text-sm font-semibold text-lake-700 hover:underline">
-            View all rentals →
-          </Link>
-        </div>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => (
-            <ProductCard key={p.singenuityId} product={p} />
-          ))}
+      {/* ---------- About band ---------- */}
+      <section className="container-page py-16" aria-labelledby="about-intro">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <h2 id="about-intro" className="text-3xl font-bold text-lake-900">
+              {ABOUT_INTRO.heading}
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-pine-900/90">{ABOUT_INTRO.body}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/about" className="btn-primary">Learn More</Link>
+              <Link href="/faqs" className="btn-secondary">View FAQs</Link>
+            </div>
+          </div>
+          <div className="rounded-2xl bg-sand-50 p-6">
+            <h3 className="text-lg font-bold text-lake-900">Marina Store &amp; Deli</h3>
+            <p className="mt-1 text-sm text-pine-700">
+              Your one-stop shop for everything you need for a fun day on the lake:
+            </p>
+            <ul className="mt-4 grid grid-cols-2 gap-2 text-sm text-pine-900">
+              {STORE_ITEMS.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span aria-hidden="true" className="text-lake-600">✓</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* Trust band */}
-      <section className="bg-sand-50">
-        <div className="container-page grid gap-8 py-14 md:grid-cols-3">
-          <div>
-            <h2 className="text-lg font-bold text-lake-900">What&apos;s included</h2>
-            <ul className="mt-3 space-y-2 text-sm text-pine-900">
-              {WHATS_INCLUDED.map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-lake-600">✓</span> {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-lake-900">Easy cancellation</h2>
-            <ul className="mt-3 space-y-2 text-sm text-pine-900">
-              {CANCELLATION_POLICY.map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-lake-600">✓</span> {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-lake-900">Open year-round</h2>
-            <ul className="mt-3 space-y-2 text-sm text-pine-900">
-              {HOURS.map((h) => (
-                <li key={h.season}>
-                  <span className="font-semibold">{h.season}:</span> {h.value}
-                </li>
-              ))}
-            </ul>
-            <Link href="/contact" className="mt-3 inline-block text-sm font-semibold text-lake-700 hover:underline">
-              Plan your visit →
+      {/* ---------- Featured Boat Rentals ---------- */}
+      <section className="bg-lake-50/60 py-16" aria-labelledby="featured">
+        <div className="container-page">
+          <p className="text-sm font-semibold uppercase tracking-widest text-lake-600">Featured</p>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 id="featured" className="text-3xl font-bold text-lake-900">Boat Rentals</h2>
+            <Link href="/rentals" className="text-sm font-semibold text-lake-700 hover:underline">
+              View all rentals →
             </Link>
           </div>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((p) => (
+              <ProductCard key={p.singenuityId} product={p} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Reviews — only renders if real reviews exist (no fabricated filler). */}
+      {/* ---------- Reviews ---------- */}
       {REVIEWS.length > 0 && (
-        <section className="container-page py-14" aria-labelledby="reviews">
-          <h2 id="reviews" className="text-2xl font-bold text-lake-900">What guests say</h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
+        <section className="container-page py-16" aria-labelledby="reviews">
+          <p className="text-sm font-semibold uppercase tracking-widest text-lake-600">Our Reviews</p>
+          <h2 id="reviews" className="text-3xl font-bold text-lake-900">
+            Best Boat Rentals in Healdsburg, CA
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {REVIEWS.map((r) => (
               <figure key={r.author} className="rounded-2xl border border-lake-100 bg-white p-5 shadow-sm">
-                <blockquote className="text-pine-900">“{r.quote}”</blockquote>
-                <figcaption className="mt-3 text-sm font-semibold text-lake-700">
-                  — {r.author}
-                  {r.source && <span className="font-normal text-pine-700"> · {r.source}</span>}
-                </figcaption>
+                <Stars count={r.stars ?? 5} />
+                <blockquote className="mt-2 text-pine-900">“{r.quote}”</blockquote>
+                <figcaption className="mt-3 text-sm font-semibold text-lake-700">— {r.author}</figcaption>
               </figure>
             ))}
           </div>
+          <p className="mt-6 text-sm text-pine-700">
+            As reviewed on {REVIEW_PLATFORMS.join(", ")}.
+          </p>
         </section>
       )}
+
+      {/* ---------- CTA band ---------- */}
+      <section className="bg-gradient-to-r from-lake-700 to-lake-900 text-white">
+        <div className="container-page flex flex-col items-center gap-5 py-14 text-center">
+          <h2 className="text-3xl font-extrabold">Experience Lake Sonoma!</h2>
+          <p className="max-w-xl text-lake-100">
+            Pick your boat or patio and reserve the exact date in just a few taps.
+          </p>
+          <Link href="/rentals" className="btn-primary bg-white text-lake-800 hover:bg-lake-50">
+            Book Now
+          </Link>
+        </div>
+      </section>
+
+      {/* ---------- Trust band (functional upgrade) ---------- */}
+      <section className="container-page grid gap-8 py-14 md:grid-cols-3">
+        <div>
+          <h2 className="text-lg font-bold text-lake-900">What&apos;s included</h2>
+          <ul className="mt-3 space-y-2 text-sm text-pine-900">
+            {WHATS_INCLUDED.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span aria-hidden="true" className="text-lake-600">✓</span> {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className="text-lg font-bold text-lake-900">Easy cancellation</h2>
+          <ul className="mt-3 space-y-2 text-sm text-pine-900">
+            {CANCELLATION_POLICY.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span aria-hidden="true" className="text-lake-600">✓</span> {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className="text-lg font-bold text-lake-900">Open year-round</h2>
+          <ul className="mt-3 space-y-2 text-sm text-pine-900">
+            {HOURS.map((h) => (
+              <li key={h.season}>
+                <span className="font-semibold">{h.season}:</span> {h.value}
+              </li>
+            ))}
+          </ul>
+          <Link href="/contact" className="mt-3 inline-block text-sm font-semibold text-lake-700 hover:underline">
+            Plan your visit →
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

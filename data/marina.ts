@@ -8,11 +8,11 @@
  *
  *  RULES
  *   - Never invent prices, specs, photos, reviews, or Singenuity IDs.
- *   - All `singenuityId` + `price` values below are VERIFIED. Do not alter them
- *     without confirming with the owner.
- *   - `priceTBD: true` means "ask the owner" — the UI shows an inquire CTA, not $0.
- *   - Unknown fields (e.g. stereo, some capacities) are left undefined on purpose
- *     so the UI omits them rather than guessing. See TODO list in README.
+ *   - All `singenuityId` + `price` values are VERIFIED. Do not alter without
+ *     confirming with the owner.
+ *   - Descriptions (`blurb`) and durations mirror the live lakesonoma.com.
+ *   - `priceTBD: true` means "ask the owner" — UI shows an inquire CTA, not $0.
+ *   - Unknown fields (e.g. stereo) are left undefined so the UI omits them.
  * ============================================================================
  */
 
@@ -25,19 +25,11 @@ export type Category =
   | "paddle"
   | "patio";
 
-/** Buckets used by the homepage "Find your boat" helper. */
-export type ActivityTag =
-  | "cruising"
-  | "fishing"
-  | "watersports"
-  | "paddling"
-  | "patio";
+export type ActivityTag = "cruising" | "fishing" | "watersports" | "paddling" | "patio";
 
 export interface PriceOption {
-  /** e.g. "Half-day", "Full day", "Per hour", "Per day" */
-  label: string;
-  /** USD; omit when priceTBD */
-  amount?: number;
+  label: string; // e.g. "Half-day", "Per hour", "Per day"
+  amount?: number; // USD; omit when priceTBD
 }
 
 export interface Product {
@@ -46,24 +38,26 @@ export interface Product {
   name: string;
   category: Category;
   activities: ActivityTag[];
-  /** Max people; undefined when not verified. */
   capacity?: number;
   pricing: PriceOption[];
   priceTBD?: boolean;
-  /** Short marketing blurb (facts only). */
+  /** Marketing blurb mirrored from lakesonoma.com (facts only). */
   blurb: string;
-  /** Stereo present? undefined = unconfirmed (UI omits). */
-  stereo?: boolean;
+  /** Rental duration options offered (from the live site). */
+  durations?: string[];
+  /** Extra notes/restrictions (e.g. pontoon towing rules). */
+  notes?: string[];
+  stereo?: boolean; // undefined = unconfirmed (UI omits)
   featured?: boolean;
 }
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   pontoon: "Pontoon Boats",
-  watersport: "Watersport Boats",
+  watersport: "Watersport / Tubing",
   sport: "Sport Boats",
   fishing: "Fishing Boats",
   jetski: "Jet Skis",
-  paddle: "Paddle Craft",
+  paddle: "Kayaks & Paddle Craft",
   patio: "Patios & Day-Use",
 };
 
@@ -75,9 +69,12 @@ export const ACTIVITY_LABELS: Record<ActivityTag, string> = {
   patio: "Patio / picnic on the water",
 };
 
+const PONTOON_DURATIONS = ["Half-Day", "Full-Day", "Overnight"];
+const PONTOON_NOTES = ["No slides or barbecues offered", "No towing allowed behind pontoon boats"];
+
 /** ---------------------------------------------------------------- PRODUCTS */
 export const PRODUCTS: Product[] = [
-  // ----- Pontoons -----
+  // ----- Pontoons (1–12 people; single and double-decker) -----
   {
     singenuityId: 3624,
     slug: "pontoon-5-person",
@@ -86,7 +83,9 @@ export const PRODUCTS: Product[] = [
     activities: ["cruising"],
     capacity: 5,
     pricing: [{ label: "Half-day", amount: 350 }],
-    blurb: "Our most popular small-group pontoon — easy to drive and perfect for a relaxed cruise.",
+    durations: PONTOON_DURATIONS,
+    notes: PONTOON_NOTES,
+    blurb: "Enjoy a leisurely float on Lake Sonoma with a fun pontoon boat rental — our most popular small-group boat, easy to drive and perfect for a relaxed cruise.",
     featured: true,
   },
   {
@@ -97,7 +96,9 @@ export const PRODUCTS: Product[] = [
     activities: ["cruising"],
     capacity: 10,
     pricing: [{ label: "Half-day", amount: 420 }],
-    blurb: "Roomy pontoon with space for the whole crew to spread out and enjoy the lake.",
+    durations: PONTOON_DURATIONS,
+    notes: PONTOON_NOTES,
+    blurb: "A roomy pontoon with space for the whole crew to spread out and enjoy a day on the water.",
     featured: true,
   },
   {
@@ -108,7 +109,9 @@ export const PRODUCTS: Product[] = [
     activities: ["cruising"],
     capacity: 12,
     pricing: [{ label: "Half-day", amount: 520 }],
-    blurb: "Big-group pontoon for a day on the water with family and friends.",
+    durations: PONTOON_DURATIONS,
+    notes: PONTOON_NOTES,
+    blurb: "Our big-group pontoon for a fun time on Lake Sonoma with the whole family.",
   },
   {
     singenuityId: 3635,
@@ -118,7 +121,9 @@ export const PRODUCTS: Product[] = [
     activities: ["cruising"],
     capacity: 12,
     pricing: [{ label: "Half-day", amount: 585 }],
-    blurb: "Two levels of fun — upper deck and slide make this a Lake Sonoma favorite.",
+    durations: PONTOON_DURATIONS,
+    notes: PONTOON_NOTES,
+    blurb: "Two levels of fun — our double-decker pontoon is a Lake Sonoma favorite for groups up to 12.",
     featured: true,
   },
   {
@@ -129,7 +134,9 @@ export const PRODUCTS: Product[] = [
     activities: ["cruising"],
     capacity: 10,
     pricing: [{ label: "Half-day", amount: 600 }],
-    blurb: "Premium single-story pontoon with upgraded comfort for up to 10 guests.",
+    durations: PONTOON_DURATIONS,
+    notes: PONTOON_NOTES,
+    blurb: "A premium single-story pontoon with upgraded comfort for up to 10 guests.",
   },
 
   // ----- Watersport / Tubing -----
@@ -141,7 +148,8 @@ export const PRODUCTS: Product[] = [
     activities: ["watersports", "cruising"],
     capacity: 7,
     pricing: [{ label: "Half-day", amount: 600 }],
-    blurb: "Built for tubing and towed fun — bring the crew and make a splash.",
+    durations: ["Half-Day", "Full-Day"],
+    blurb: "For some great tubing and watersports on Lake Sonoma, don't miss this boat that lets you enjoy the water for a half or a full day.",
     featured: true,
   },
 
@@ -154,7 +162,8 @@ export const PRODUCTS: Product[] = [
     activities: ["watersports", "cruising"],
     capacity: 8,
     pricing: [{ label: "Half-day", amount: 700 }],
-    blurb: "Our top-tier sport boat for watersports and high-energy days on the lake.",
+    durations: ["Half-Day", "Full-Day"],
+    blurb: "Enjoy a high-octane adventure over the waters of Lake Sonoma with our premium sport boat rental.",
   },
 
   // ----- Fishing -----
@@ -164,8 +173,10 @@ export const PRODUCTS: Product[] = [
     name: "Logic Fishing Boat",
     category: "fishing",
     activities: ["fishing"],
+    capacity: 3,
     pricing: [{ label: "Half-day", amount: 340 }],
-    blurb: "Rigged for anglers — head out for Lake Sonoma's bass, catfish, and more.",
+    durations: ["Half-Day", "Full-Day", "Overnight"],
+    blurb: "Experience the best fishing on Lake Sonoma with half-day, full-day, or overnight rentals.",
     featured: true,
   },
 
@@ -178,11 +189,12 @@ export const PRODUCTS: Product[] = [
     activities: ["watersports"],
     capacity: 2,
     pricing: [{ label: "Per hour", amount: 150 }],
-    blurb: "Fast, agile, and a blast — rent by the hour for two riders.",
+    durations: ["1–4 Hours"],
+    blurb: "Have fun speeding over the waters of Lake Sonoma with an exciting jet ski rental.",
     featured: true,
   },
 
-  // ----- Paddle craft -----
+  // ----- Kayaks & Paddle craft -----
   {
     singenuityId: 3644,
     slug: "single-kayak",
@@ -191,7 +203,8 @@ export const PRODUCTS: Product[] = [
     activities: ["paddling"],
     capacity: 1,
     pricing: [{ label: "Per hour", amount: 50 }],
-    blurb: "Explore the coves at your own pace in a stable single kayak.",
+    durations: ["Hourly", "Half-Day", "Full-Day"],
+    blurb: "Enjoy paddling on Lake Sonoma with a single kayak, available for hourly or half and full-day rentals.",
   },
   {
     singenuityId: 3645,
@@ -201,7 +214,8 @@ export const PRODUCTS: Product[] = [
     activities: ["paddling"],
     capacity: 2,
     pricing: [{ label: "Per hour", amount: 50 }],
-    blurb: "Paddle together — a roomy two-seat kayak for partners or parent and child.",
+    durations: ["Hourly", "Half-Day", "Full-Day"],
+    blurb: "Paddle together on Lake Sonoma in a roomy double kayak — hourly or half and full-day rentals.",
   },
   {
     singenuityId: 3648,
@@ -211,17 +225,19 @@ export const PRODUCTS: Product[] = [
     activities: ["paddling"],
     capacity: 1,
     pricing: [{ label: "Per hour", amount: 50 }],
-    blurb: "Stand-up paddle boarding on calm Lake Sonoma water.",
+    durations: ["1–4 Hours"],
+    blurb: "Experience the stunning scenery along the shore of Lake Sonoma with a stand-up paddle board rental.",
   },
   {
     singenuityId: 3650,
     slug: "canoe",
-    name: "Canoe (2)",
+    name: "Canoe",
     category: "paddle",
     activities: ["paddling"],
     capacity: 2,
     pricing: [{ label: "Per hour", amount: 50 }],
-    blurb: "Classic two-person canoe for a quiet paddle along the shoreline.",
+    durations: ["Half-Day", "Full-Day", "Overnight"],
+    blurb: "Paddle along the shores of Lake Sonoma with a relaxing canoe rental.",
   },
 
   // ----- Patios & Day-Use -----
@@ -242,7 +258,7 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Reserve a patio by the bar for an easy day-use spot.",
+    blurb: "Reserve a patio by the bar for an easy lakeside day-use spot.",
   },
   {
     singenuityId: 3653,
@@ -297,10 +313,23 @@ export const WHATS_INCLUDED: string[] = [
   "USCG-approved safety gear and life jackets (infant through adult)",
 ];
 
-/** Operator & check-in rules (verified). */
+/** Day-use patio amenities (verbatim from the live site). */
+export const DAY_USE_INCLUDES: string[] = [
+  "BBQ pits",
+  "Partly shaded area",
+  "Picnic tables",
+  "Trash receptacles",
+];
+
+/** Day-use patio hours (verbatim from the live site). */
+export const DAY_USE_HOURS = "8:00 AM – 8:00 PM";
+
+/** Operator, safety & check-in rules (verified). */
 export const OPERATOR_RULES: string[] = [
   "Boat operators must be 21+ with a valid government-issued photo ID",
   "A boating safety card is recommended but not required",
+  "Children under 12 must be accompanied by an adult at all times",
+  "Life jackets are required for all children under 13 while underway",
   "Please arrive 30 minutes early for check-in",
 ];
 

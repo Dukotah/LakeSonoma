@@ -46,8 +46,9 @@ export default function StoragePage() {
       <section className="mt-10 rounded-2xl bg-lake-50 p-6">
         <h2 className="text-xl font-bold text-lake-900">Ask about availability</h2>
         <p className="mt-2 max-w-2xl text-pine-900/90">
-          Storage and berthing are arranged directly with our team, and may require berthing forms
-          and agreements. Tell us what you&apos;re looking for and we&apos;ll follow up.
+          To reserve a slip or trailer storage, submit a Seasonal or Annual Berthing Agreement
+          along with the corresponding Membership Fee as a deposit. Tell us what you&apos;re looking
+          for and we&apos;ll follow up.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <a href={SITE.phoneHref} className="btn-primary">Call {SITE.phone}</a>
