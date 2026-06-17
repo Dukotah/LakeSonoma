@@ -121,6 +121,6 @@ export const NAV: NavItem[] = [
   { label: "FAQs", href: "/faqs" },
   { label: "Policies", href: "/policies" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "/read-on-sonoma" },
+  { label: "Read On Sonoma", href: "/read-on-sonoma" },
   { label: "Contact", href: "/contact" },
 ];
