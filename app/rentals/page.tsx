@@ -8,17 +8,34 @@ import {
   type ActivityTag,
 } from "@/data/marina";
 import { ProductCard } from "@/components/ProductCard";
+import { Hero } from "@/components/Hero";
+import { Section } from "@/components/Section";
+import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/Container";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Boat Rentals",
+  title: "Boat Rentals — Lake Sonoma Marina",
   description:
     "Browse Lake Sonoma Marina boat rentals — pontoons, watersport boats, fishing boats, jet skis, kayaks, paddle boards and canoes. Filter by activity or group size and book online.",
   path: "/rentals",
 });
 
-const CATEGORY_FILTERS: Category[] = ["pontoon", "watersport", "sport", "fishing", "jetski", "paddle"];
+const CATEGORY_FILTERS: Category[] = [
+  "pontoon",
+  "watersport",
+  "sport",
+  "fishing",
+  "jetski",
+  "paddle",
+];
 const ACTIVITY_FILTERS: ActivityTag[] = ["cruising", "fishing", "watersports", "paddling"];
+
+const CAPACITY_OPTIONS = [
+  { label: "1–5 guests", max: 5 },
+  { label: "Up to 10", max: 10 },
+  { label: "Groups of 12", max: 12 },
+];
 
 type SearchParams = { category?: string; activity?: string; capacity?: string };
 
@@ -39,69 +56,187 @@ export default async function RentalsPage({
     items = items.filter((p) => p.capacity !== undefined && p.capacity <= capacity);
   }
 
-  const hasFilter = activeCategory || activeActivity || capacity !== undefined;
+  const hasFilter =
+    activeCategory !== undefined ||
+    activeActivity !== undefined ||
+    capacity !== undefined;
+
+  // Build a human-readable active filter label for the results heading
+  let activeLabel: string | undefined;
+  if (activeCategory) activeLabel = CATEGORY_LABELS[activeCategory];
+  else if (activeActivity) activeLabel = ACTIVITY_LABELS[activeActivity];
+  else if (capacity !== undefined)
+    activeLabel = `Up to ${capacity} guests`;
 
   return (
-    <div className="container-page py-12">
-      <header className="max-w-2xl">
-        <h1 className="text-3xl font-extrabold text-lake-900">Boat Rentals</h1>
-        <p className="mt-2 text-pine-700">
-          Pick the right boat for your group and book the exact item — every booking link
-          takes you straight to that boat&apos;s availability calendar.
-        </p>
-      </header>
+    <>
+      {/* ── Hero ─────────────────────────────────────────────────── */}
+      <Hero
+        image="marina-docks"
+        eyebrow="Healdsburg, CA"
+        title="Find your perfect boat"
+        subtitle="Pontoons, sport boats, fishing boats, jet skis, kayaks and more — every booking link takes you straight to that boat's availability calendar."
+        height="medium"
+      >
+        <a href="#fleet" className="btn-ghost-light">
+          Browse the fleet
+        </a>
+      </Hero>
 
-      {/* Filters */}
-      <div className="mt-6 space-y-3" role="group" aria-label="Filter rentals">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-semibold text-pine-700">Type:</span>
-          {CATEGORY_FILTERS.map((c) => (
-            <FilterChip key={c} active={activeCategory === c} href={`/rentals?category=${c}`}>
-              {CATEGORY_LABELS[c]}
-            </FilterChip>
-          ))}
+      {/* ── Filter bar ───────────────────────────────────────────── */}
+      <Section tone="white" spacing="tight" id="fleet">
+        <div className="space-y-5">
+          {/* Category chips */}
+          <fieldset>
+            <legend className="mb-2.5 text-xs font-semibold uppercase tracking-widest text-pine-500">
+              By type
+            </legend>
+            <div
+              className="flex flex-wrap gap-2"
+              role="group"
+              aria-label="Filter by boat type"
+            >
+              {CATEGORY_FILTERS.map((c) => (
+                <FilterChip
+                  key={c}
+                  active={activeCategory === c}
+                  href={`/rentals?category=${c}`}
+                >
+                  {CATEGORY_LABELS[c]}
+                </FilterChip>
+              ))}
+            </div>
+          </fieldset>
+
+          {/* Activity chips */}
+          <fieldset>
+            <legend className="mb-2.5 text-xs font-semibold uppercase tracking-widest text-pine-500">
+              By activity
+            </legend>
+            <div
+              className="flex flex-wrap gap-2"
+              role="group"
+              aria-label="Filter by activity"
+            >
+              {ACTIVITY_FILTERS.map((a) => (
+                <FilterChip
+                  key={a}
+                  active={activeActivity === a}
+                  href={`/rentals?activity=${a}`}
+                >
+                  {ACTIVITY_LABELS[a]}
+                </FilterChip>
+              ))}
+            </div>
+          </fieldset>
+
+          {/* Capacity chips */}
+          <fieldset>
+            <legend className="mb-2.5 text-xs font-semibold uppercase tracking-widest text-pine-500">
+              Group size
+            </legend>
+            <div
+              className="flex flex-wrap gap-2"
+              role="group"
+              aria-label="Filter by group size"
+            >
+              {CAPACITY_OPTIONS.map((g) => (
+                <FilterChip
+                  key={g.max}
+                  active={capacity === g.max}
+                  href={`/rentals?capacity=${g.max}`}
+                >
+                  {g.label}
+                </FilterChip>
+              ))}
+            </div>
+          </fieldset>
+
+          {hasFilter && (
+            <Link
+              href="/rentals"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-lake-700 underline-offset-4 hover:underline"
+            >
+              <span aria-hidden="true">×</span>
+              Clear all filters
+            </Link>
+          )}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-semibold text-pine-700">Activity:</span>
-          {ACTIVITY_FILTERS.map((a) => (
-            <FilterChip key={a} active={activeActivity === a} href={`/rentals?activity=${a}`}>
-              {ACTIVITY_LABELS[a]}
-            </FilterChip>
-          ))}
+      </Section>
+
+      {/* ── Results grid ─────────────────────────────────────────── */}
+      <Section tone="default" spacing="loose">
+        {/* Results header */}
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4 border-b border-sand-200 pb-6">
+          <div>
+            {activeLabel ? (
+              <>
+                <p className="eyebrow mb-1">Filtered results</p>
+                <h2 className="text-display-sm font-medium text-pine-900">{activeLabel}</h2>
+              </>
+            ) : (
+              <>
+                <p className="eyebrow mb-1">All rentals</p>
+                <h2 className="text-display-sm font-medium text-pine-900">Our fleet</h2>
+              </>
+            )}
+            <p className="mt-1 text-sm text-pine-500">
+              {items.length} {items.length === 1 ? "rental" : "rentals"} available
+            </p>
+          </div>
         </div>
-        {hasFilter && (
-          <Link href="/rentals" className="inline-block text-sm font-semibold text-lake-700 hover:underline">
-            Clear filters ✕
-          </Link>
+
+        {items.length > 0 ? (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((p, i) => (
+              <Reveal key={p.singenuityId} delay={i * 60}>
+                <ProductCard product={p} />
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          /* Empty state */
+          <Reveal>
+            <div className="rounded-4xl border border-lake-100 bg-lake-50/60 px-8 py-14 text-center">
+              <p className="text-display-sm font-medium text-pine-900">
+                No rentals match that filter
+              </p>
+              <p className="mt-2 text-pine-500">
+                Try a different combination, or browse everything.
+              </p>
+              <Link href="/rentals" className="btn-primary mt-6 inline-block">
+                See all rentals
+              </Link>
+            </div>
+          </Reveal>
         )}
-      </div>
+      </Section>
 
-      {/* Results */}
-      {items.length > 0 ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((p) => (
-            <ProductCard key={p.singenuityId} product={p} />
-          ))}
-        </div>
-      ) : (
-        <p className="mt-8 rounded-xl border border-lake-100 bg-lake-50 p-6 text-pine-700">
-          No rentals match that filter.{" "}
-          <Link href="/rentals" className="font-semibold text-lake-700 hover:underline">
-            See all rentals
-          </Link>
-          .
-        </p>
-      )}
-
-      <p className="mt-10 text-sm text-pine-700">
-        Looking for a place to gather lakeside?{" "}
-        <Link href="/patios" className="font-semibold text-lake-700 hover:underline">
-          Reserve a patio or day-use spot →
-        </Link>
-      </p>
-    </div>
+      {/* ── Patios cross-sell band ────────────────────────────────── */}
+      <Section tone="pine" spacing="loose">
+        <Container size="narrow">
+          <Reveal>
+            <div className="text-center">
+              <p className="eyebrow mb-4 !text-sand-300">Also available</p>
+              <h2 className="text-display-md font-medium text-white">
+                Reserve a lakeside patio
+              </h2>
+              <p className="mx-auto mt-4 max-w-lg text-lg leading-relaxed text-sand-200/80">
+                Gather your group at one of our reserved day-use patios — BBQ pits, lake
+                views, and shaded picnic areas from 8 AM to 8 PM.
+              </p>
+              <Link href="/patios" className="btn-ghost-light mt-8 inline-block">
+                View patios &amp; day-use
+              </Link>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+    </>
   );
 }
+
+/* ── Filter chip ──────────────────────────────────────────────────────────── */
 
 function FilterChip({
   href,
@@ -117,10 +252,10 @@ function FilterChip({
       href={href}
       aria-current={active ? "true" : undefined}
       className={
-        "rounded-full border px-3 py-1.5 text-sm font-medium transition " +
+        "rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 ease-soft-out " +
         (active
-          ? "border-lake-600 bg-lake-600 text-white"
-          : "border-lake-200 text-pine-900 hover:border-lake-400 hover:bg-lake-50")
+          ? "border-lake-700 bg-lake-700 text-white shadow-soft"
+          : "border-sand-300 bg-white text-pine-700 hover:border-lake-400 hover:bg-lake-50 hover:text-lake-800")
       }
     >
       {children}

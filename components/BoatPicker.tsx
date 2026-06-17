@@ -9,8 +9,9 @@ const ORDER: Category[] = ["pontoon", "watersport", "sport", "fishing", "jetski"
 
 /**
  * Sticky, always-visible booking entry. Clicking it opens a picker of every
- * item — each row deep-links to that item's Singenuity date page. This replaces
- * the old dead/generic "Book Now" entry point.
+ * item — each row deep-links to that item's Singenuity date page (NEW TAB). This
+ * replaces the old dead/generic "Book Now" entry point. Booking deep-link logic
+ * (bookingUrl(id)) is intentionally preserved exactly.
  */
 export function BoatPicker() {
   const [open, setOpen] = useState(false);
@@ -35,34 +36,39 @@ export function BoatPicker() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-40 rounded-full bg-lake-600 px-5 py-3 font-semibold text-white shadow-lg transition hover:bg-lake-700 sm:bottom-6 sm:right-6"
+        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-lake-700 px-6 py-3.5 text-sm font-semibold text-white shadow-lift transition-all duration-300 ease-soft-out hover:-translate-y-0.5 hover:bg-lake-800 sm:bottom-7 sm:right-7"
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        🛥️ Book a boat
+        <span aria-hidden="true">⛵</span> Book a Boat
       </button>
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-pine-950/60 backdrop-blur-sm animate-fade-in sm:items-center"
           role="dialog"
           aria-modal="true"
           aria-label="Choose a boat to book"
           onClick={() => setOpen(false)}
         >
           <div
-            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
+            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-4xl bg-sand-50 p-6 shadow-lift sm:rounded-4xl sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-lake-900">Pick a boat or patio to book</h2>
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <p className="eyebrow mb-1">Reserve your day</p>
+                <h2 className="font-serif text-2xl font-medium text-pine-900">
+                  Pick a boat or patio
+                </h2>
+              </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-full p-2 text-pine-900 hover:bg-lake-50"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-pine-700 transition-colors hover:bg-pine-100"
                 aria-label="Close booking picker"
               >
-                ✕
+                <span aria-hidden="true" className="text-lg">✕</span>
               </button>
             </div>
 
@@ -70,33 +76,36 @@ export function BoatPicker() {
               const items = PRODUCTS.filter((p) => p.category === cat);
               if (!items.length) return null;
               return (
-                <div key={cat} className="mb-5">
-                  <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-lake-600">
+                <div key={cat} className="mb-7 last:mb-0">
+                  <h3 className="mb-2 text-eyebrow font-semibold uppercase text-lake-600">
                     {CATEGORY_LABELS[cat]}
                   </h3>
-                  <ul className="divide-y divide-lake-50">
+                  <ul className="divide-y divide-pine-100">
                     {items.map((p) => {
                       const from = fromPrice(p);
                       return (
-                        <li key={p.singenuityId} className="flex items-center justify-between gap-3 py-2">
+                        <li
+                          key={p.singenuityId}
+                          className="flex items-center justify-between gap-3 py-3"
+                        >
                           <Link
                             href={`/product/${p.slug}`}
-                            className="text-pine-900 hover:text-lake-700 hover:underline"
+                            className="text-pine-800 transition-colors hover:text-lake-700"
                             onClick={() => setOpen(false)}
                           >
-                            {p.name}
+                            <span className="font-medium">{p.name}</span>
                             {from !== undefined && (
-                              <span className="ml-2 text-sm text-pine-700">from ${from}</span>
+                              <span className="ml-2 text-sm text-pine-500">from ${from}</span>
                             )}
                             {p.priceTBD && (
-                              <span className="ml-2 text-sm text-pine-700">inquire for pricing</span>
+                              <span className="ml-2 text-sm text-pine-500">inquire for pricing</span>
                             )}
                           </Link>
                           <a
                             href={bookingUrl(p.singenuityId)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="shrink-0 rounded-full bg-lake-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-lake-700"
+                            className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
                             aria-label={`Book ${p.name} (opens in a new tab)`}
                           >
                             Book ↗

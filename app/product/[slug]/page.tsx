@@ -14,8 +14,13 @@ import {
 } from "@/data/marina";
 import { singenuityImage, bookingUrl } from "@/lib/singenuity";
 import { BookButton } from "@/components/BookButton";
+import { Section } from "@/components/Section";
+import { Container } from "@/components/Container";
+import { Reveal } from "@/components/Reveal";
 import { pageMeta, productJsonLd, JsonLd } from "@/lib/seo";
 import { SITE } from "@/data/site";
+
+/* ── Static generation ──────────────────────────────────────────────────── */
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -31,13 +36,16 @@ export async function generateMetadata({
   if (!p) return {};
   const from = fromPrice(p);
   return pageMeta({
-    title: p.name,
+    title: `${p.name} — Lake Sonoma Marina`,
     description:
-      `Rent the ${p.name} at Lake Sonoma Marina${p.capacity ? ` (up to ${p.capacity} people)` : ""}` +
+      `Rent the ${p.name} at Lake Sonoma Marina` +
+      `${p.capacity ? ` (up to ${p.capacity} people)` : ""}` +
       `${from !== undefined ? ` from $${from}` : ""}. ${p.blurb}`,
     path: `/product/${p.slug}`,
   });
 }
+
+/* ── Page ───────────────────────────────────────────────────────────────── */
 
 export default async function ProductPage({
   params,
@@ -49,203 +57,394 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const isPontoon = product.category === "pontoon";
+  const from = fromPrice(product);
+  const backHref =
+    product.category === "patio" ? "/patios" : `/rentals?category=${product.category}`;
+  const backLabel =
+    product.category === "patio" ? "Patios & Day-Use" : CATEGORY_LABELS[product.category];
 
   return (
-    <div className="container-page py-10">
-      {/* Breadcrumbs */}
-      <nav aria-label="Breadcrumb" className="text-sm text-pine-700">
-        <ol className="flex flex-wrap items-center gap-1">
-          <li><Link href="/" className="hover:underline">Home</Link></li>
-          <li aria-hidden="true">/</li>
-          <li>
-            <Link
-              href={product.category === "patio" ? "/patios" : `/rentals?category=${product.category}`}
-              className="hover:underline"
-            >
-              {CATEGORY_LABELS[product.category]}
-            </Link>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li className="font-medium text-pine-900" aria-current="page">{product.name}</li>
-        </ol>
-      </nav>
+    <>
+      {/* ── Breadcrumb + gallery hero ──────────────────────────────── */}
+      <Section tone="white" spacing="none" headerOffset>
+        <Container>
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="pt-6 pb-8">
+            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-pine-500">
+              <li>
+                <Link href="/" className="transition-colors hover:text-lake-700">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true" className="select-none text-pine-300">
+                /
+              </li>
+              <li>
+                <Link href={backHref} className="transition-colors hover:text-lake-700">
+                  {backLabel}
+                </Link>
+              </li>
+              <li aria-hidden="true" className="select-none text-pine-300">
+                /
+              </li>
+              <li className="font-medium text-pine-900" aria-current="page">
+                {product.name}
+              </li>
+            </ol>
+          </nav>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        {/* Gallery */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-lake-50">
-          <Image
-            src={singenuityImage(product.singenuityId, 1000, 750)}
-            alt={`${product.name} at Lake Sonoma Marina`}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
-            priority
-          />
-        </div>
+          {/* Two-column layout: gallery + booking panel */}
+          <div className="grid gap-10 pb-16 lg:grid-cols-[1fr_420px] lg:items-start lg:gap-16">
+            {/* Gallery */}
+            <div>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-4xl bg-lake-50 shadow-card">
+                <Image
+                  src={singenuityImage(product.singenuityId, 1000, 750)}
+                  alt={`${product.name} on Lake Sonoma`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
 
-        {/* Booking panel */}
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-lake-600">
-            {CATEGORY_LABELS[product.category]}
-          </p>
-          <h1 className="mt-1 text-3xl font-extrabold text-lake-900">{product.name}</h1>
-          {product.capacity !== undefined && (
-            <p className="mt-2 text-pine-700">Seats up to {product.capacity} people</p>
-          )}
-          <p className="mt-3 text-pine-900/90">{product.blurb}</p>
+              {/* Category + blurb below image on desktop */}
+              <div className="mt-8 hidden lg:block">
+                <p className="eyebrow mb-3">{CATEGORY_LABELS[product.category]}</p>
+                <p className="text-lg leading-relaxed text-pine-700">{product.blurb}</p>
+              </div>
+            </div>
 
-          {/* Pricing */}
-          <div className="mt-5 rounded-xl border border-lake-100 bg-lake-50/60 p-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-pine-700">Pricing</h2>
-            {product.priceTBD ? (
-              <p className="mt-2 text-pine-900">
-                Pricing varies — please call{" "}
-                <a href={SITE.phoneHref} className="font-semibold text-lake-700 hover:underline">
-                  {SITE.phone}
-                </a>{" "}
-                or check availability for current rates.
+            {/* Booking panel (sticky on desktop) */}
+            <aside className="lg:sticky lg:top-28" aria-label="Booking details">
+              <p className="eyebrow mb-2">{CATEGORY_LABELS[product.category]}</p>
+              <h1 className="text-display-md font-medium text-pine-900">{product.name}</h1>
+
+              {product.capacity !== undefined && (
+                <p className="mt-2 text-pine-500">
+                  Up to {product.capacity}{" "}
+                  {product.capacity === 1 ? "guest" : "guests"}
+                </p>
+              )}
+
+              {/* Blurb — visible on mobile only (desktop shows below image) */}
+              <p className="mt-4 text-base leading-relaxed text-pine-700 lg:hidden">
+                {product.blurb}
               </p>
-            ) : (
-              <ul className="mt-2 space-y-1">
-                {product.pricing.map((opt) => (
-                  <li key={opt.label} className="flex items-baseline justify-between">
-                    <span className="text-pine-900">{opt.label}</span>
-                    <span className="text-lg font-bold text-lake-800">
-                      {opt.amount !== undefined ? `$${opt.amount}` : "Inquire"}
+
+              {/* Pricing card */}
+              <div className="mt-6 rounded-4xl border border-sand-200 bg-sand-50 p-6 shadow-soft">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-pine-500">
+                  Pricing
+                </h2>
+
+                {product.priceTBD ? (
+                  <div className="mt-3">
+                    <p className="text-2xl font-medium text-pine-900">
+                      Call for pricing
+                    </p>
+                    <p className="mt-1 text-sm text-pine-500">
+                      Pricing varies — please call or check availability.
+                    </p>
+                    <a
+                      href={SITE.phoneHref}
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-lake-700 underline-offset-4 hover:underline"
+                    >
+                      {SITE.phone}
+                    </a>
+                  </div>
+                ) : (
+                  <ul className="mt-3 divide-y divide-sand-200">
+                    {product.pricing.map((opt) => (
+                      <li
+                        key={opt.label}
+                        className="flex items-baseline justify-between py-2.5 first:pt-0 last:pb-0"
+                      >
+                        <span className="text-sm text-pine-700">{opt.label}</span>
+                        <span className="text-xl font-medium text-pine-900">
+                          {opt.amount !== undefined ? `$${opt.amount}` : "Inquire"}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {product.durations && product.durations.length > 0 && (
+                  <p className="mt-4 border-t border-sand-200 pt-4 text-xs text-pine-500">
+                    <span className="font-semibold text-pine-700">Available durations:</span>{" "}
+                    {product.durations.join(" · ")}
+                  </p>
+                )}
+
+                <p className="mt-3 text-xs text-pine-400">
+                  Exact availability and per-duration rates are shown on the booking page.
+                </p>
+              </div>
+
+              {/* Primary CTA */}
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <BookButton
+                  singenuityId={product.singenuityId}
+                  productName={product.name}
+                  className="btn-primary flex-1 text-center"
+                />
+                <a
+                  href={SITE.phoneHref}
+                  className="btn-secondary flex-1 text-center"
+                  aria-label={`Call Lake Sonoma Marina at ${SITE.phone}`}
+                >
+                  Call {SITE.phone}
+                </a>
+              </div>
+              <p className="mt-2 text-xs text-pine-400">
+                Booking opens securely on Singenuity in a new tab.
+              </p>
+
+              {/* From price summary */}
+              {from !== undefined && (
+                <p className="mt-4 text-sm text-pine-500">
+                  Starting from{" "}
+                  <span className="font-semibold text-pine-800">${from}</span>{" "}
+                  / {product.pricing[0]?.label?.toLowerCase() ?? "rental"}
+                </p>
+              )}
+            </aside>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ── What's included + Operator rules ──────────────────────── */}
+      <Section tone="sand" spacing="loose">
+        <div className="grid gap-12 md:grid-cols-2">
+          {/* What's included */}
+          <Reveal>
+            <section aria-labelledby="included-heading">
+              <p className="eyebrow mb-3">Every reservation</p>
+              <h2
+                id="included-heading"
+                className="text-display-sm font-medium text-pine-900"
+              >
+                What&apos;s included
+              </h2>
+              <ul className="mt-6 space-y-3">
+                {WHATS_INCLUDED.map((item) => (
+                  <li key={item} className="flex gap-3 text-pine-700">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 flex-shrink-0 text-lake-600"
+                    >
+                      ✓
                     </span>
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
-            )}
-            {product.durations && product.durations.length > 0 && (
-              <p className="mt-3 text-sm text-pine-900">
-                <span className="font-semibold">Available:</span> {product.durations.join(" · ")}
-              </p>
-            )}
-            <p className="mt-2 text-xs text-pine-700">
-              Exact availability and rates for each duration are shown on the booking page.
-            </p>
-          </div>
+            </section>
+          </Reveal>
 
-          {/* CTAs */}
-          <div className="mt-5 flex flex-wrap gap-3">
-            <BookButton singenuityId={product.singenuityId} productName={product.name} />
-            <a href={SITE.phoneHref} className="btn-secondary">
-              Call {SITE.phone}
-            </a>
-          </div>
-          <p className="mt-2 text-xs text-pine-700">
-            Booking opens securely on Singenuity in a new tab.
-          </p>
-        </div>
-      </div>
-
-      {/* Details: included + rules */}
-      <div className="mt-12 grid gap-8 md:grid-cols-2">
-        <section aria-labelledby="included">
-          <h2 id="included" className="text-xl font-bold text-lake-900">What&apos;s included</h2>
-          <ul className="mt-3 space-y-2 text-pine-900">
-            {WHATS_INCLUDED.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span aria-hidden="true" className="text-lake-600">✓</span> {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section aria-labelledby="rules">
-          <h2 id="rules" className="text-xl font-bold text-lake-900">Good to know</h2>
-          <ul className="mt-3 space-y-2 text-pine-900">
-            {OPERATOR_RULES.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span aria-hidden="true" className="text-lake-600">•</span> {item}
-              </li>
-            ))}
-          </ul>
-          {product.notes && product.notes.length > 0 && (
-            <ul className="mt-3 space-y-2 text-pine-900">
-              {product.notes.map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-lake-600">•</span> {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
-      {/* Pontoon comparison */}
-      {isPontoon && <PontoonComparison currentSlug={product.slug} />}
-
-      {/* Cancellation summary */}
-      <section className="mt-12 rounded-2xl bg-sand-50 p-6" aria-labelledby="cancel">
-        <h2 id="cancel" className="text-lg font-bold text-lake-900">Cancellation policy</h2>
-        <ul className="mt-3 grid gap-2 text-sm text-pine-900 sm:grid-cols-3">
-          {CANCELLATION_POLICY.map((item) => (
-            <li key={item} className="flex gap-2">
-              <span aria-hidden="true" className="text-lake-600">✓</span> {item}
-            </li>
-          ))}
-        </ul>
-        <Link href="/policies" className="mt-3 inline-block text-sm font-semibold text-lake-700 hover:underline">
-          Full policies &amp; rules →
-        </Link>
-      </section>
-
-      <JsonLd data={productJsonLd(product)} />
-    </div>
-  );
-}
-
-function PontoonComparison({ currentSlug }: { currentSlug: string }) {
-  return (
-    <section className="mt-12" aria-labelledby="compare">
-      <h2 id="compare" className="text-xl font-bold text-lake-900">Compare our pontoons</h2>
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[520px] border-collapse text-left text-sm">
-          <caption className="sr-only">Capacity and half-day price for each pontoon</caption>
-          <thead>
-            <tr className="border-b border-lake-200 text-pine-700">
-              <th scope="col" className="py-2 pr-4 font-semibold">Pontoon</th>
-              <th scope="col" className="py-2 pr-4 font-semibold">Capacity</th>
-              <th scope="col" className="py-2 pr-4 font-semibold">Half-day</th>
-              <th scope="col" className="py-2 font-semibold">Book</th>
-            </tr>
-          </thead>
-          <tbody>
-            {PONTOONS.map((p) => {
-              const price = fromPrice(p);
-              const isCurrent = p.slug === currentSlug;
-              return (
-                <tr
-                  key={p.singenuityId}
-                  className={"border-b border-lake-100 " + (isCurrent ? "bg-lake-50" : "")}
-                >
-                  <th scope="row" className="py-2 pr-4 font-medium text-pine-900">
-                    <Link href={`/product/${p.slug}`} className="hover:text-lake-700 hover:underline">
-                      {p.name}
-                    </Link>
-                    {isCurrent && <span className="ml-2 text-xs text-lake-600">(viewing)</span>}
-                  </th>
-                  <td className="py-2 pr-4 text-pine-900">{p.capacity ?? "—"}</td>
-                  <td className="py-2 pr-4 font-semibold text-lake-800">
-                    {price !== undefined ? `$${price}` : "Inquire"}
-                  </td>
-                  <td className="py-2">
-                    <a
-                      href={bookingUrl(p.singenuityId)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full bg-lake-600 px-3 py-1 text-xs font-semibold text-white hover:bg-lake-700"
+          {/* Operator & product notes */}
+          <Reveal delay={80}>
+            <section aria-labelledby="rules-heading">
+              <p className="eyebrow mb-3">Good to know</p>
+              <h2
+                id="rules-heading"
+                className="text-display-sm font-medium text-pine-900"
+              >
+                Operator rules
+              </h2>
+              <ul className="mt-6 space-y-3">
+                {OPERATOR_RULES.map((item) => (
+                  <li key={item} className="flex gap-3 text-pine-700">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 flex-shrink-0 text-lake-400"
                     >
-                      Book ↗
-                    </a>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </section>
+                      ·
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+                {product.notes &&
+                  product.notes.length > 0 &&
+                  product.notes.map((note) => (
+                    <li key={note} className="flex gap-3 text-pine-700">
+                      <span
+                        aria-hidden="true"
+                        className="mt-0.5 flex-shrink-0 text-lake-600"
+                      >
+                        ·
+                      </span>
+                      <span className="font-medium">{note}</span>
+                    </li>
+                  ))}
+              </ul>
+            </section>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/* ── Pontoon comparison table (pontoon category only) ───────── */}
+      {isPontoon && (
+        <Section tone="white" spacing="loose">
+          <Reveal>
+            <section aria-labelledby="compare-heading">
+              <p className="eyebrow mb-3">Pontoon fleet</p>
+              <h2
+                id="compare-heading"
+                className="text-display-sm font-medium text-pine-900"
+              >
+                Compare our pontoons
+              </h2>
+              <p className="mt-2 text-pine-500">
+                All pontoons include the same great amenities — choose the size that fits
+                your group.
+              </p>
+
+              <div className="mt-8 overflow-x-auto rounded-4xl border border-sand-200 shadow-soft">
+                <table className="w-full min-w-[540px] border-collapse text-left text-sm">
+                  <caption className="sr-only">
+                    Capacity and half-day price for each pontoon at Lake Sonoma Marina
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-sand-200 bg-sand-50">
+                      <th
+                        scope="col"
+                        className="px-6 py-4 font-semibold text-pine-700"
+                      >
+                        Pontoon
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-4 font-semibold text-pine-700"
+                      >
+                        Capacity
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-4 font-semibold text-pine-700"
+                      >
+                        Half-day
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-4 font-semibold text-pine-700"
+                      >
+                        Book
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {PONTOONS.map((p) => {
+                      const price = fromPrice(p);
+                      const isCurrent = p.slug === product.slug;
+                      return (
+                        <tr
+                          key={p.singenuityId}
+                          className={
+                            "border-b border-sand-100 last:border-0 transition-colors " +
+                            (isCurrent
+                              ? "bg-lake-50"
+                              : "hover:bg-sand-50/60")
+                          }
+                        >
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-pine-900"
+                          >
+                            <Link
+                              href={`/product/${p.slug}`}
+                              className="transition-colors hover:text-lake-700 hover:underline"
+                            >
+                              {p.name}
+                            </Link>
+                            {isCurrent && (
+                              <span className="ml-2 rounded-full bg-lake-100 px-2 py-0.5 text-xs font-medium text-lake-700">
+                                viewing
+                              </span>
+                            )}
+                          </th>
+                          <td className="px-4 py-4 text-pine-700">
+                            {p.capacity !== undefined
+                              ? `Up to ${p.capacity}`
+                              : "—"}
+                          </td>
+                          <td className="px-4 py-4 font-semibold text-pine-900">
+                            {price !== undefined ? `$${price}` : "Inquire"}
+                          </td>
+                          <td className="px-6 py-4">
+                            <a
+                              href={bookingUrl(p.singenuityId)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-primary inline-block px-4 py-1.5 text-xs"
+                              aria-label={`Book ${p.name} (opens booking in a new tab)`}
+                            >
+                              Book ↗
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </Reveal>
+        </Section>
+      )}
+
+      {/* ── Cancellation policy ───────────────────────────────────── */}
+      <Section tone="pine" spacing="default">
+        <Reveal>
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <p className="eyebrow mb-3 !text-sand-300">Flexibility</p>
+              <h2 className="text-display-sm font-medium text-white">
+                Cancellation policy
+              </h2>
+              <ul className="mt-6 space-y-3">
+                {CANCELLATION_POLICY.map((item) => (
+                  <li key={item} className="flex gap-3 text-sand-100/80">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 flex-shrink-0 text-lake-300"
+                    >
+                      ✓
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/policies"
+                className="mt-5 inline-block text-sm font-semibold text-lake-300 underline-offset-4 hover:underline"
+              >
+                Full policies &amp; rules →
+              </Link>
+            </div>
+
+            {/* Repeat prominent CTA */}
+            <div className="rounded-4xl bg-white/10 p-8 text-center backdrop-blur-sm">
+              <p className="text-sm font-medium text-sand-200">Ready to go?</p>
+              <BookButton
+                singenuityId={product.singenuityId}
+                productName={product.name}
+                className="btn-ghost-light mt-4 w-full text-center"
+                label="Check availability"
+              />
+              <a
+                href={SITE.phoneHref}
+                className="mt-3 block text-sm text-sand-300 underline-offset-4 hover:underline"
+              >
+                Or call {SITE.phone}
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ── Structured data ─────────────────────────────────────────── */}
+      <JsonLd data={productJsonLd(product)} />
+    </>
   );
 }

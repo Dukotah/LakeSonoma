@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { pageMeta, JsonLd } from "@/lib/seo";
 import { SITE } from "@/data/site";
+import { Hero } from "@/components/Hero";
+import { Section } from "@/components/Section";
+import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/Container";
 
 export const metadata: Metadata = pageMeta({
-  title: "FAQs",
+  title: "FAQs — Lake Sonoma Marina",
   description:
     "Frequently asked questions about Lake Sonoma Marina — location, hours, boat types, fuel & docking, day-use fees, slip reservations, pets, and safety.",
   path: "/faqs",
@@ -88,35 +93,68 @@ export default function FaqsPage() {
   };
 
   return (
-    <div className="container-page py-12">
-      <p className="text-sm font-semibold uppercase tracking-widest text-lake-600">Questions?</p>
-      <h1 className="text-3xl font-extrabold text-lake-900">Get your answers</h1>
+    <>
+      <Hero
+        image="sunset-dock"
+        eyebrow="Questions?"
+        height="compact"
+        title="Frequently Asked Questions"
+        subtitle="Everything you need to know before your day on the lake."
+      />
 
-      <div className="mt-8 max-w-3xl space-y-10">
-        {FAQ_GROUPS.map((group) => (
-          <section key={group.group} aria-labelledby={`grp-${group.group}`}>
-            <h2 id={`grp-${group.group}`} className="text-lg font-bold text-lake-700">
-              {group.group}
-            </h2>
-            <dl className="mt-3 divide-y divide-lake-100 border-t border-lake-100">
-              {group.items.map((f) => (
-                <div key={f.q} className="py-4">
-                  <dt className="font-semibold text-lake-900">{f.q}</dt>
-                  <dd className="mt-1 text-pine-900/90">{f.a}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        ))}
-      </div>
+      <Section tone="default" spacing="loose">
+        <Container size="narrow">
+          <div className="space-y-14">
+            {FAQ_GROUPS.map((group, gi) => (
+              <Reveal key={group.group} delay={gi * 60}>
+                <section aria-labelledby={`faq-group-${gi}`}>
+                  <h2
+                    id={`faq-group-${gi}`}
+                    className="text-display-sm font-medium text-pine-900 mb-6 pb-3 border-b border-sand-200"
+                  >
+                    {group.group}
+                  </h2>
 
-      <p className="mt-8 text-pine-700">
-        Still have a question? Call{" "}
-        <a href={SITE.phoneHref} className="font-semibold text-lake-700 hover:underline">{SITE.phone}</a>{" "}
-        or email{" "}
-        <a href={`mailto:${SITE.email}`} className="font-semibold text-lake-700 hover:underline">{SITE.email}</a>.
-      </p>
+                  <dl className="space-y-0 divide-y divide-sand-100">
+                    {group.items.map((f, fi) => (
+                      <div key={fi} className="py-6">
+                        <dt className="text-lg font-semibold text-pine-900 mb-2">{f.q}</dt>
+                        <dd className="text-pine-600 leading-relaxed">{f.a}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Still have questions band */}
+      <Section tone="lake" spacing="tight">
+        <Container size="narrow">
+          <Reveal>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div>
+                <p className="eyebrow mb-1">Still have a question?</p>
+                <p className="text-pine-800 leading-relaxed">
+                  Our team is happy to help — call or email us directly.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 flex-shrink-0">
+                <a href={SITE.phoneHref} className="btn-primary">
+                  {SITE.phone}
+                </a>
+                <Link href="/contact" className="btn-secondary">
+                  Send a message
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
       <JsonLd data={faqJsonLd} />
-    </div>
+    </>
   );
 }

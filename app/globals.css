@@ -4,39 +4,147 @@
 
 :root {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  @apply bg-white text-pine-900 antialiased;
-}
+  /* Honor users who prefer reduced motion: kill smooth scroll + animations. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 
-/* Visible focus for keyboard users (accessibility). */
-:focus-visible {
-  outline: 3px solid theme("colors.lake.400");
-  outline-offset: 2px;
+  body {
+    @apply bg-sand-50 font-sans text-pine-800 antialiased;
+    font-feature-settings: "kern", "liga", "calt";
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Editorial serif display headings. */
+  h1,
+  h2,
+  h3 {
+    @apply font-serif text-pine-900;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+
+  h1 {
+    @apply text-display-lg font-medium;
+  }
+  h2 {
+    @apply text-display-md font-medium;
+  }
+  h3 {
+    @apply text-display-sm font-medium;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible focus for keyboard users (accessibility). */
+  :focus-visible {
+    outline: 3px solid theme("colors.lake.500");
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
 
 @layer components {
+  /* Layout container (kept for backwards-compat alongside Container.tsx). */
   .container-page {
-    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
   }
 
+  /* Small uppercase label that sits above a headline. */
+  .eyebrow {
+    @apply text-eyebrow font-semibold uppercase text-lake-600;
+  }
+
+  /* Primary CTA — solid, calm, refined. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-lake-600 px-6 py-3
-      font-semibold text-white shadow-sm transition hover:bg-lake-700
-      focus-visible:outline focus-visible:outline-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-lake-700 px-7 py-3
+      text-base font-semibold text-white shadow-soft transition-all duration-300 ease-soft-out
+      hover:-translate-y-0.5 hover:bg-lake-800 hover:shadow-card
+      focus-visible:outline focus-visible:outline-3;
   }
 
+  /* Secondary CTA — quiet outline. */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-lake-600
-      px-6 py-3 font-semibold text-lake-700 transition hover:bg-lake-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-lake-700/40
+      bg-white/40 px-7 py-3 text-base font-semibold text-lake-800 backdrop-blur
+      transition-all duration-300 ease-soft-out hover:border-lake-700 hover:bg-white
+      hover:shadow-soft focus-visible:outline focus-visible:outline-3;
   }
 
+  /* Ghost CTA for use over dark/photographic backgrounds. */
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/60
+      px-7 py-3 text-base font-semibold text-white backdrop-blur-sm transition-all duration-300
+      ease-soft-out hover:bg-white/15 focus-visible:outline focus-visible:outline-3
+      focus-visible:outline-white;
+  }
+
+  /* Refined editorial card. */
   .card {
-    @apply overflow-hidden rounded-2xl border border-lake-100 bg-white shadow-sm transition hover:shadow-md;
+    @apply overflow-hidden rounded-3xl border border-pine-100 bg-white shadow-soft
+      transition-all duration-300 ease-soft-out;
+  }
+}
+
+@layer utilities {
+  /* Reveal animation driven by the <Reveal/> client component.
+     Elements start hidden; .is-revealed (set by IntersectionObserver) plays them in.
+     prefers-reduced-motion users get an instant, fully-visible state. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Soft dark gradient overlay for legible text over full-bleed photography. */
+  .photo-overlay {
+    background: linear-gradient(
+      to top,
+      rgba(15, 21, 15, 0.72) 0%,
+      rgba(15, 21, 15, 0.38) 38%,
+      rgba(15, 21, 15, 0.12) 70%,
+      rgba(15, 21, 15, 0.18) 100%
+    );
+  }
+
+  /* Tasteful fallback gradient when an image key is missing. */
+  .photo-fallback {
+    background:
+      radial-gradient(120% 120% at 20% 0%, theme("colors.lake.500") 0%, transparent 55%),
+      linear-gradient(160deg, theme("colors.lake.800"), theme("colors.pine.900"));
   }
 }
