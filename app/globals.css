@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-pine-900 antialiased;
+}
+
+/* Visible focus for keyboard users (accessibility). */
+:focus-visible {
+  outline: 3px solid theme("colors.lake.400");
+  outline-offset: 2px;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-lake-600 px-6 py-3
+      font-semibold text-white shadow-sm transition hover:bg-lake-700
+      focus-visible:outline focus-visible:outline-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-lake-600
+      px-6 py-3 font-semibold text-lake-700 transition hover:bg-lake-50;
+  }
+
+  .card {
+    @apply overflow-hidden rounded-2xl border border-lake-100 bg-white shadow-sm transition hover:shadow-md;
+  }
+}
