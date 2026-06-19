@@ -74,6 +74,7 @@ export default function FormsPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn-primary px-5 py-2.5 text-sm"
+                            aria-label={`Download ${doc.name} (PDF)`}
                           >
                             Download PDF
                             <span aria-hidden="true"> ↓</span>

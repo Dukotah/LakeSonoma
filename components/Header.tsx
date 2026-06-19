@@ -113,7 +113,7 @@ export function Header() {
         <nav
           id="mobile-menu"
           aria-label="Primary mobile"
-          className="border-t border-pine-100 bg-sand-50 lg:hidden"
+          className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-pine-100 bg-sand-50 lg:hidden"
         >
           <ul className="mx-auto flex w-full max-w-content flex-col px-5 py-3 sm:px-6">
             {NAV.map((item) => (

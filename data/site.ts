@@ -9,7 +9,7 @@ export const SITE = {
   tagline: "Private Boat Rentals & Storage in Healdsburg, CA",
   description:
     "Boat rentals, patio day-use reservations, and boat storage at Lake Sonoma in Healdsburg/Geyserville, CA. Pontoons, ski boats, fishing boats, jet skis, kayaks and more — open year-round.",
-  url: "https://lake-sonoma.vercel.app",
+  url: "https://lakesonoma.com",
   phone: "(707) 433-2200",
   phoneHref: "tel:+17074332200",
   email: "staff@lakesonoma.com",

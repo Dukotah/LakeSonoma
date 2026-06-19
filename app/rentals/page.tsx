@@ -250,7 +250,7 @@ function FilterChip({
   return (
     <Link
       href={href}
-      aria-current={active ? "true" : undefined}
+      aria-current={active ? "page" : undefined}
       className={
         "rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 ease-soft-out " +
         (active

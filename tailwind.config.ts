@@ -16,17 +16,9 @@ const config: Config = {
     "./components/**/*.{ts,tsx}",
   ],
   theme: {
-    container: {
-      center: true,
-      padding: {
-        DEFAULT: "1.25rem",
-        sm: "1.5rem",
-        lg: "2rem",
-      },
-      screens: {
-        "2xl": "1200px",
-      },
-    },
+    // Layout width is owned by <Container/> (components/Container.tsx); the
+    // Tailwind `container` plugin is intentionally not configured to avoid
+    // competing container systems.
     extend: {
       colors: {
         lake: {

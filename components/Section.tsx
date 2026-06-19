@@ -20,6 +20,15 @@ const SPACING_CLASS: Record<Spacing, string> = {
   loose: "py-24 sm:py-32",
 };
 
+// Bottom-only padding, used when headerOffset adds a fixed top offset so the two
+// don't fight in the cascade.
+const PB_CLASS: Record<Spacing, string> = {
+  none: "",
+  tight: "pb-12 sm:pb-16",
+  default: "pb-16 sm:pb-24",
+  loose: "pb-24 sm:pb-32",
+};
+
 /**
  * Vertical rhythm primitive: a full-width band with generous editorial padding
  * and an optional background tone. Wraps children in a <Container> by default;
@@ -54,8 +63,8 @@ export function Section({
   return (
     <Tag
       id={id}
-      className={`${TONE_CLASS[tone]} ${SPACING_CLASS[spacing]}${
-        headerOffset ? " pt-28 sm:pt-32" : ""
+      className={`${TONE_CLASS[tone]} ${
+        headerOffset ? `pt-28 sm:pt-32 ${PB_CLASS[spacing]}` : SPACING_CLASS[spacing]
       }${className ? ` ${className}` : ""}`}
     >
       {bleed ? children : <Container size={containerSize}>{children}</Container>}

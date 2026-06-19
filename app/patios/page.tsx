@@ -125,41 +125,33 @@ export default function PatiosPage() {
           </Reveal>
 
           <Reveal delay={120}>
-            <div
-              className="overflow-hidden rounded-4xl bg-white shadow-card"
-              role="table"
-              aria-label="Day-use fee schedule"
-            >
-              <div
-                className="grid grid-cols-2 bg-pine-900 px-6 py-3 text-sm font-semibold uppercase tracking-wider text-sand-200"
-                role="row"
-              >
-                <span role="columnheader">Service</span>
-                <span className="text-right" role="columnheader">
-                  Fee
-                </span>
-              </div>
-              {DAY_USE_FEES.map((f, i) => (
-                <div
-                  key={f.label}
-                  className={`grid grid-cols-2 px-6 py-4 ${
-                    i < DAY_USE_FEES.length - 1
-                      ? "border-b border-sand-100"
-                      : ""
-                  }`}
-                  role="row"
-                >
-                  <span className="text-pine-800" role="cell">
-                    {f.label}
-                  </span>
-                  <span
-                    className="text-right text-lg font-semibold text-lake-800"
-                    role="cell"
-                  >
-                    ${f.amount}
-                  </span>
-                </div>
-              ))}
+            <div className="overflow-hidden rounded-4xl shadow-card">
+              <table className="w-full bg-white text-left">
+                <caption className="sr-only">Day-use fee schedule</caption>
+                <thead>
+                  <tr className="bg-pine-900 text-sm font-semibold uppercase tracking-wider text-sand-200">
+                    <th scope="col" className="px-6 py-3">
+                      Service
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right">
+                      Fee
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DAY_USE_FEES.map((f, i) => (
+                    <tr
+                      key={f.label}
+                      className={i < DAY_USE_FEES.length - 1 ? "border-b border-sand-100" : ""}
+                    >
+                      <td className="px-6 py-4 text-pine-800">{f.label}</td>
+                      <td className="px-6 py-4 text-right text-lg font-semibold text-lake-800">
+                        ${f.amount}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Reveal>
         </div>

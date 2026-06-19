@@ -123,6 +123,7 @@ export default function ContactPage() {
             <div className="aspect-[4/3] overflow-hidden rounded-4xl border border-lake-100 shadow-card">
               <iframe
                 title="Map to Lake Sonoma Marina"
+                aria-label="Interactive map showing the location of Lake Sonoma Marina"
                 src={mapSrc}
                 className="h-full w-full"
                 loading="lazy"

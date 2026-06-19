@@ -61,14 +61,17 @@ export default function PricingPage() {
               <Reveal key={cat}>
                 <div>
                   <h2 className="text-display-sm font-medium text-pine-900">{CATEGORY_LABELS[cat]}</h2>
-                  <div className="mt-4 overflow-hidden rounded-3xl border border-sand-100">
-                    <table className="w-full text-left text-sm">
+                  <div className="mt-4 overflow-x-auto rounded-3xl border border-sand-100">
+                    <table className="w-full min-w-[480px] text-left text-sm">
+                      <caption className="sr-only">
+                        {CATEGORY_LABELS[cat]} rental prices at Lake Sonoma Marina
+                      </caption>
                       <thead className="bg-sand-50 text-pine-500">
                         <tr>
-                          <th className="px-5 py-3 font-semibold">Rental</th>
-                          <th className="px-5 py-3 font-semibold">Capacity</th>
-                          <th className="px-5 py-3 font-semibold">From</th>
-                          <th className="px-5 py-3 font-semibold text-right">Book</th>
+                          <th scope="col" className="px-5 py-3 font-semibold">Rental</th>
+                          <th scope="col" className="px-5 py-3 font-semibold">Capacity</th>
+                          <th scope="col" className="px-5 py-3 font-semibold">From</th>
+                          <th scope="col" className="px-5 py-3 font-semibold text-right">Book</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-sand-100">
@@ -118,19 +121,20 @@ export default function PricingPage() {
       </Section>
 
       {/* Equipment rentals + disclaimers */}
-      <Section tone="white" spacing="tight">
+      <Section tone="white" spacing="default">
         <Reveal>
           <h2 className="text-display-sm font-medium text-pine-900">Equipment rentals</h2>
           <p className="mt-2 text-pine-600">Add tow toys and gear to your boat rental.</p>
-          <div className="mt-4 overflow-hidden rounded-3xl border border-sand-100">
-            <table className="w-full text-left text-sm">
+          <div className="mt-4 overflow-x-auto rounded-3xl border border-sand-100">
+            <table className="w-full min-w-[560px] text-left text-sm">
+              <caption className="sr-only">Equipment rental prices at Lake Sonoma Marina</caption>
               <thead className="bg-sand-50 text-pine-500">
                 <tr>
-                  <th className="px-5 py-3 font-semibold">Equipment</th>
-                  <th className="px-5 py-3 font-semibold">1 hr</th>
-                  <th className="px-5 py-3 font-semibold">4 hr</th>
-                  <th className="px-5 py-3 font-semibold">8 hr</th>
-                  <th className="px-5 py-3 font-semibold">24 hr</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">Equipment</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">1 hr</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">4 hr</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">8 hr</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">24 hr</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-sand-100">

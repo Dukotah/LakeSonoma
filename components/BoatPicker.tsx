@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { PRODUCTS, CATEGORY_LABELS, fromPrice, type Category } from "@/data/marina";
 import { bookingUrl } from "@/lib/singenuity";
@@ -16,14 +16,36 @@ const ORDER: Category[] = ["pontoon", "watersport", "sport", "fishing", "jetski"
  */
 export function BoatPicker() {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      // Focus trap: keep Tab cycling within the dialog.
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
     if (open) {
       document.addEventListener("keydown", onKey);
       document.body.style.overflow = "hidden";
+      // Move focus into the dialog on open.
+      dialogRef.current?.querySelector<HTMLElement>("button")?.focus();
     }
     return () => {
       document.removeEventListener("keydown", onKey);
@@ -37,7 +59,7 @@ export function BoatPicker() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-lake-700 px-6 py-3.5 text-sm font-semibold text-white shadow-lift transition-all duration-300 ease-soft-out hover:-translate-y-0.5 hover:bg-lake-800 sm:bottom-7 sm:right-7"
+        className="fixed bottom-20 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-lake-700 px-6 py-3.5 text-sm font-semibold text-white shadow-lift transition-all duration-300 ease-soft-out hover:-translate-y-0.5 hover:bg-lake-800 sm:bottom-7 sm:right-7"
         aria-haspopup="dialog"
         aria-expanded={open}
       >
@@ -49,17 +71,18 @@ export function BoatPicker() {
           className="fixed inset-0 z-50 flex items-end justify-center bg-pine-950/60 backdrop-blur-sm animate-fade-in sm:items-center"
           role="dialog"
           aria-modal="true"
-          aria-label="Choose a boat to book"
+          aria-labelledby="boatpicker-title"
           onClick={() => setOpen(false)}
         >
           <div
+            ref={dialogRef}
             className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-4xl bg-sand-50 p-6 shadow-lift sm:rounded-4xl sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
                 <p className="eyebrow mb-1">Reserve your day</p>
-                <h2 className="font-serif text-2xl font-medium text-pine-900">
+                <h2 id="boatpicker-title" className="font-serif text-2xl font-medium text-pine-900">
                   Pick a boat or patio
                 </h2>
               </div>
@@ -105,7 +128,7 @@ export function BoatPicker() {
                           {p.bookByPhone ? (
                             <a
                               href={SITE.phoneHref}
-                              className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
+                              className="shrink-0 rounded-full bg-lake-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
                               aria-label={`Call to book ${p.name}`}
                             >
                               Call ☎
@@ -115,7 +138,7 @@ export function BoatPicker() {
                               href={bookingUrl(p.singenuityId)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
+                              className="shrink-0 rounded-full bg-lake-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
                               aria-label={`Book ${p.name} (opens in a new tab)`}
                             >
                               Book ↗

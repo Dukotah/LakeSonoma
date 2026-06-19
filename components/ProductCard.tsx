@@ -27,7 +27,8 @@ export function ProductCard({ product }: { product: Product }) {
       <Link
         href={`/product/${product.slug}`}
         className="block focus-visible:outline-none"
-        aria-label={`${product.name} details`}
+        tabIndex={-1}
+        aria-hidden="true"
       >
         <div className="relative aspect-[4/3] overflow-hidden bg-lake-100">
           {imgOk ? (

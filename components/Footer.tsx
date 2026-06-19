@@ -15,7 +15,7 @@ export function Footer() {
   return (
     <footer className="bg-pine-950 text-pine-200">
       <div className="mx-auto w-full max-w-content px-5 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Brand + contact */}
           <div>
             <Logo tone="light" />

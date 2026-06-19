@@ -10,7 +10,7 @@ import {
 } from "@/lib/web3forms";
 
 const inputClass =
-  "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-400 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
+  "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-500 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
 
 /**
  * Contact form — submits to Web3Forms (emails staff@lakesonoma.com). Shows

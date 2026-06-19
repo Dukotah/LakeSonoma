@@ -10,7 +10,7 @@ const HEIGHT_CLASS: Record<Height, string> = {
   full: "min-h-[92vh]",
   tall: "min-h-[78vh]",
   medium: "min-h-[60vh]",
-  compact: "min-h-[44vh]",
+  compact: "min-h-[56vh] sm:min-h-[44vh]",
 };
 
 /**

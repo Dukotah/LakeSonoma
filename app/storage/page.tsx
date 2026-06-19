@@ -123,9 +123,9 @@ export default function StoragePage() {
       </Section>
 
       {/* ── Fees & terms ─────────────────────────────────────────── */}
-      <Section tone="white" spacing="tight" id="storage-terms">
+      <Section tone="sand" spacing="default" id="storage-terms">
         <Reveal>
-          <div className="rounded-4xl bg-sand-50 p-8 shadow-soft">
+          <div className="rounded-4xl bg-white p-8 shadow-soft">
             <p className="eyebrow">Fees &amp; Terms</p>
             <h2 className="mt-2 text-display-sm font-medium text-pine-900">
               Good to know before you reserve

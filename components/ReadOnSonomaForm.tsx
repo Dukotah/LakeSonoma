@@ -10,7 +10,7 @@ import {
 } from "@/lib/web3forms";
 
 const inputClass =
-  "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-400 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
+  "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-500 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
 
 /**
  * Read On Sonoma reward redemption form — submits to Web3Forms (emails the
@@ -152,7 +152,14 @@ export function ReadOnSonomaForm() {
               key={tier.level}
               className="flex cursor-pointer items-start gap-3 rounded-2xl border border-sand-200 bg-white px-4 py-3.5 transition hover:border-lake-400 hover:bg-lake-50 has-[:checked]:border-lake-500 has-[:checked]:bg-lake-50"
             >
-              <input type="radio" name="rewardTier" value={tier.name} required className="mt-0.5 accent-lake-600" />
+              <input
+                type="radio"
+                name="rewardTier"
+                value={tier.name}
+                required
+                aria-required="true"
+                className="mt-0.5 accent-lake-600"
+              />
               <span>
                 <span className="block font-semibold text-pine-900">{tier.name}</span>
                 <span className="text-sm text-pine-600">{tier.description}</span>

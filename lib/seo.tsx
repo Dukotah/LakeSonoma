@@ -14,6 +14,12 @@ export function pageMeta(opts: {
   path?: string;
 }): Metadata {
   const url = opts.path ? `${SITE.url}${opts.path}` : SITE.url;
+  const ogImage = {
+    url: `${SITE.url}/opengraph-image`,
+    width: 1200,
+    height: 630,
+    alt: SITE.name,
+  };
   return {
     title: opts.title,
     description: opts.description,
@@ -24,8 +30,14 @@ export function pageMeta(opts: {
       url,
       siteName: SITE.name,
       type: "website",
+      images: [ogImage],
     },
-    twitter: { card: "summary_large_image", title: opts.title, description: opts.description },
+    twitter: {
+      card: "summary_large_image",
+      title: opts.title,
+      description: opts.description,
+      images: [ogImage.url],
+    },
   };
 }
 

@@ -58,7 +58,7 @@ export function NewsletterForm() {
           type="email"
           required
           placeholder="you@email.com"
-          className="min-w-0 flex-1 rounded-full border border-pine-700 bg-pine-900 px-4 py-2.5 text-sm text-white placeholder-pine-400 focus:border-lake-400 focus:outline-none focus:ring-2 focus:ring-lake-500/40"
+          className="min-w-0 flex-1 rounded-full border border-pine-700 bg-pine-900 px-4 py-2.5 text-sm text-white placeholder-pine-500 focus:border-lake-400 focus:outline-none focus:ring-2 focus:ring-lake-500/40"
         />
         <button
           type="submit"

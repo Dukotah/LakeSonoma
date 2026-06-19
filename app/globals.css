@@ -69,17 +69,17 @@
     @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
   }
 
-  /* Small uppercase label that sits above a headline. */
+  /* Small uppercase label that sits above a headline (lake-700 for AA contrast). */
   .eyebrow {
-    @apply text-eyebrow font-semibold uppercase text-lake-600;
+    @apply text-eyebrow font-semibold uppercase text-lake-700;
   }
 
-  /* Primary CTA — solid, calm, refined. */
+  /* Primary CTA — solid, calm, refined. Dark focus ring stays visible on light bg. */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-full bg-lake-700 px-7 py-3
       text-base font-semibold text-white shadow-soft transition-all duration-300 ease-soft-out
       hover:-translate-y-0.5 hover:bg-lake-800 hover:shadow-card
-      focus-visible:outline focus-visible:outline-3;
+      focus-visible:outline focus-visible:outline-3 focus-visible:outline-lake-700;
   }
 
   /* Secondary CTA — quiet outline. */
@@ -87,7 +87,7 @@
     @apply inline-flex items-center justify-center gap-2 rounded-full border border-lake-700/40
       bg-white/40 px-7 py-3 text-base font-semibold text-lake-800 backdrop-blur
       transition-all duration-300 ease-soft-out hover:border-lake-700 hover:bg-white
-      hover:shadow-soft focus-visible:outline focus-visible:outline-3;
+      hover:shadow-soft focus-visible:outline focus-visible:outline-3 focus-visible:outline-lake-700;
   }
 
   /* Ghost CTA for use over dark/photographic backgrounds. */
