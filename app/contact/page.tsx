@@ -40,12 +40,18 @@ export default function ContactPage() {
                 </h2>
                 <address className="not-italic space-y-2 text-pine-700 leading-relaxed">
                   <p>{SITE.address.full}</p>
-                  <p>
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <a
                       href={SITE.phoneHref}
                       className="font-semibold text-lake-700 hover:text-lake-900 transition-colors"
                     >
                       {SITE.phone}
+                    </a>
+                    <a
+                      href={`sms:+17074332200`}
+                      className="rounded-full bg-lake-50 px-3 py-0.5 text-xs font-semibold text-lake-700 transition-colors hover:bg-lake-100"
+                    >
+                      Text us
                     </a>
                   </p>
                   <p>
@@ -150,11 +156,6 @@ export default function ContactPage() {
             </p>
           </Reveal>
 
-          {/*
-            TODO (developer): wire ContactForm to a backend or form service (e.g. Resend,
-            Formspree, or a Next.js server action) before going live. Fields are listed
-            in data/content.ts CONTACT.formFields.
-          */}
           <Reveal delay={80}>
             <ContactForm />
           </Reveal>

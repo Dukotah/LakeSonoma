@@ -170,19 +170,23 @@ export default function PatiosPage() {
         <Reveal className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-display-sm font-medium text-sand-50">
-              Questions about patios or groups?
+              Planning a group, party, or company outing?
             </h2>
-            <p className="mt-2 text-sand-200">
-              Call the marina directly or drop us a note and we&apos;ll get
-              back to you quickly.
+            <p className="mt-2 max-w-xl text-sand-200">
+              Birthdays, family reunions, corporate days, club gatherings — the Grand Patio and
+              our pontoons are made for groups. Tell us your date and headcount and we&apos;ll help
+              you put it together.
             </p>
           </div>
           <div className="flex flex-shrink-0 flex-wrap gap-3">
             <a href={SITE.phoneHref} className="btn-ghost-light">
               {SITE.phone}
             </a>
-            <Link href="/contact" className="btn-ghost-light">
-              Send a message
+            <Link
+              href="/contact?subject=Group+%2F+event+inquiry"
+              className="btn-ghost-light"
+            >
+              Plan an event
             </Link>
           </div>
         </Reveal>

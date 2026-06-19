@@ -39,6 +39,162 @@ export const READ_ON_SONOMA = {
     "Rewards are redeemed by form: parent/driver name, email, phone, student info, school/library branch, preferred reward tier, requested visit time, and date of visit (weekdays only, excluding major holidays).",
 };
 
+/* ----------------------------------------------- FORMS & AGREEMENTS (real PDFs) */
+export interface Agreement {
+  name: string;
+  /** Local hosted PDF (in /public/forms), or undefined for request-only docs. */
+  pdf?: string;
+  /** Headline price, if fixed (e.g. "$450 / year"). */
+  price?: string;
+  blurb: string;
+  /** How it's obtained/submitted when there's no downloadable PDF. */
+  via?: string;
+}
+
+export interface AgreementGroup {
+  id: string;
+  heading: string;
+  description: string;
+  items: Agreement[];
+}
+
+const FORMS = "/forms";
+
+export const AGREEMENT_GROUPS: AgreementGroup[] = [
+  {
+    id: "berthing",
+    heading: "Berthing License Agreements",
+    description:
+      "Reserve a slip for your boat. Complete the agreement that matches your term and submit it with the Membership Fee deposit. Applications are first-come, first-served and all contracts are billed in full.",
+    items: [
+      {
+        name: "12-Month Berthing License Agreement",
+        pdf: `${FORMS}/12-month-berthing-agreement.pdf`,
+        blurb:
+          "Annual membership (12-month minimum). Includes a marina store discount and lakeside slip-holder / dry-storage parking. Requires a Lifetime Membership.",
+      },
+      {
+        name: "6-Month Berthing License Agreement",
+        pdf: `${FORMS}/6-month-berthing-agreement.pdf`,
+        blurb:
+          "Seasonal membership (6-month minimum). Includes a marina store discount and lakeside parking. Returning members have first right to their prior slip.",
+      },
+      {
+        name: "Short-Term Berthing License Agreement",
+        pdf: `${FORMS}/short-term-berthing-agreement.pdf`,
+        blurb:
+          "Month-to-month dockage. Payment due in full upon signing; placement based on availability. No store discount or parking pass (a temporary parking pass is issued day one).",
+      },
+    ],
+  },
+  {
+    id: "storage",
+    heading: "Storage Agreements",
+    description:
+      "On-site storage for trailers and dry-stored boats, billed monthly. Complete the agreement and submit it with payment to reserve your space.",
+    items: [
+      {
+        name: "Trailer Storage Agreement",
+        pdf: `${FORMS}/trailer-storage-agreement.pdf`,
+        price: "$85 / month",
+        blurb: "On-site trailer storage on a month-to-month basis.",
+      },
+      {
+        name: "Dry Storage Agreement",
+        pdf: `${FORMS}/dry-storage-agreement.pdf`,
+        blurb: "On-site dry boat storage on a month-to-month basis.",
+      },
+    ],
+  },
+  {
+    id: "passes",
+    heading: "Launch Ramp & Day-Use Passes",
+    description:
+      "Annual passes for the private launch ramp, valid for one calendar year. A great option if you launch often through the season.",
+    items: [
+      {
+        name: "Annual Ramp Pass",
+        pdf: `${FORMS}/annual-ramp-pass-agreement.pdf`,
+        price: "$450 / year",
+        blurb:
+          "Launch-ramp access for your vehicle and trailer for one calendar year. Does not include slip-holder parking.",
+      },
+      {
+        name: "Annual Day-Use Pass",
+        pdf: `${FORMS}/annual-day-use-pass-agreement.pdf`,
+        price: "$250 / year",
+        blurb:
+          "Launch-ramp access for your vehicle for one calendar year (hand launch acceptable).",
+      },
+    ],
+  },
+  {
+    id: "other",
+    heading: "Other Forms",
+    description:
+      "A few items are handled directly with the office rather than as a download.",
+    items: [
+      {
+        name: "ACH Application",
+        blurb:
+          "Set up monthly billing by automatic bank transfer. Monthly billing is offered in hardship cases and with approval only.",
+        via: "Request by email from the billing office",
+      },
+      {
+        name: "Request to Vacate Form",
+        blurb:
+          "Notify the marina when removing your boat. Must be completed in person, the day the boat is removed.",
+        via: "Completed in person at the Marina Store",
+      },
+    ],
+  },
+];
+
+/* --------------------------------------------------------------- STORAGE */
+export const STORAGE = {
+  intro:
+    "Own your own boat? Keep it on the water and ready to go. Lake Sonoma Marina offers covered and uncovered slip berthing, plus on-site dry and trailer storage. Slips are charged by boat length or slip length (whichever is greater), billed monthly.",
+  options: [
+    {
+      name: "Slip Berthing",
+      detail:
+        "Covered and uncovered slips for your boat, sized by length. Choose a 12-month (annual) or 6-month (seasonal) Berthing License — both include a marina store discount and lakeside parking — or a short-term month-to-month slip.",
+      price: "Billed monthly by length",
+    },
+    {
+      name: "Dry Storage",
+      detail: "On-site dry storage for your boat on a month-to-month basis.",
+      price: "Monthly",
+    },
+    {
+      name: "Trailer Storage",
+      detail: "On-site storage for your boat trailer on a month-to-month basis.",
+      price: "$85 / month",
+    },
+  ],
+  terms: [
+    "Reservations are finalized only when the appropriate Berthing License Agreement and payment are both complete.",
+    "All contracts are billed in full. Applications are first-come, first-served.",
+    "Monthly payments are considered for hardship cases with manager approval, for an additional $10/month billing fee and required automatic ACH payments.",
+    "To join the waitlist, submit a Seasonal or Annual Berthing Agreement and the corresponding Membership Fee as a deposit.",
+  ],
+  contact: {
+    email: "billing@lakesonoma.com",
+    phone: "(707) 526-7272",
+    phoneHref: "tel:+17075267272",
+  },
+};
+
+/* ------------------------------------------------------ HYDROHOIST BOAT LIFT */
+export const HYDROHOIST = {
+  heading: "HydroHoist Boat Lift",
+  body:
+    "Lake Sonoma Marina is now a proud supplier of HydroHoist Boat Lifts. Keep your boat out of the water, protected from hull growth and wear, and ready to launch in seconds. Purchase a boat lift through our marina today.",
+  cta: "For pricing and more information, please call the billing office.",
+  phone: "(707) 526-7272",
+  phoneHref: "tel:+17075267272",
+};
+
 /* ------------------------------------------------------- POLICIES & RULES */
 export interface PolicyGroup {
   title: string;

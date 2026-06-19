@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
-import { SITE, HOURS } from "@/data/site";
+import { SITE, HOURS, REVIEWS, SOCIAL } from "@/data/site";
 import { singenuityImage } from "@/lib/singenuity";
+import { productImage } from "@/data/imagery";
 import { fromPrice, type Product } from "@/data/marina";
+
+/** Approximate marina coordinates (Geyserville, CA) for LocalBusiness geo. */
+const GEO = { lat: 38.7169, lng: -123.0186 };
 
 /** Per-page metadata helper with sensible OpenGraph defaults. */
 export function pageMeta(opts: {
@@ -25,8 +29,23 @@ export function pageMeta(opts: {
   };
 }
 
+/** Aggregate rating built from the real published reviews (never fabricated). */
+function aggregateRating() {
+  const rated = REVIEWS.filter((r) => typeof r.stars === "number");
+  if (!rated.length) return undefined;
+  const avg = rated.reduce((s, r) => s + (r.stars ?? 0), 0) / rated.length;
+  return {
+    "@type": "AggregateRating",
+    ratingValue: Number(avg.toFixed(1)),
+    reviewCount: rated.length,
+    bestRating: 5,
+    worstRating: 1,
+  };
+}
+
 /** schema.org LocalBusiness for the marina (rendered once in the root layout). */
 export function localBusinessJsonLd() {
+  const rating = aggregateRating();
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -35,6 +54,8 @@ export function localBusinessJsonLd() {
     telephone: SITE.phone,
     email: SITE.email,
     url: SITE.url,
+    image: `${SITE.url}/opengraph-image`,
+    priceRange: "$$",
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.street,
@@ -43,9 +64,46 @@ export function localBusinessJsonLd() {
       postalCode: SITE.address.postalCode,
       addressCountry: "US",
     },
+    geo: { "@type": "GeoCoordinates", latitude: GEO.lat, longitude: GEO.lng },
+    hasMap: `https://www.google.com/maps?q=${encodeURIComponent(SITE.mapQuery)}`,
+    sameAs: [SOCIAL.facebook, SOCIAL.instagram, SOCIAL.tripadvisor],
     openingHoursSpecification: HOURS.map((h) => ({
       "@type": "OpeningHoursSpecification",
       description: `${h.season}: ${h.value}`,
+    })),
+    ...(rating && { aggregateRating: rating }),
+    review: REVIEWS.map((r) => ({
+      "@type": "Review",
+      reviewRating: { "@type": "Rating", ratingValue: r.stars ?? 5, bestRating: 5 },
+      author: { "@type": "Person", name: r.author },
+      reviewBody: r.quote,
+    })),
+  };
+}
+
+/** schema.org FAQPage for the FAQs page. */
+export function faqPageJsonLd(faqs: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
+/** schema.org BreadcrumbList. Pass ordered { name, path } crumbs. */
+export function breadcrumbJsonLd(crumbs: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: `${SITE.url}${c.path}`,
     })),
   };
 }
@@ -56,21 +114,41 @@ export function localBusinessJsonLd() {
  * rating data — we never fabricate ratings.
  */
 export function productJsonLd(p: Product) {
-  const price = fromPrice(p);
+  const amounts = p.pricing
+    .map((o) => o.amount)
+    .filter((a): a is number => typeof a === "number");
+  const low = amounts.length ? Math.min(...amounts) : undefined;
+  const high = amounts.length ? Math.max(...amounts) : undefined;
+  const offers =
+    low === undefined
+      ? undefined
+      : low === high
+        ? {
+            "@type": "Offer",
+            price: low,
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: `${SITE.url}/product/${p.slug}`,
+          }
+        : {
+            "@type": "AggregateOffer",
+            lowPrice: low,
+            highPrice: high,
+            priceCurrency: "USD",
+            offerCount: amounts.length,
+            availability: "https://schema.org/InStock",
+            url: `${SITE.url}/product/${p.slug}`,
+          };
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: p.name,
     description: p.blurb,
-    image: singenuityImage(p.singenuityId),
-    ...(price !== undefined && {
-      offers: {
-        "@type": "Offer",
-        price,
-        priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
-      },
-    }),
+    brand: { "@type": "Brand", name: SITE.name },
+    image: productImage(p.slug)
+      ? `${SITE.url}${productImage(p.slug)}`
+      : singenuityImage(p.singenuityId),
+    ...(offers && { offers }),
   };
 }
 

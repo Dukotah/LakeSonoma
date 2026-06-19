@@ -25,4 +25,14 @@ export const redirects = [
 
   // Old blog slug
   { source: "/read-on", destination: "/read-on-sonoma", permanent: true },
+
+  // Old WordPress info pages -> new equivalents
+  { source: "/boat-storage", destination: "/storage", permanent: true },
+  { source: "/forms-agreements", destination: "/forms", permanent: true },
+  { source: "/forms-agreements/:path*", destination: "/forms", permanent: true },
+  { source: "/hydrohoist-boat-lift", destination: "/hydrohoist", permanent: true },
+  { source: "/policies-rules", destination: "/policies", permanent: true },
+  { source: "/privacy-policy", destination: "/privacy", permanent: true },
+  { source: "/privacy-policy-2", destination: "/privacy", permanent: true },
+  { source: "/terms-of-service", destination: "/terms", permanent: true },
 ];

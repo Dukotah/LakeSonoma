@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { fromPrice, type Product } from "@/data/marina";
 import { singenuityImage } from "@/lib/singenuity";
+import { productImage } from "@/data/imagery";
+import { BLUR_DATA_URL } from "@/lib/blur";
 import { BookButton } from "@/components/BookButton";
 
 /**
@@ -17,6 +19,8 @@ export function ProductCard({ product }: { product: Product }) {
   const from = fromPrice(product);
   const unit = product.pricing[0]?.label ?? "";
   const [imgOk, setImgOk] = useState(true);
+  // Prefer the marina's own photo; fall back to Singenuity's hosted image.
+  const imgSrc = productImage(product.slug) ?? singenuityImage(product.singenuityId);
 
   return (
     <article className="card group flex flex-col hover:-translate-y-1 hover:shadow-lift">
@@ -28,10 +32,12 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="relative aspect-[4/3] overflow-hidden bg-lake-100">
           {imgOk ? (
             <Image
-              src={singenuityImage(product.singenuityId)}
+              src={imgSrc}
               alt={`${product.name} at Lake Sonoma Marina`}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
               className="object-cover transition-transform duration-700 ease-soft-out group-hover:scale-105"
               onError={() => setImgOk(false)}
             />
@@ -69,6 +75,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-6 flex flex-wrap items-center gap-2">
           <BookButton
             singenuityId={product.singenuityId}
+            bookByPhone={product.bookByPhone}
             label="Book"
             productName={product.name}
             className="btn-primary px-5 py-2.5 text-sm"

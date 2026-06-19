@@ -8,10 +8,10 @@
  *
  *  RULES
  *   - Never invent prices, specs, photos, reviews, or Singenuity IDs.
- *   - All `singenuityId` + `price` values are VERIFIED. Do not alter without
- *     confirming with the owner.
- *   - Descriptions (`blurb`) and durations mirror the live lakesonoma.com.
+ *   - Prices below mirror the marina's official 2026 Boat Rental Rates sheet
+ *     (1 hour / 4 hours / 8 hours / 24 hours). Do not alter without the owner.
  *   - `priceTBD: true` means "ask the owner" — UI shows an inquire CTA, not $0.
+ *   - `bookByPhone: true` is for items with no Singenuity deep-link (call to book).
  *   - Unknown fields (e.g. stereo) are left undefined so the UI omits them.
  * ============================================================================
  */
@@ -28,8 +28,8 @@ export type Category =
 export type ActivityTag = "cruising" | "fishing" | "watersports" | "paddling" | "patio";
 
 export interface PriceOption {
-  label: string; // e.g. "Half-day", "Per hour", "Per day"
-  amount?: number; // USD; omit when priceTBD
+  label: string; // e.g. "1 hour", "4 hours", "8 hours", "24 hours", "Per day"
+  amount?: number; // USD; omit when priceTBD / not offered
 }
 
 export interface Product {
@@ -41,10 +41,10 @@ export interface Product {
   capacity?: number;
   pricing: PriceOption[];
   priceTBD?: boolean;
+  /** No Singenuity deep-link — CTA becomes "Call to book". */
+  bookByPhone?: boolean;
   /** Marketing blurb mirrored from lakesonoma.com (facts only). */
   blurb: string;
-  /** Rental duration options offered (from the live site). */
-  durations?: string[];
   /** Extra notes/restrictions (e.g. pontoon towing rules). */
   notes?: string[];
   stereo?: boolean; // undefined = unconfirmed (UI omits)
@@ -56,7 +56,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   watersport: "Watersport / Tubing",
   sport: "Sport Boats",
   fishing: "Fishing Boats",
-  jetski: "Jet Skis",
+  jetski: "Wave Runners",
   paddle: "Kayaks & Paddle Craft",
   patio: "Patios & Day-Use",
 };
@@ -69,12 +69,29 @@ export const ACTIVITY_LABELS: Record<ActivityTag, string> = {
   patio: "Patio / picnic on the water",
 };
 
-const PONTOON_DURATIONS = ["Half-Day", "Full-Day", "Overnight"];
 const PONTOON_NOTES = ["No slides or barbecues offered", "No towing allowed behind pontoon boats"];
+
+/**
+ * Build the standard four-tier price list from the rate sheet. Pass `null` for a
+ * tier that isn't offered (shown as N/A on the sheet) and it's omitted.
+ */
+function tiers(
+  h1: number | null,
+  h4: number | null,
+  h8: number | null,
+  h24: number | null,
+): PriceOption[] {
+  const rows: PriceOption[] = [];
+  if (h1 != null) rows.push({ label: "1 hour", amount: h1 });
+  if (h4 != null) rows.push({ label: "4 hours", amount: h4 });
+  if (h8 != null) rows.push({ label: "8 hours", amount: h8 });
+  if (h24 != null) rows.push({ label: "24 hours", amount: h24 });
+  return rows;
+}
 
 /** ---------------------------------------------------------------- PRODUCTS */
 export const PRODUCTS: Product[] = [
-  // ----- Pontoons (1–12 people; single and double-decker) -----
+  // ----- Pontoons -----
   {
     singenuityId: 3624,
     slug: "pontoon-5-person",
@@ -82,8 +99,7 @@ export const PRODUCTS: Product[] = [
     category: "pontoon",
     activities: ["cruising"],
     capacity: 5,
-    pricing: [{ label: "Half-day", amount: 350 }],
-    durations: PONTOON_DURATIONS,
+    pricing: tiers(125, 350, 625, 1000),
     notes: PONTOON_NOTES,
     blurb: "Enjoy a leisurely float on Lake Sonoma with a fun pontoon boat rental — our most popular small-group boat, easy to drive and perfect for a relaxed cruise.",
     featured: true,
@@ -95,8 +111,7 @@ export const PRODUCTS: Product[] = [
     category: "pontoon",
     activities: ["cruising"],
     capacity: 10,
-    pricing: [{ label: "Half-day", amount: 420 }],
-    durations: PONTOON_DURATIONS,
+    pricing: tiers(135, 420, 750, 1000),
     notes: PONTOON_NOTES,
     blurb: "A roomy pontoon with space for the whole crew to spread out and enjoy a day on the water.",
     featured: true,
@@ -108,8 +123,7 @@ export const PRODUCTS: Product[] = [
     category: "pontoon",
     activities: ["cruising"],
     capacity: 12,
-    pricing: [{ label: "Half-day", amount: 520 }],
-    durations: PONTOON_DURATIONS,
+    pricing: tiers(160, 520, 900, 1300),
     notes: PONTOON_NOTES,
     blurb: "Our big-group pontoon for a fun time on Lake Sonoma with the whole family.",
   },
@@ -120,23 +134,33 @@ export const PRODUCTS: Product[] = [
     category: "pontoon",
     activities: ["cruising"],
     capacity: 12,
-    pricing: [{ label: "Half-day", amount: 585 }],
-    durations: PONTOON_DURATIONS,
+    pricing: tiers(185, 585, 995, 1300),
     notes: PONTOON_NOTES,
-    blurb: "Two levels of fun — our double-decker pontoon is a Lake Sonoma favorite for groups up to 12.",
+    blurb: "Two levels of fun — our double-decker pontoon is a Lake Sonoma favorite for groups up to 12, complete with a slide-friendly upper deck view.",
     featured: true,
   },
   {
     singenuityId: 3636,
     slug: "pontoon-premium-10",
-    name: "Premium 10-Passenger Single Story",
+    name: "Premium 10-Passenger Pontoon",
     category: "pontoon",
     activities: ["cruising"],
     capacity: 10,
-    pricing: [{ label: "Half-day", amount: 600 }],
-    durations: PONTOON_DURATIONS,
+    pricing: tiers(200, 600, 1100, null),
     notes: PONTOON_NOTES,
     blurb: "A premium single-story pontoon with upgraded comfort for up to 10 guests.",
+  },
+  {
+    singenuityId: 0,
+    slug: "quest-fishing-pontoon",
+    name: "Quest Fishing Pontoon (3)",
+    category: "pontoon",
+    activities: ["fishing", "cruising"],
+    capacity: 3,
+    pricing: tiers(100, 375, 600, null),
+    bookByPhone: true,
+    notes: PONTOON_NOTES,
+    blurb: "A nimble fishing pontoon built for casting a line on Lake Sonoma — stable, easy to drive, and ideal for a small fishing party. Call the marina to reserve.",
   },
 
   // ----- Watersport / Tubing -----
@@ -147,8 +171,7 @@ export const PRODUCTS: Product[] = [
     category: "watersport",
     activities: ["watersports", "cruising"],
     capacity: 7,
-    pricing: [{ label: "Half-day", amount: 600 }],
-    durations: ["Half-Day", "Full-Day"],
+    pricing: tiers(175, 600, 1000, null),
     blurb: "For some great tubing and watersports on Lake Sonoma, don't miss this boat that lets you enjoy the water for a half or a full day.",
     featured: true,
   },
@@ -157,40 +180,37 @@ export const PRODUCTS: Product[] = [
   {
     singenuityId: 3627,
     slug: "premium-sport-boat",
-    name: "Premium Sport Boat (8)",
+    name: "Premium Sport Ski Boat (8)",
     category: "sport",
     activities: ["watersports", "cruising"],
     capacity: 8,
-    pricing: [{ label: "Half-day", amount: 700 }],
-    durations: ["Half-Day", "Full-Day"],
-    blurb: "Enjoy a high-octane adventure over the waters of Lake Sonoma with our premium sport boat rental.",
+    pricing: tiers(225, 700, 1300, null),
+    blurb: "Enjoy a high-octane adventure over the waters of Lake Sonoma with our premium sport ski boat rental.",
   },
 
   // ----- Fishing -----
   {
     singenuityId: 3641,
     slug: "logic-fishing-boat",
-    name: "Logic Fishing Boat",
+    name: "Logic Fishing Boat (3)",
     category: "fishing",
     activities: ["fishing"],
     capacity: 3,
-    pricing: [{ label: "Half-day", amount: 340 }],
-    durations: ["Half-Day", "Full-Day", "Overnight"],
-    blurb: "Experience the best fishing on Lake Sonoma with half-day, full-day, or overnight rentals.",
+    pricing: tiers(100, 340, 680, 750),
+    blurb: "Experience the best fishing on Lake Sonoma with hourly, half-day, full-day, or overnight rentals.",
     featured: true,
   },
 
-  // ----- Jet Ski -----
+  // ----- Wave Runner (jet ski) -----
   {
     singenuityId: 3643,
     slug: "jet-ski",
-    name: "Jet Ski (2)",
+    name: "Wave Runner (Jet Ski)",
     category: "jetski",
     activities: ["watersports"],
     capacity: 2,
-    pricing: [{ label: "Per hour", amount: 150 }],
-    durations: ["1–4 Hours"],
-    blurb: "Have fun speeding over the waters of Lake Sonoma with an exciting jet ski rental.",
+    pricing: tiers(150, null, null, null),
+    blurb: "Have fun speeding over the waters of Lake Sonoma with an exciting Wave Runner (jet ski) rental, available by the hour.",
     featured: true,
   },
 
@@ -202,9 +222,8 @@ export const PRODUCTS: Product[] = [
     category: "paddle",
     activities: ["paddling"],
     capacity: 1,
-    pricing: [{ label: "Per hour", amount: 50 }],
-    durations: ["Hourly", "Half-Day", "Full-Day"],
-    blurb: "Enjoy paddling on Lake Sonoma with a single kayak, available for hourly or half and full-day rentals.",
+    pricing: tiers(50, 150, 300, 300),
+    blurb: "Enjoy paddling on Lake Sonoma with a single kayak, available by the hour or for a half or full day.",
   },
   {
     singenuityId: 3645,
@@ -213,9 +232,8 @@ export const PRODUCTS: Product[] = [
     category: "paddle",
     activities: ["paddling"],
     capacity: 2,
-    pricing: [{ label: "Per hour", amount: 50 }],
-    durations: ["Hourly", "Half-Day", "Full-Day"],
-    blurb: "Paddle together on Lake Sonoma in a roomy double kayak — hourly or half and full-day rentals.",
+    pricing: tiers(50, 175, 325, 325),
+    blurb: "Paddle together on Lake Sonoma in a roomy double kayak — by the hour or for a half or full day.",
   },
   {
     singenuityId: 3648,
@@ -224,8 +242,7 @@ export const PRODUCTS: Product[] = [
     category: "paddle",
     activities: ["paddling"],
     capacity: 1,
-    pricing: [{ label: "Per hour", amount: 50 }],
-    durations: ["1–4 Hours"],
+    pricing: tiers(50, 150, 300, 300),
     blurb: "Experience the stunning scenery along the shore of Lake Sonoma with a stand-up paddle board rental.",
   },
   {
@@ -234,9 +251,8 @@ export const PRODUCTS: Product[] = [
     name: "Canoe",
     category: "paddle",
     activities: ["paddling"],
-    capacity: 2,
-    pricing: [{ label: "Per hour", amount: 50 }],
-    durations: ["Half-Day", "Full-Day", "Overnight"],
+    capacity: 3,
+    pricing: tiers(50, 150, 300, 300),
     blurb: "Paddle along the shores of Lake Sonoma with a relaxing canoe rental.",
   },
 
@@ -305,6 +321,31 @@ export const PRODUCTS: Product[] = [
     pricing: [{ label: "Per day", amount: 100 }],
     blurb: "Upper lakeside reserved patio with elevated views.",
   },
+];
+
+/**
+ * Add-on equipment rentals (from the 2026 rate sheet). Booked with the marina
+ * alongside a boat rather than as standalone watercraft.
+ */
+export interface Equipment {
+  name: string;
+  capacity: number;
+  pricing: PriceOption[];
+}
+
+export const EQUIPMENT_RENTALS: Equipment[] = [
+  { name: "Performance Water Ski", capacity: 1, pricing: tiers(30, 50, 70, 100) },
+  { name: "Knee Board", capacity: 1, pricing: tiers(30, 50, 70, 100) },
+  { name: "Wake Board", capacity: 1, pricing: tiers(35, 60, 100, 135) },
+  { name: "Tube", capacity: 1, pricing: tiers(35, 60, 100, 135) },
+];
+
+/** Rental terms printed on the official rate sheet (verbatim intent). */
+export const RENTAL_DISCLAIMERS: string[] = [
+  "A valid driver's license and a credit card are required for all rentals.",
+  "Fuel and sales tax are not included in the boat rental rates.",
+  "All renters must check in 30 minutes prior to the reserved time.",
+  "Cancellations must be made 7 days prior to the reservation date.",
 ];
 
 /** What every rental reservation includes (verified). */

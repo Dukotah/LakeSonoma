@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PRODUCTS, CATEGORY_LABELS, fromPrice, type Category } from "@/data/marina";
 import { bookingUrl } from "@/lib/singenuity";
+import { SITE } from "@/data/site";
 
 const ORDER: Category[] = ["pontoon", "watersport", "sport", "fishing", "jetski", "paddle", "patio"];
 
@@ -101,15 +102,25 @@ export function BoatPicker() {
                               <span className="ml-2 text-sm text-pine-500">inquire for pricing</span>
                             )}
                           </Link>
-                          <a
-                            href={bookingUrl(p.singenuityId)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
-                            aria-label={`Book ${p.name} (opens in a new tab)`}
-                          >
-                            Book ↗
-                          </a>
+                          {p.bookByPhone ? (
+                            <a
+                              href={SITE.phoneHref}
+                              className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
+                              aria-label={`Call to book ${p.name}`}
+                            >
+                              Call ☎
+                            </a>
+                          ) : (
+                            <a
+                              href={bookingUrl(p.singenuityId)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="shrink-0 rounded-full bg-lake-700 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-lake-800"
+                              aria-label={`Book ${p.name} (opens in a new tab)`}
+                            >
+                              Book ↗
+                            </a>
+                          )}
                         </li>
                       );
                     })}

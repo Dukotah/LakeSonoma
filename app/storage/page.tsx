@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { SITE, BILLING_OFFICE } from "@/data/site";
-import { POLICY_GROUPS } from "@/data/content";
+import { POLICY_GROUPS, STORAGE } from "@/data/content";
 import { Hero } from "@/components/Hero";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
@@ -22,26 +22,36 @@ const STORAGE_OPTIONS = [
   {
     id: "slips",
     eyebrow: "Wet Storage",
-    heading: "Slips & Berthing",
-    body: "Keep your boat in the water, ready to launch the moment you arrive. We offer seasonal and annual berthing agreements for slip holders, with returning members receiving first right of refusal on their prior slip.",
+    heading: "Slip Berthing",
+    price: "Billed monthly by length",
+    body: "Keep your boat in the water, ready to launch the moment you arrive. Covered and uncovered slips, charged by boat length or slip length (whichever is greater). Choose seasonal or annual berthing — returning members keep first right to their prior slip.",
     details: [
       "Seasonal berthing — minimum 6 consecutive months",
       "Annual berthing — minimum 12 consecutive months",
+      "Marina store discount + lakeside parking with seasonal/annual terms",
       "Membership Fee deposit required with Berthing Agreement",
-      "Monthly billing option available (additional billing fee applies)",
       "Payments due before the 10th of each month",
     ],
   },
   {
     id: "dry-storage",
     eyebrow: "Dry Storage",
-    heading: "Trailered Dry Storage",
-    body: "Secure on-site trailer storage when you want your boat close but off the water. Availability varies by season — reach out early to check current openings.",
+    heading: "Dry Boat Storage",
+    price: "Monthly",
+    body: "On-site dry storage for your boat on a month-to-month basis — close at hand and easy to launch when you visit.",
     details: [
       "On-site secured storage area",
-      "Seasonal availability — inquire for current openings",
-      "Easy access for self-launch on day-use visit",
+      "Month-to-month basis",
+      "Easy access for self-launch on a day-use visit",
     ],
+  },
+  {
+    id: "trailer-storage",
+    eyebrow: "Trailer Storage",
+    heading: "Trailer Storage",
+    price: "$85 / month",
+    body: "Leave the trailer with us and travel light. On-site trailer storage on a simple month-to-month basis.",
+    details: ["On-site trailer storage", "Month-to-month basis", "$85 per month"],
   },
 ];
 
@@ -77,7 +87,7 @@ export default function StoragePage() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+        <div className="mt-12 grid gap-8 lg:grid-cols-3">
           {STORAGE_OPTIONS.map((opt, i) => (
             <Reveal key={opt.id} delay={i * 100}>
               <article
@@ -91,6 +101,7 @@ export default function StoragePage() {
                 >
                   {opt.heading}
                 </h3>
+                <p className="mt-1 text-sm font-semibold text-lake-700">{opt.price}</p>
                 <p className="mt-3 leading-relaxed text-pine-700">{opt.body}</p>
                 <ul className="mt-5 flex-1 space-y-2" aria-label={`${opt.heading} details`}>
                   {opt.details.map((d) => (
@@ -109,6 +120,46 @@ export default function StoragePage() {
             </Reveal>
           ))}
         </div>
+      </Section>
+
+      {/* ── Fees & terms ─────────────────────────────────────────── */}
+      <Section tone="white" spacing="tight" id="storage-terms">
+        <Reveal>
+          <div className="rounded-4xl bg-sand-50 p-8 shadow-soft">
+            <p className="eyebrow">Fees &amp; Terms</p>
+            <h2 className="mt-2 text-display-sm font-medium text-pine-900">
+              Good to know before you reserve
+            </h2>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {STORAGE.terms.map((t) => (
+                <li key={t} className="flex items-start gap-3 text-sm text-pine-800">
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-lake-100 text-xs font-bold text-lake-700"
+                  >
+                    ✓
+                  </span>
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-sm text-pine-600">
+              Agreements &amp; payment go to the billing office:{" "}
+              <a href={`mailto:${STORAGE.contact.email}`} className="font-semibold text-lake-700 hover:underline">
+                {STORAGE.contact.email}
+              </a>{" "}
+              ·{" "}
+              <a href={STORAGE.contact.phoneHref} className="font-semibold text-lake-700 hover:underline">
+                {STORAGE.contact.phone}
+              </a>
+              . Download agreements on the{" "}
+              <Link href="/forms" className="font-semibold text-lake-700 hover:underline">
+                Forms &amp; Agreements
+              </Link>{" "}
+              page.
+            </p>
+          </div>
+        </Reveal>
       </Section>
 
       {/* ── HydroHoist boat lift ─────────────────────────────────── */}
@@ -135,12 +186,12 @@ export default function StoragePage() {
               the marina office to confirm fit and current inventory.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href={SITE.phoneHref} className="btn-primary">
+              <Link href="/hydrohoist" className="btn-primary">
+                HydroHoist details
+              </Link>
+              <a href={SITE.phoneHref} className="btn-secondary">
                 Call {SITE.phone}
               </a>
-              <Link href="/contact" className="btn-secondary">
-                Send an inquiry
-              </Link>
             </div>
           </Reveal>
 

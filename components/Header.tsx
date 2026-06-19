@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { NAV, SITE } from "@/data/site";
-import { LOGO } from "@/data/imagery";
+import { usePathname } from "next/navigation";
+import { PRIMARY_NAV, NAV, SITE } from "@/data/site";
+import { Logo } from "@/components/Logo";
 
 /**
  * Editorial site header. Renders transparent over the hero, then transitions to a
@@ -15,6 +15,9 @@ import { LOGO } from "@/data/imagery";
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -55,20 +58,26 @@ export function Header() {
       <div className="mx-auto flex h-20 w-full max-w-content items-center justify-between gap-4 px-5 sm:px-6 lg:px-8">
         <Brand solid={solid} />
 
-        {/* Desktop nav */}
-        <nav aria-label="Primary" className="hidden items-center gap-7 xl:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`text-sm font-medium tracking-wide transition-colors ${linkColor}`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Desktop nav (intentionally lean) */}
+        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+          {PRIMARY_NAV.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`relative text-sm font-medium tracking-wide transition-colors ${linkColor} after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-current after:transition-all after:duration-300 ${
+                  active ? "after:w-full" : "after:w-0 hover:after:w-full"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="hidden items-center gap-4 xl:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           <a
             href={SITE.phoneHref}
             className={`text-sm font-semibold transition-colors ${
@@ -85,7 +94,7 @@ export function Header() {
         {/* Mobile toggle */}
         <button
           type="button"
-          className={`inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors xl:hidden ${
+          className={`inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors lg:hidden ${
             solid ? "text-pine-800 hover:bg-pine-100" : "text-white hover:bg-white/15"
           }`}
           aria-expanded={open}
@@ -104,7 +113,7 @@ export function Header() {
         <nav
           id="mobile-menu"
           aria-label="Primary mobile"
-          className="border-t border-pine-100 bg-sand-50 xl:hidden"
+          className="border-t border-pine-100 bg-sand-50 lg:hidden"
         >
           <ul className="mx-auto flex w-full max-w-content flex-col px-5 py-3 sm:px-6">
             {NAV.map((item) => (
@@ -134,36 +143,9 @@ export function Header() {
 }
 
 function Brand({ solid }: { solid: boolean }) {
-  const [logoOk, setLogoOk] = useState(true);
-
   return (
-    <Link href="/" className="flex items-center gap-3" aria-label={`${SITE.name} — home`}>
-      {LOGO && logoOk ? (
-        <Image
-          src={LOGO}
-          alt={SITE.name}
-          width={150}
-          height={48}
-          priority
-          className={`h-11 w-auto transition ${solid ? "" : "brightness-0 invert"}`}
-          onError={() => setLogoOk(false)}
-        />
-      ) : (
-        <span
-          className={`font-serif text-xl font-medium leading-none tracking-tight transition-colors ${
-            solid ? "text-pine-900" : "text-white"
-          }`}
-        >
-          Lake Sonoma
-          <span
-            className={`mt-0.5 block text-eyebrow font-semibold uppercase ${
-              solid ? "text-lake-600" : "text-sand-200"
-            }`}
-          >
-            Marina
-          </span>
-        </span>
-      )}
+    <Link href="/" aria-label={`${SITE.name} — home`} className="transition-opacity hover:opacity-90">
+      <Logo tone={solid ? "brand" : "light"} />
     </Link>
   );
 }

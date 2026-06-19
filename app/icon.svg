@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Lake Sonoma Marina">
+  <rect width="48" height="48" rx="10" fill="#0b6177"/>
+  <circle cx="24" cy="24" r="17" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+  <clipPath id="c"><circle cx="24" cy="24" r="14.5"/></clipPath>
+  <g clip-path="url(#c)" fill="none" stroke="#ffffff" stroke-linecap="round">
+    <path d="M7 24 q4.25 -4 8.5 0 t8.5 0 t8.5 0 t8.5 0" stroke-width="2.4"/>
+    <path d="M7 30 q4.25 -4 8.5 0 t8.5 0 t8.5 0 t8.5 0" stroke-width="2.4" opacity="0.6"/>
+    <path d="M7 18 q4.25 -4 8.5 0 t8.5 0 t8.5 0 t8.5 0" stroke-width="2.4" opacity="0.4"/>
+  </g>
+</svg>

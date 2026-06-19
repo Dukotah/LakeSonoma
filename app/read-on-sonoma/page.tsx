@@ -85,11 +85,6 @@ export default function ReadOnSonomaPage() {
             </p>
           </Reveal>
 
-          {/*
-            TODO (developer): wire ReadOnSonomaForm to a backend or form service (e.g. Resend,
-            a Next.js server action, or Formspree) before going live. All fields are
-            specified by READ_ON_SONOMA.redemptionNote (data/content.ts).
-          */}
           <Reveal delay={80}>
             <ReadOnSonomaForm />
           </Reveal>

@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BoatPicker } from "@/components/BoatPicker";
+import { CookieConsent } from "@/components/CookieConsent";
+import { WaveDivider } from "@/components/WaveDivider";
 import { SITE } from "@/data/site";
 import { localBusinessJsonLd, JsonLd } from "@/lib/seo";
 
@@ -31,9 +34,19 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0b6177",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+      <head>
+        {/* Speed up the booking hand-off + image CDN */}
+        <link rel="preconnect" href="https://book.singenuity.com" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      </head>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"
@@ -45,9 +58,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main" className="flex-1">
           {children}
         </main>
+        {/* Signature wave transition into the footer (echoes the logo's water line) */}
+        <WaveDivider fill="#0f150f" />
         <Footer />
         <BoatPicker />
+        <CookieConsent />
         <JsonLd data={localBusinessJsonLd()} />
+        <Analytics />
       </body>
     </html>
   );

@@ -21,8 +21,9 @@ export function catalogUrl(): string {
 }
 
 /**
- * Singenuity hosts product photos on Cloudinary. Reusing per owner approval
- * (TODO: confirm image rights — see README).
+ * Singenuity hosts the marina's product photos on Cloudinary (the owner's own
+ * booking platform). Used as a fallback when a local /images/singenuity photo
+ * isn't present for an item.
  */
 export function singenuityImage(singenuityId: number, w = 800, h = 600): string {
   return `https://res.cloudinary.com/singenuity/w_${w},h_${h},c_fill/v1/prod/1560/758/entities/images/${singenuityId}/original`;

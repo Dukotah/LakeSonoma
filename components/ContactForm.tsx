@@ -1,49 +1,94 @@
 "use client";
 
+import { useState } from "react";
 import { SITE } from "@/data/site";
 import { CONTACT } from "@/data/content";
+import {
+  WEB3FORMS_ENABLED,
+  submitToWeb3Forms,
+  type SubmitState,
+} from "@/lib/web3forms";
+
+const inputClass =
+  "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-400 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
 
 /**
- * Contact form — extracted as a Client Component because it uses an
- * onSubmit event handler. The form is currently disabled (submit button is
- * aria-disabled) until a backend / form service is wired up.
- *
- * TODO (developer): replace the onSubmit stub with a real server action or
- * third-party form service (Resend, Formspree, etc.) before going live.
+ * Contact form — submits to Web3Forms (emails staff@lakesonoma.com). Shows
+ * inline success/error states. If no Web3Forms key is configured, it degrades
+ * to a "call/email us" notice so it never silently drops a message.
  */
 export function ContactForm() {
-  return (
-    <form
-      aria-label="Contact form"
-      onSubmit={(e) => e.preventDefault()}
-      noValidate
-      className="space-y-6"
-    >
-      <p
+  const [state, setState] = useState<SubmitState>("idle");
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    if (fd.get("botcheck")) return; // honeypot
+    setState("submitting");
+    const payload: Record<string, unknown> = {
+      subject: "New contact enquiry — Lake Sonoma Marina",
+      from_name: `${fd.get("firstName") ?? ""} ${fd.get("lastName") ?? ""}`.trim(),
+    };
+    CONTACT.formFields.forEach((f) => (payload[f.label] = fd.get(f.name) ?? ""));
+    const ok = await submitToWeb3Forms(payload);
+    if (ok) {
+      setState("success");
+      form.reset();
+    } else {
+      setState("error");
+    }
+  }
+
+  if (state === "success") {
+    return (
+      <div
         role="status"
-        className="rounded-2xl border border-lake-200 bg-lake-50 px-5 py-3 text-sm text-lake-800"
+        className="rounded-2xl border border-lake-200 bg-lake-50 px-6 py-8 text-center"
       >
-        <strong>Note:</strong> This form is not yet connected to a mail service —
-        please call us at{" "}
-        <a href={SITE.phoneHref} className="font-semibold underline">
-          {SITE.phone}
-        </a>{" "}
-        or email{" "}
-        <a href={`mailto:${SITE.email}`} className="font-semibold underline">
-          {SITE.email}
-        </a>{" "}
-        in the meantime.
-      </p>
+        <p className="text-display-sm font-medium text-pine-900">Thank you!</p>
+        <p className="mt-2 text-pine-700">
+          Your message is on its way to the marina. We&apos;ll be in touch shortly.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form aria-label="Contact form" onSubmit={onSubmit} noValidate className="space-y-6">
+      {!WEB3FORMS_ENABLED && (
+        <p
+          role="status"
+          className="rounded-2xl border border-lake-200 bg-lake-50 px-5 py-3 text-sm text-lake-800"
+        >
+          <strong>Note:</strong> the message service isn&apos;t configured yet — please call{" "}
+          <a href={SITE.phoneHref} className="font-semibold underline">
+            {SITE.phone}
+          </a>{" "}
+          or email{" "}
+          <a href={`mailto:${SITE.email}`} className="font-semibold underline">
+            {SITE.email}
+          </a>
+          .
+        </p>
+      )}
+
+      {/* Honeypot (hidden from humans) */}
+      <input
+        type="checkbox"
+        name="botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
 
       <div className="grid gap-6 sm:grid-cols-2">
         {CONTACT.formFields
           .filter((f) => f.type !== "textarea")
           .map((field) => (
             <div key={field.name} className="flex flex-col gap-1.5">
-              <label
-                htmlFor={field.name}
-                className="text-sm font-semibold text-pine-800"
-              >
+              <label htmlFor={field.name} className="text-sm font-semibold text-pine-800">
                 {field.label}
                 {field.required && (
                   <span aria-hidden="true" className="ml-1 text-lake-600">
@@ -68,7 +113,7 @@ export function ContactForm() {
                     : undefined
                 }
                 aria-required={field.required}
-                className="rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-400 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40"
+                className={inputClass}
               />
             </div>
           ))}
@@ -78,10 +123,7 @@ export function ContactForm() {
         .filter((f) => f.type === "textarea")
         .map((field) => (
           <div key={field.name} className="flex flex-col gap-1.5">
-            <label
-              htmlFor={field.name}
-              className="text-sm font-semibold text-pine-800"
-            >
+            <label htmlFor={field.name} className="text-sm font-semibold text-pine-800">
               {field.label}
               {field.required && (
                 <span aria-hidden="true" className="ml-1 text-lake-600">
@@ -95,24 +137,34 @@ export function ContactForm() {
               required={field.required}
               aria-required={field.required}
               rows={5}
-              className="rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-400 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40 resize-none"
+              className={`${inputClass} resize-none`}
             />
           </div>
         ))}
 
       <p className="text-xs text-pine-500">
-        <span aria-hidden="true" className="text-lake-600">*</span>{" "}
+        <span aria-hidden="true" className="text-lake-600">
+          *
+        </span>{" "}
         Required fields
       </p>
 
+      {state === "error" && (
+        <p role="alert" className="text-sm font-medium text-red-700">
+          Something went wrong sending your message. Please try again, or call{" "}
+          <a href={SITE.phoneHref} className="font-semibold underline">
+            {SITE.phone}
+          </a>
+          .
+        </p>
+      )}
+
       <button
         type="submit"
-        disabled
-        aria-disabled="true"
-        className="btn-primary opacity-50 cursor-not-allowed"
-        title="Form submission not yet enabled — please call or email directly"
+        disabled={state === "submitting" || !WEB3FORMS_ENABLED}
+        className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Send message
+        {state === "submitting" ? "Sending…" : "Send message"}
       </button>
     </form>
   );

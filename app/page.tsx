@@ -238,6 +238,18 @@ export default function HomePage() {
               <h2 className="text-pine-900">
                 Best Boat Rentals in Healdsburg, CA
               </h2>
+              {(() => {
+                const rated = REVIEWS.filter((r) => typeof r.stars === "number");
+                const avg =
+                  rated.reduce((s, r) => s + (r.stars ?? 0), 0) / (rated.length || 1);
+                return (
+                  <p className="mt-4 inline-flex items-center gap-2 text-pine-700">
+                    <Stars count={Math.round(avg)} />
+                    <span className="font-semibold text-pine-900">{avg.toFixed(1)}</span>
+                    <span className="text-pine-500">· {rated.length} guest reviews</span>
+                  </p>
+                );
+              })()}
             </div>
           </Reveal>
 
@@ -261,11 +273,16 @@ export default function HomePage() {
             <p className="mt-10 text-center text-sm text-pine-400">
               As reviewed on{" "}
               {REVIEW_PLATFORMS.map((platform, i) => (
-                <span key={platform}>
-                  <span className="font-semibold text-pine-600">{platform}</span>
-                  {i < REVIEW_PLATFORMS.length - 1 && (
-                    <span aria-hidden="true"> · </span>
-                  )}
+                <span key={platform.name}>
+                  <a
+                    href={platform.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-lake-700 underline-offset-4 hover:underline"
+                  >
+                    {platform.name}
+                  </a>
+                  {i < REVIEW_PLATFORMS.length - 1 && <span aria-hidden="true"> · </span>}
                 </span>
               ))}
             </p>

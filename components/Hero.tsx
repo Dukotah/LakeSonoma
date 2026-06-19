@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { IMAGES } from "@/data/imagery";
+import { BLUR_DATA_URL } from "@/lib/blur";
 import { Container } from "@/components/Container";
 
 type Height = "full" | "tall" | "medium" | "compact";
@@ -55,6 +56,8 @@ export function Hero({
           fill
           priority={priority}
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL={BLUR_DATA_URL}
           className="-z-10 object-cover"
         />
       ) : (

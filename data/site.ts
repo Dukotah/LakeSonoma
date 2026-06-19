@@ -62,8 +62,18 @@ export const SOCIAL = {
     "https://www.tripadvisor.com/Attraction_Review-g32482-d321137-Reviews-Lake_Sonoma-Healdsburg_Sonoma_County_California.html",
 };
 
-/** Review platforms the marina is featured on (per homepage badges). */
-export const REVIEW_PLATFORMS = ["Google", "Yelp", "TripAdvisor"];
+/** Review platforms the marina is featured on, with links to each listing. */
+export const REVIEW_PLATFORMS: { name: string; url: string }[] = [
+  { name: "Google", url: "https://www.google.com/search?q=Lake+Sonoma+Marina+Geyserville+reviews" },
+  {
+    name: "Yelp",
+    url: "https://www.yelp.com/search?find_desc=Lake+Sonoma+Marina&find_loc=Geyserville%2C+CA",
+  },
+  {
+    name: "TripAdvisor",
+    url: "https://www.tripadvisor.com/Attraction_Review-g32482-d321137-Reviews-Lake_Sonoma-Healdsburg_Sonoma_County_California.html",
+  },
+];
 
 /**
  * Real guest reviews published on lakesonoma.com (verified, not invented).
@@ -114,13 +124,27 @@ export interface NavItem {
   href: string;
 }
 
+/**
+ * PRIMARY_NAV — the lean top-bar nav (kept intentionally uncluttered).
+ * Everything else stays reachable via the footer (full NAV) and contextual links.
+ */
+export const PRIMARY_NAV: NavItem[] = [
+  { label: "Boat Rentals", href: "/rentals" },
+  { label: "Patio Rentals", href: "/patios" },
+  { label: "Storage", href: "/storage" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+/** NAV — the full link set, surfaced in the footer for complete discoverability. */
 export const NAV: NavItem[] = [
   { label: "Boat Rentals", href: "/rentals" },
   { label: "Patio Rentals", href: "/patios" },
   { label: "Storage", href: "/storage" },
+  { label: "HydroHoist Lift", href: "/hydrohoist" },
+  { label: "Read On Sonoma", href: "/read-on-sonoma" },
   { label: "FAQs", href: "/faqs" },
   { label: "Policies", href: "/policies" },
   { label: "About", href: "/about" },
-  { label: "Read On Sonoma", href: "/read-on-sonoma" },
   { label: "Contact", href: "/contact" },
 ];

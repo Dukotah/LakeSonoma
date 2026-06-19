@@ -3,9 +3,10 @@ import type { Config } from "tailwindcss";
 /**
  * Lake Sonoma Marina — NATURE-LUXE EDITORIAL design system.
  *
- * Calm, refined, high-end (luxury resort / Sonoma winery feel):
- *  - lake  : deep, muted teal-blue primary (water).
- *  - sand  : warm, soft sand/stone accents (shoreline, paper warmth).
+ * Calm, refined, high-end (luxury resort / Sonoma winery feel), tuned to the
+ * marina's REAL brand palette pulled from lakesonoma.com:
+ *  - lake  : brand teal (#0d98ba primary / #0b6177 deep) — the water/identity.
+ *  - sand  : warm bronze/sand accent (#987655) — shoreline + logo warmth.
  *  - pine  : deep desaturated green-charcoal for body text & dark sections.
  * Restrained palette, generous whitespace, large serif display scale.
  */
@@ -29,25 +30,26 @@ const config: Config = {
     extend: {
       colors: {
         lake: {
-          50: "#f1f7f9",
-          100: "#dceaef",
-          200: "#bcd6df",
-          300: "#8fb9c7",
-          400: "#5d96a9",
-          500: "#3d7889",
-          600: "#326070",
-          700: "#2c4f5d",
-          800: "#28424e",
-          900: "#243944",
-          950: "#13232c",
+          50: "#eff9fc",
+          100: "#d6eff5",
+          200: "#aadfeb",
+          300: "#73c7dc",
+          400: "#37aac8",
+          500: "#0d98ba", // brand primary teal
+          600: "#0b7d9c",
+          700: "#0b6177", // brand deep teal
+          800: "#0d4f60",
+          900: "#103f4d",
+          950: "#072833",
         },
         sand: {
-          50: "#faf7f1",
-          100: "#f3ecdf",
-          200: "#e7d9bf",
-          300: "#d8c198",
-          400: "#c7a56e",
-          500: "#b98e51",
+          50: "#faf6f0",
+          100: "#f2e8d9",
+          200: "#e6d2b7",
+          300: "#d4b489",
+          400: "#bb8f5c",
+          500: "#987655", // brand bronze/sand
+          600: "#7c5f43",
         },
         pine: {
           50: "#f3f5f3",

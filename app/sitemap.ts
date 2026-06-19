@@ -7,13 +7,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/rentals",
     "/patios",
+    "/pricing",
     "/storage",
     "/forms",
+    "/hydrohoist",
     "/faqs",
     "/policies",
     "/about",
     "/contact",
+    "/guide",
     "/read-on-sonoma",
+    "/privacy",
+    "/terms",
   ];
 
   const staticEntries = staticPaths.map((path) => ({
