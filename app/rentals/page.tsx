@@ -229,18 +229,46 @@ export default async function RentalsPage({
             ))}
           </div>
         ) : (
-          /* Empty state */
+          /* Empty state — copy is specific to the active filter */
           <Reveal>
             <div className="rounded-4xl border border-lake-100 bg-lake-50/60 px-8 py-14 text-center">
               <p className="text-display-sm font-medium text-pine-900">
-                No rentals match that filter
+                {activeCategory
+                  ? `No ${CATEGORY_LABELS[activeCategory]?.toLowerCase() ?? "rentals"} available right now`
+                  : activeActivity
+                  ? `No boats available for ${ACTIVITY_LABELS[activeActivity]?.toLowerCase() ?? "that activity"} right now`
+                  : capacity !== undefined
+                  ? `No boats available for groups of up to ${capacity}`
+                  : "No rentals match that filter"}
               </p>
               <p className="mt-2 text-pine-500">
-                Try a different combination, or browse everything.
+                {activeCategory
+                  ? `We may have upcoming ${CATEGORY_LABELS[activeCategory]?.toLowerCase() ?? "rentals"} — try browsing all rental types or contact us about custom availability.`
+                  : activeActivity
+                  ? `Check back soon or contact us — we may be able to arrange a custom booking for ${ACTIVITY_LABELS[activeActivity]?.toLowerCase() ?? "your activity"}.`
+                  : capacity !== undefined
+                  ? `We may have options for your group — reach out and we'll help find the right fit.`
+                  : "Try a different combination, or browse everything."}
               </p>
-              <Link href="/rentals" className="btn-primary mt-6 inline-block">
-                See all rentals
-              </Link>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <Link href="/rentals" className="btn-primary inline-block">
+                  See all rentals
+                </Link>
+                <Link
+                  href={`/contact?subject=${encodeURIComponent(
+                    activeCategory
+                      ? `Custom booking — ${CATEGORY_LABELS[activeCategory] ?? activeCategory}`
+                      : activeActivity
+                      ? `Custom booking — ${ACTIVITY_LABELS[activeActivity] ?? activeActivity}`
+                      : capacity !== undefined
+                      ? `Custom booking — group of ${capacity}`
+                      : "Custom booking inquiry"
+                  )}`}
+                  className="btn-secondary inline-block"
+                >
+                  Request a custom booking
+                </Link>
+              </div>
             </div>
           </Reveal>
         )}

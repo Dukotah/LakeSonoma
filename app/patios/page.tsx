@@ -11,7 +11,8 @@ import { ProductCard } from "@/components/ProductCard";
 import { Hero } from "@/components/Hero";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
-import { pageMeta } from "@/lib/seo";
+import { Container } from "@/components/Container";
+import { pageMeta, breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Patio & Day-Use Reservations — Lake Sonoma Marina",
@@ -23,6 +24,34 @@ export const metadata: Metadata = pageMeta({
 export default function PatiosPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Patios & Day-Use", path: "/patios" },
+        ])}
+      />
+
+      {/* ── Breadcrumb ────────────────────────────────────────────── */}
+      <Section tone="white" spacing="none" headerOffset bleed>
+        <Container>
+          <nav aria-label="Breadcrumb" className="pt-6 pb-4">
+            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-pine-500">
+              <li>
+                <Link href="/" className="transition-colors hover:text-lake-700">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true" className="select-none text-pine-300">
+                /
+              </li>
+              <li className="font-medium text-pine-900" aria-current="page">
+                Patios &amp; Day-Use
+              </li>
+            </ol>
+          </nav>
+        </Container>
+      </Section>
+
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <Hero
         image="picnic-patio"

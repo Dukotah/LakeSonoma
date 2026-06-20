@@ -51,6 +51,27 @@ export default function PricingPage() {
         </Reveal>
       </Section>
 
+      {/* Trust banner */}
+      {/* OWNER: confirm cancellation policy window (currently stated as generic) */}
+      <Section tone="sand" spacing="tight">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-pine-700">
+          <span className="flex items-center gap-2">
+            <span aria-hidden="true" className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-lake-100 text-lake-700 text-xs font-bold">✓</span>
+            Free cancellation available — confirm window at booking
+          </span>
+          <span aria-hidden="true" className="hidden text-pine-300 sm:inline">|</span>
+          <span className="flex items-center gap-2">
+            <span aria-hidden="true" className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-lake-100 text-lake-700 text-xs font-bold">✓</span>
+            Real-time availability via Singenuity booking system
+          </span>
+          <span aria-hidden="true" className="hidden text-pine-300 sm:inline">|</span>
+          <span className="flex items-center gap-2">
+            <span aria-hidden="true" className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-lake-100 text-lake-700 text-xs font-bold">✓</span>
+            Secure online booking
+          </span>
+        </div>
+      </Section>
+
       {/* Rentals by category */}
       <Section tone="white" spacing="default">
         <div className="space-y-12">
