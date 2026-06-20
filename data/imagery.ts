@@ -23,6 +23,8 @@ export const IMAGES: Record<string, string> = {
   // Wide lake landscape (reuses the aerial for a clean, on-brand wide shot).
   "lake-landscape": `${WP}/f5e92ce993c46cf91a5ff142f28efab7.jpeg`,
   // Lush lawn + walkway down to the docks — warm, inviting "about" band.
+  // NOTE: 1600x1200 source — NOT suitable as a full-bleed <Hero> image (requires >=1920px wide).
+  // Use only for small band / non-hero contexts.
   "family-boating": `${WP}/f30472fd86f85bb4a3cd3de3d9a3b65e.jpeg`,
   // Dramatic aerial for the closing CTA band.
   "sunset-dock": `${WP}/f5e92ce993c46cf91a5ff142f28efab7.jpeg`,

@@ -21,7 +21,7 @@ export default function ContactPage() {
   return (
     <>
       <Hero
-        image="hero"
+        image="marina-docks"
         eyebrow="We'd love to hear from you"
         height="compact"
         title="Contact &amp; Directions"

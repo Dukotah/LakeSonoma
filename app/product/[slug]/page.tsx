@@ -110,7 +110,7 @@ export default async function ProductPage({
                   src={productImage(product.slug) ?? singenuityImage(product.singenuityId, 1000, 750)}
                   alt={`${product.name} on Lake Sonoma`}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                   priority
                 />
