@@ -41,7 +41,7 @@ export default function PoliciesPage() {
   return (
     <>
       <Hero
-        image="marina-docks"
+        image="policies-bg"
         eyebrow="Marina rules & guidelines"
         height="compact"
         title="Policies &amp; Rules"

@@ -18,7 +18,7 @@ export default function AboutPage() {
   return (
     <>
       <Hero
-        image="marina-docks"
+        image="hero"
         eyebrow="Healdsburg, CA"
         height="medium"
         title="Sonoma County's Premier Marina"

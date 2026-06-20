@@ -56,6 +56,7 @@ export function Hero({
           fill
           priority={priority}
           sizes="100vw"
+          quality={90}
           placeholder="blur"
           blurDataURL={BLUR_DATA_URL}
           className="-z-10 object-cover"

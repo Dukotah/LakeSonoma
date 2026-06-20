@@ -4,6 +4,9 @@ import { redirects } from "./lib/redirects";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
+    // Allow the higher-quality re-encode used by full-bleed <Hero> photos
+    // (detail-heavy aerials turn to mush at the default quality of 75).
+    qualities: [75, 90],
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
     ],

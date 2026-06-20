@@ -70,7 +70,7 @@ export default function GuidePage() {
       />
 
       <Hero
-        image="lake-landscape"
+        image="hero"
         eyebrow="Visitor Guide"
         height="medium"
         title="Your guide to Lake Sonoma"

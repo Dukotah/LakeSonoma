@@ -60,7 +60,7 @@ export default function StoragePage() {
     <>
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <Hero
-        image="storage-slips"
+        image="policies-bg"
         eyebrow="Boat Storage"
         height="medium"
         title="Your boat at home on the lake."

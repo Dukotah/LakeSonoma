@@ -72,7 +72,7 @@ export default async function RentalsPage({
     <>
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <Hero
-        image="marina-docks"
+        image="jet-ski"
         eyebrow="Healdsburg, CA"
         title="Find your perfect boat"
         subtitle="Pontoons, sport boats, fishing boats, jet skis, kayaks and more — every booking link takes you straight to that boat's availability calendar."

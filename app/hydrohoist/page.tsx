@@ -32,7 +32,7 @@ export default function HydroHoistPage() {
   return (
     <>
       <Hero
-        image="marina-docks"
+        image="policies-bg"
         eyebrow="At the Marina"
         title="HydroHoist Boat Lifts"
         subtitle="Lake Sonoma Marina is now a proud supplier of HydroHoist Boat Lifts."

@@ -95,7 +95,7 @@ export default function FaqsPage() {
   return (
     <>
       <Hero
-        image="sunset-dock"
+        image="hero"
         eyebrow="Questions?"
         height="compact"
         title="Frequently Asked Questions"
