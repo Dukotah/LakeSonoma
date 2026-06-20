@@ -58,7 +58,8 @@ export const PRODUCT_IMAGES: Record<string, string> = {
   "pontoon-12-person": `${SG}/3634.jpg`,
   "pontoon-double-decker": `${SG}/3635.jpg`,
   "pontoon-premium-10": `${SG}/3636.jpg`,
-  "quest-fishing-pontoon": `${SG}/3633.jpg`, // stand-in: a pontoon photo (no dedicated Quest photo yet)
+  // OWNER: replace 3633.jpg stand-in with the actual Quest Fishing Pontoon photo (singenuityId 0 — no dedicated Singenuity image on file yet)
+  "quest-fishing-pontoon": `${SG}/3633.jpg`,
   "watersport-tubing": `${SG}/3637.jpg`,
   "premium-sport-boat": `${SG}/3627.jpg`,
   "logic-fishing-boat": `${SG}/3641.jpg`,

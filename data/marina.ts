@@ -263,9 +263,12 @@ export const PRODUCTS: Product[] = [
     name: "Grand Patio",
     category: "patio",
     activities: ["patio"],
+    // OWNER: confirm Grand Patio per-day rate — priceTBD kept until confirmed; UI shows "Inquire for pricing" / "Call for pricing"
     pricing: [{ label: "Per day" }],
     priceTBD: true,
-    blurb: "Our largest reservable patio for groups and gatherings on the water.",
+    // OWNER: confirm Grand Patio group capacity (estimated largest on property — verify head count)
+    blurb:
+      "The marina's most spacious reservable patio, ideal for large group gatherings and celebrations. Enjoy partial shade, picnic tables, and BBQ pits steps from the water's edge — contact us for availability and group pricing.",
   },
   {
     singenuityId: 3652,
@@ -274,7 +277,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Reserve a patio by the bar for an easy lakeside day-use spot.",
+    // OWNER: confirm Bar Patio capacity (number of guests/tables it seats)
+    blurb:
+      "A reserved patio situated right by the marina bar, perfect for groups who want quick access to refreshments and the convenience of a central location. Includes a picnic table and trash receptacles.",
   },
   {
     singenuityId: 3653,
@@ -283,7 +288,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "A scenic reserved patio with lake views.",
+    // OWNER: confirm Scenic Patio capacity and any specific lake-view orientation details
+    blurb:
+      "A lakeside reserved patio chosen for its unobstructed views of the water and surrounding Sonoma hills. Spend the day relaxing at a picnic table in a partly shaded setting while taking in the scenery.",
   },
   {
     singenuityId: 3654,
@@ -292,7 +299,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Reserved patio near the bridge — a shaded place to gather.",
+    // OWNER: confirm Bridge Patio capacity and whether overhead cover is permanent or seasonal
+    blurb:
+      "Tucked near the bridge with natural overhead shade, this reserved patio offers a cooler spot for small groups to gather, grill, and watch the boats come and go throughout the day.",
   },
   {
     singenuityId: 3655,
@@ -301,7 +310,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Lakeside reserved patio for your day on the water.",
+    // OWNER: confirm Lakeside Patio 5 capacity and any distinguishing features vs. Patio 6
+    blurb:
+      "A reserved lakeside patio close to the water, equipped with a picnic table and BBQ pit. Great for families or small groups looking for a day-use spot right at the marina.",
   },
   {
     singenuityId: 3656,
@@ -310,7 +321,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Lakeside reserved patio for your day on the water.",
+    // OWNER: confirm Lakeside Patio 6 capacity and any distinguishing features vs. Patio 5
+    blurb:
+      "Another well-positioned lakeside patio with direct views of the water. Ideal for a relaxed day out — bring your food, fire up the BBQ pit, and settle in for an afternoon on Lake Sonoma.",
   },
   {
     singenuityId: 3657,
@@ -319,7 +332,9 @@ export const PRODUCTS: Product[] = [
     category: "patio",
     activities: ["patio"],
     pricing: [{ label: "Per day", amount: 100 }],
-    blurb: "Upper lakeside reserved patio with elevated views.",
+    // OWNER: confirm Upper Lakeside Patio 7 capacity and whether elevation provides a significantly wider lake view
+    blurb:
+      "The elevated position of this upper lakeside patio gives your group a wider vantage point over the lake — a great pick for those who want a panoramic backdrop for their day-use reservation.",
   },
 ];
 
