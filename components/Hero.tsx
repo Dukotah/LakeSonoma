@@ -71,9 +71,17 @@ export function Hero({
       <Container className={`flex flex-1 flex-col justify-end pb-16 pt-28 sm:pb-24 ${alignClass}`}>
         <div className={`max-w-3xl ${align === "center" ? "mx-auto" : ""}`}>
           {eyebrow && <p className="eyebrow mb-4 !text-sand-200">{eyebrow}</p>}
-          <h1 className="text-display-xl font-medium text-white drop-shadow-sm">{title}</h1>
+          <h1
+            className="text-display-xl font-medium text-white"
+            style={{ textShadow: "0 2px 12px rgba(15,21,15,0.70), 0 1px 3px rgba(15,21,15,0.55)" }}
+          >
+            {title}
+          </h1>
           {subtitle && (
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-sand-50/90 sm:text-xl">
+            <p
+              className="mt-5 max-w-2xl text-lg leading-relaxed text-sand-50/90 sm:text-xl"
+              style={{ textShadow: "0 1px 6px rgba(15,21,15,0.60)" }}
+            >
               {subtitle}
             </p>
           )}

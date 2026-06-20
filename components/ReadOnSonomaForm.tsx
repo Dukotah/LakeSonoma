@@ -107,19 +107,19 @@ export function ReadOnSonomaForm() {
             <label htmlFor="parentName" className="text-sm font-semibold text-pine-800">
               Parent / Driver Name <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="parentName" name="parentName" type="text" required autoComplete="name" className={inputClass} />
+            <input id="parentName" name="parentName" type="text" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} autoComplete="name" className={inputClass} />
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="parentEmail" className="text-sm font-semibold text-pine-800">
               Email <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="parentEmail" name="parentEmail" type="email" required autoComplete="email" className={inputClass} />
+            <input id="parentEmail" name="parentEmail" type="email" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} autoComplete="email" className={inputClass} />
           </div>
           <div className="flex flex-col gap-1.5 sm:col-span-2">
             <label htmlFor="parentPhone" className="text-sm font-semibold text-pine-800">
               Phone <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="parentPhone" name="parentPhone" type="tel" required autoComplete="tel" className={inputClass} />
+            <input id="parentPhone" name="parentPhone" type="tel" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} autoComplete="tel" className={inputClass} />
           </div>
         </div>
       </fieldset>
@@ -132,13 +132,13 @@ export function ReadOnSonomaForm() {
             <label htmlFor="studentName" className="text-sm font-semibold text-pine-800">
               Student Name <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="studentName" name="studentName" type="text" required className={inputClass} />
+            <input id="studentName" name="studentName" type="text" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} className={inputClass} />
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="schoolLibrary" className="text-sm font-semibold text-pine-800">
               School / Library Branch <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="schoolLibrary" name="schoolLibrary" type="text" required className={inputClass} />
+            <input id="schoolLibrary" name="schoolLibrary" type="text" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} className={inputClass} />
           </div>
         </div>
       </fieldset>
@@ -185,7 +185,7 @@ export function ReadOnSonomaForm() {
             <label htmlFor="visitDate" className="text-sm font-semibold text-pine-800">
               Requested Date <span aria-hidden="true" className="text-lake-600">*</span>
             </label>
-            <input id="visitDate" name="visitDate" type="date" required className={inputClass} />
+            <input id="visitDate" name="visitDate" type="date" required aria-required="true" aria-invalid={state === "error" ? true : undefined} aria-describedby={state === "error" ? "ros-form-error" : undefined} className={inputClass} />
           </div>
         </div>
         <p className="mt-2 text-xs text-pine-500">
@@ -198,7 +198,12 @@ export function ReadOnSonomaForm() {
       </p>
 
       {state === "error" && (
-        <p role="alert" className="text-sm font-medium text-red-700">
+        <p
+          id="ros-form-error"
+          role="alert"
+          aria-live="assertive"
+          className="text-sm font-medium text-red-700"
+        >
           Something went wrong. Please try again, or call{" "}
           <a href={SITE.phoneHref} className="font-semibold underline">
             {SITE.phone}

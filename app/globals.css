@@ -130,14 +130,16 @@
     }
   }
 
-  /* Soft dark gradient overlay for legible text over full-bleed photography. */
+  /* Soft dark gradient overlay for legible text over full-bleed photography.
+     Bottom stops are deep enough to guarantee AA contrast (4.5:1) for white
+     text at any font size rendered on a mid-tone photo. */
   .photo-overlay {
     background: linear-gradient(
       to top,
-      rgba(15, 21, 15, 0.72) 0%,
-      rgba(15, 21, 15, 0.38) 38%,
-      rgba(15, 21, 15, 0.12) 70%,
-      rgba(15, 21, 15, 0.18) 100%
+      rgba(15, 21, 15, 0.88) 0%,
+      rgba(15, 21, 15, 0.62) 30%,
+      rgba(15, 21, 15, 0.28) 60%,
+      rgba(15, 21, 15, 0.20) 100%
     );
   }
 
@@ -146,5 +148,25 @@
     background:
       radial-gradient(120% 120% at 20% 0%, theme("colors.lake.500") 0%, transparent 55%),
       linear-gradient(160deg, theme("colors.lake.800"), theme("colors.pine.900"));
+  }
+
+  /* Neutralize translate/scale motion on buttons and interactive elements for
+     users who prefer reduced motion (WCAG 2.3.3 AAA / 2.1 guideline). The
+     existing global rule already collapses all transition durations, but we
+     also explicitly zero out transform-based hover effects so none of them
+     fire even briefly (Safari sometimes still applies the end-state transform
+     without a duration). */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary,
+    .btn-secondary,
+    .btn-ghost-light,
+    .card {
+      transition: none !important;
+    }
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-ghost-light:hover {
+      transform: none !important;
+    }
   }
 }

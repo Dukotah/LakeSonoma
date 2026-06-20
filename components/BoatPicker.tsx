@@ -18,6 +18,7 @@ const ORDER: Category[] = ["pontoon", "watersport", "sport", "fishing", "jetski"
 export function BoatPicker() {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -45,8 +46,8 @@ export function BoatPicker() {
     if (open) {
       document.addEventListener("keydown", onKey);
       document.body.style.overflow = "hidden";
-      // Move focus into the dialog on open.
-      dialogRef.current?.querySelector<HTMLElement>("button")?.focus();
+      // Move focus to the Close button on open (WCAG 2.4.3 focus order).
+      closeButtonRef.current?.focus();
     }
     return () => {
       document.removeEventListener("keydown", onKey);
@@ -70,13 +71,14 @@ export function BoatPicker() {
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-pine-950/60 backdrop-blur-sm animate-fade-in"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="boatpicker-title"
+          aria-hidden="true"
           onClick={() => setOpen(false)}
         >
           <div
             ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="boatpicker-title"
             className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-sand-50 p-6 shadow-lift sm:rounded-4xl sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
@@ -88,6 +90,7 @@ export function BoatPicker() {
                 </h2>
               </div>
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setOpen(false)}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full text-pine-700 transition-colors hover:bg-pine-100"

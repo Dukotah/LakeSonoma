@@ -115,6 +115,8 @@ export function ContactForm() {
                     : undefined
                 }
                 aria-required={field.required}
+                aria-invalid={state === "error" ? true : undefined}
+                aria-describedby={state === "error" ? "contact-form-error" : undefined}
                 className={inputClass}
               />
             </div>
@@ -138,6 +140,8 @@ export function ContactForm() {
               name={field.name}
               required={field.required}
               aria-required={field.required}
+              aria-invalid={state === "error" ? true : undefined}
+              aria-describedby={state === "error" ? "contact-form-error" : undefined}
               rows={5}
               className={`${inputClass} resize-none`}
             />
@@ -152,7 +156,12 @@ export function ContactForm() {
       </p>
 
       {state === "error" && (
-        <p role="alert" className="text-sm font-medium text-red-700">
+        <p
+          id="contact-form-error"
+          role="alert"
+          aria-live="assertive"
+          className="text-sm font-medium text-red-700"
+        >
           Something went wrong sending your message. Please try again, or call{" "}
           <a href={SITE.phoneHref} className="font-semibold underline">
             {SITE.phone}

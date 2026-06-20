@@ -197,18 +197,21 @@ export default async function RentalsPage({
 
       {/* ── Results grid ─────────────────────────────────────────── */}
       <Section tone="default" spacing="loose">
-        {/* Results header */}
+        {/* Results header — h1 is the primary content heading for this page;
+            the Hero carries a visually prominent title inside its own <section>
+            which is treated as a sectioning context. Using h1 here satisfies
+            WCAG 2.4.6 (meaningful headings) for the main content area. */}
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4 border-b border-sand-200 pb-6">
           <div>
             {activeLabel ? (
               <>
                 <p className="eyebrow mb-1">Filtered results</p>
-                <h2 className="text-display-sm font-medium text-pine-900">{activeLabel}</h2>
+                <h1 className="text-display-sm font-medium text-pine-900">{activeLabel}</h1>
               </>
             ) : (
               <>
                 <p className="eyebrow mb-1">All rentals</p>
-                <h2 className="text-display-sm font-medium text-pine-900">Our fleet</h2>
+                <h1 className="text-display-sm font-medium text-pine-900">Our fleet</h1>
               </>
             )}
             <p className="mt-1 text-sm text-pine-500">

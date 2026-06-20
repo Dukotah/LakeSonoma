@@ -59,6 +59,9 @@ export function NewsletterForm() {
           name="email"
           type="email"
           required
+          aria-required="true"
+          aria-invalid={state === "error" ? true : undefined}
+          aria-describedby={state === "error" ? "newsletter-error" : undefined}
           placeholder="you@email.com"
           className="min-w-0 flex-1 rounded-full border border-pine-700 bg-pine-900 px-4 py-2.5 text-sm text-white placeholder-pine-500 focus:border-lake-400 focus:outline-none focus:ring-2 focus:ring-lake-500/40"
         />
@@ -71,7 +74,12 @@ export function NewsletterForm() {
         </button>
       </div>
       {state === "error" && (
-        <p role="alert" className="text-xs text-red-300">
+        <p
+          id="newsletter-error"
+          role="alert"
+          aria-live="assertive"
+          className="text-xs text-red-300"
+        >
           Couldn&apos;t sign you up — please try again.
         </p>
       )}

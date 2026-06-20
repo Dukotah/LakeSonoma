@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 
 const KEY = "ls-cookie-consent";
@@ -21,14 +21,23 @@ export function CookieConsent() {
     }
   }, []);
 
-  function dismiss() {
+  const dismiss = useCallback(() => {
     try {
       localStorage.setItem(KEY, "1");
     } catch {
       /* ignore */
     }
     setShow(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    if (!show) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") dismiss();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [show, dismiss]);
 
   if (!show) return null;
 
@@ -36,6 +45,7 @@ export function CookieConsent() {
     <div
       role="region"
       aria-label="Cookie notice"
+      aria-live="polite"
       className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-2xl rounded-2xl border border-pine-200 bg-white/95 p-4 shadow-lift backdrop-blur sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2"
     >
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
