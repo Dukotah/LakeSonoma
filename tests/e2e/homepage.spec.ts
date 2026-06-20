@@ -15,8 +15,7 @@ test.describe("Homepage smoke", () => {
 
   test("homepage renders with a heading", async ({ page }) => {
     await page.goto("/");
-    // The page must return HTTP 200
-    const response = await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("domcontentloaded");
     // Verify there's at least one visible heading (h1 or h2)
     const heading = page.locator("h1, h2").first();
     await expect(heading).toBeVisible();
