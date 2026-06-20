@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
 import { getProduct, fromPrice, CATEGORY_LABELS } from "@/data/marina";
 
-// Per-product dynamic OG card (1200x630).
-export const runtime = "edge";
+// Per-product dynamic OG card (1200x630). Runs on the default (Node) runtime so
+// it can pre-render statically for every slug via generateStaticParams — Next 15
+// forbids combining `runtime = "edge"` with generateStaticParams.
 export const alt = "Lake Sonoma Marina — Product";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
