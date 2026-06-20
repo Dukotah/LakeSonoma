@@ -1,17 +1,25 @@
 import type { Metadata } from "next";
 import { SITE, HOURS, REVIEWS, SOCIAL } from "@/data/site";
-import { singenuityImage } from "@/lib/singenuity";
+import { singenuityImage, SINGENUITY_BASE } from "@/lib/singenuity";
 import { productImage } from "@/data/imagery";
 import { fromPrice, type Product } from "@/data/marina";
 
 /** Approximate marina coordinates (Geyserville, CA) for LocalBusiness geo. */
 const GEO = { lat: 38.7169, lng: -123.0186 };
 
-/** Per-page metadata helper with sensible OpenGraph defaults. */
+/**
+ * Per-page metadata helper with sensible OpenGraph defaults.
+ *
+ * Note: Next.js OpenGraph type is limited to its own type union (no "product").
+ * Product-level semantic markup is handled via schema.org JSON-LD (productJsonLd).
+ * Pass ogType "article" for content pages; "website" (default) for everything else.
+ */
 export function pageMeta(opts: {
   title: string;
   description: string;
   path?: string;
+  /** Override the og:type (defaults to "website"). */
+  ogType?: "website" | "article";
 }): Metadata {
   const url = opts.path ? `${SITE.url}${opts.path}` : SITE.url;
   const ogImage = {
@@ -29,7 +37,7 @@ export function pageMeta(opts: {
       description: opts.description,
       url,
       siteName: SITE.name,
-      type: "website",
+      type: opts.ogType ?? "website",
       images: [ogImage],
     },
     twitter: {
@@ -79,6 +87,27 @@ export function localBusinessJsonLd() {
     geo: { "@type": "GeoCoordinates", latitude: GEO.lat, longitude: GEO.lng },
     hasMap: `https://www.google.com/maps?q=${encodeURIComponent(SITE.mapQuery)}`,
     sameAs: [SOCIAL.facebook, SOCIAL.instagram, SOCIAL.tripadvisor],
+    areaServed: [
+      { "@type": "Lake", name: "Lake Sonoma" },
+      { "@type": "AdministrativeArea", name: "Sonoma County" },
+      { "@type": "AdministrativeArea", name: "Northern California" },
+    ],
+    paymentAccepted: "Cash, Credit Card",
+    potentialAction: {
+      "@type": "ReserveAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SINGENUITY_BASE}/`,
+        actionPlatform: [
+          "http://schema.org/DesktopWebPlatform",
+          "http://schema.org/MobileWebPlatform",
+        ],
+      },
+      result: {
+        "@type": "Reservation",
+        name: "Boat Rental Reservation",
+      },
+    },
     openingHoursSpecification: HOURS.map((h) => ({
       "@type": "OpeningHoursSpecification",
       description: `${h.season}: ${h.value}`,

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 import { SITE, BILLING_OFFICE } from "@/data/site";
 import { POLICY_GROUPS, STORAGE } from "@/data/content";
 import { Hero } from "@/components/Hero";
@@ -58,6 +58,13 @@ const STORAGE_OPTIONS = [
 export default function StoragePage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Boat Storage", path: "/storage" },
+        ])}
+      />
+
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <Hero
         image="policies-bg"

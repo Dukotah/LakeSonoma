@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 import { HYDROHOIST } from "@/data/content";
 import { Hero } from "@/components/Hero";
 import { Section } from "@/components/Section";
@@ -31,6 +31,13 @@ const BENEFITS = [
 export default function HydroHoistPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "HydroHoist Boat Lift", path: "/hydrohoist" },
+        ])}
+      />
+
       <Hero
         image="policies-bg"
         eyebrow="At the Marina"

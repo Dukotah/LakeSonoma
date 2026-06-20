@@ -14,12 +14,43 @@ import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/Container";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = pageMeta({
-  title: "Boat Rentals — Lake Sonoma Marina",
-  description:
-    "Browse Lake Sonoma Marina boat rentals — pontoons, watersport boats, fishing boats, jet skis, kayaks, paddle boards and canoes. Filter by activity or group size and book online.",
-  path: "/rentals",
-});
+const DEFAULT_TITLE = "Boat Rentals — Lake Sonoma Marina";
+const DEFAULT_DESCRIPTION =
+  "Browse Lake Sonoma Marina boat rentals — pontoons, watersport boats, fishing boats, jet skis, kayaks, paddle boards and canoes. Filter by activity or group size and book online.";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; activity?: string; capacity?: string }>;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const category = sp.category as Category | undefined;
+  const activity = sp.activity as ActivityTag | undefined;
+
+  if (category && CATEGORY_LABELS[category]) {
+    const label = CATEGORY_LABELS[category];
+    return pageMeta({
+      title: `${label} Rentals — Lake Sonoma Marina`,
+      description: `Rent ${label.toLowerCase()} at Lake Sonoma Marina. Browse available boats, check pricing, and book online.`,
+      path: `/rentals?category=${category}`,
+    });
+  }
+
+  if (activity && ACTIVITY_LABELS[activity]) {
+    const label = ACTIVITY_LABELS[activity];
+    return pageMeta({
+      title: `${label} Boat Rentals — Lake Sonoma Marina`,
+      description: `Book a boat for ${label.toLowerCase()} at Lake Sonoma Marina. Browse our fleet and reserve online.`,
+      path: `/rentals?activity=${activity}`,
+    });
+  }
+
+  return pageMeta({
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    path: "/rentals",
+  });
+}
 
 const CATEGORY_FILTERS: Category[] = [
   "pontoon",
