@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # -----------------------------------------------------------------------
+  # Primary CI job: lint + type-check + unit tests
+  # -----------------------------------------------------------------------
+  ci:
+    name: Lint / Type-check / Unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Unit tests (Vitest)
+        run: npm run test
+
+  # -----------------------------------------------------------------------
+  # Build verification — confirms next build succeeds (no OOM risk in CI)
+  # -----------------------------------------------------------------------
+  build:
+    name: Next.js build
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Treat warnings as errors during CI build
+          CI: "true"
+
+  # -----------------------------------------------------------------------
+  # E2E job — optional; only runs when browsers are available.
+  # Skipped automatically when SKIP_E2E=1 is set at the test level.
+  # Runs only on push to main/PR to main to conserve CI minutes.
+  # -----------------------------------------------------------------------
+  e2e:
+    name: E2E smoke (Playwright)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build Next.js for e2e
+        run: npm run build
+        env:
+          CI: "true"
+
+      - name: Start production server
+        run: npm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          BASE_URL: "http://localhost:3000"
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
