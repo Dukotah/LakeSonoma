@@ -13,6 +13,7 @@ import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/Container";
 import { pageMeta, breadcrumbJsonLd, JsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = pageMeta({
   title: "Patio & Day-Use Reservations — Lake Sonoma Marina",
@@ -34,21 +35,12 @@ export default function PatiosPage() {
       {/* ── Breadcrumb ────────────────────────────────────────────── */}
       <Section tone="white" spacing="none" headerOffset bleed>
         <Container>
-          <nav aria-label="Breadcrumb" className="pt-6 pb-4">
-            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-pine-500">
-              <li>
-                <Link href="/" className="transition-colors hover:text-lake-700">
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true" className="select-none text-pine-300">
-                /
-              </li>
-              <li className="font-medium text-pine-900" aria-current="page">
-                Patios &amp; Day-Use
-              </li>
-            </ol>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Patios & Day-Use" },
+            ]}
+          />
         </Container>
       </Section>
 

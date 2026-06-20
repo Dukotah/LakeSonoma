@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { WEB3FORMS_ENABLED, submitToWeb3Forms, type SubmitState } from "@/lib/web3forms";
 import { trackFormSubmit } from "@/lib/analytics";
+import { HoneypotField } from "@/components/HoneypotField";
 
 /**
  * Footer newsletter capture. Submits to Web3Forms (tagged as a newsletter
@@ -42,14 +43,7 @@ export function NewsletterForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2" aria-label="Newsletter signup">
-      <input
-        type="checkbox"
-        name="botcheck"
-        tabIndex={-1}
-        autoComplete="off"
-        className="hidden"
-        aria-hidden="true"
-      />
+      <HoneypotField />
       <div className="flex gap-2">
         <label htmlFor="newsletter-email" className="sr-only">
           Email address

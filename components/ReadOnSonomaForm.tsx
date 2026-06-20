@@ -9,6 +9,7 @@ import {
   type SubmitState,
 } from "@/lib/web3forms";
 import { trackFormSubmit } from "@/lib/analytics";
+import { HoneypotField } from "@/components/HoneypotField";
 
 const inputClass =
   "rounded-xl border border-sand-300 bg-white px-4 py-3 text-pine-900 placeholder-pine-500 shadow-sm transition focus:border-lake-500 focus:outline-none focus:ring-2 focus:ring-lake-400/40";
@@ -88,14 +89,7 @@ export function ReadOnSonomaForm() {
         </p>
       )}
 
-      <input
-        type="checkbox"
-        name="botcheck"
-        tabIndex={-1}
-        autoComplete="off"
-        className="hidden"
-        aria-hidden="true"
-      />
+      <HoneypotField />
 
       {/* Parent / guardian */}
       <fieldset>

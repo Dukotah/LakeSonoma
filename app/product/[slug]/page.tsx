@@ -21,6 +21,7 @@ import { Reveal } from "@/components/Reveal";
 import { pageMeta, productJsonLd, breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 import { ProductCard } from "@/components/ProductCard";
 import { SITE } from "@/data/site";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 /* ── Static generation ──────────────────────────────────────────────────── */
 
@@ -77,29 +78,14 @@ export default async function ProductPage({
       <Section tone="white" spacing="none" headerOffset>
         <Container>
           {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="pt-6 pb-8">
-            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-pine-500">
-              <li>
-                <Link href="/" className="transition-colors hover:text-lake-700">
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true" className="select-none text-pine-300">
-                /
-              </li>
-              <li>
-                <Link href={backHref} className="transition-colors hover:text-lake-700">
-                  {backLabel}
-                </Link>
-              </li>
-              <li aria-hidden="true" className="select-none text-pine-300">
-                /
-              </li>
-              <li className="font-medium text-pine-900" aria-current="page">
-                {product.name}
-              </li>
-            </ol>
-          </nav>
+          <Breadcrumbs
+            className="pt-6 pb-8"
+            items={[
+              { label: "Home", href: "/" },
+              { label: backLabel, href: backHref },
+              { label: product.name },
+            ]}
+          />
 
           {/* Two-column layout: gallery + booking panel */}
           <div className="grid gap-10 pb-16 lg:grid-cols-[1fr_420px] lg:items-start lg:gap-16">
