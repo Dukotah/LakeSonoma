@@ -10,8 +10,19 @@
 
 export const SINGENUITY_BASE = "https://book.singenuity.com/758";
 
-/** Deep-link straight to a specific item's date-selection page. */
-export function bookingUrl(singenuityId: number): string {
+/**
+ * Deep-link straight to a specific item's date-selection page.
+ * If the id is missing/zero/negative (e.g. bookByPhone items with id 0), falls
+ * back to the generic catalog and warns so the build surface catches it quickly.
+ */
+export function bookingUrl(singenuityId: number | null | undefined): string {
+  if (singenuityId == null || singenuityId <= 0) {
+    console.warn(
+      `[singenuity] bookingUrl called with invalid id (${singenuityId}). ` +
+        `Falling back to catalog URL. Set bookByPhone:true on this product.`,
+    );
+    return catalogUrl();
+  }
   return `${SINGENUITY_BASE}/activity/details/${singenuityId}/date`;
 }
 

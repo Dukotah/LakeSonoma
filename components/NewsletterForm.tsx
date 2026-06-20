@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { WEB3FORMS_ENABLED, submitToWeb3Forms, type SubmitState } from "@/lib/web3forms";
+import { trackFormSubmit } from "@/lib/analytics";
 
 /**
  * Footer newsletter capture. Submits to Web3Forms (tagged as a newsletter
@@ -23,6 +24,7 @@ export function NewsletterForm() {
       Email: fd.get("email") ?? "",
     });
     if (ok) {
+      trackFormSubmit("newsletter");
       setState("success");
       form.reset();
     } else {

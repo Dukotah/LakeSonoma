@@ -403,6 +403,27 @@ export const CANCELLATION_POLICY = [
   "Non-refundable within 24 hours of the reservation",
 ];
 
+/**
+ * Build-time integrity check. Throws if any product has neither a valid
+ * Singenuity ID nor bookByPhone:true — that product would produce a broken
+ * booking link. Called at module evaluation so "next build" surfaces it early.
+ */
+export function validateBookingCoverage(): void {
+  const broken = PRODUCTS.filter(
+    (p) => !(p.bookByPhone === true) && (p.singenuityId == null || p.singenuityId <= 0),
+  );
+  if (broken.length > 0) {
+    throw new Error(
+      `[marina] Products missing valid singenuityId AND bookByPhone: ${broken
+        .map((p) => p.slug)
+        .join(", ")}`,
+    );
+  }
+}
+
+// Run at module load so "next build" fails fast on broken booking links.
+validateBookingCoverage();
+
 /** --------------------------------------------------------------- HELPERS */
 export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);

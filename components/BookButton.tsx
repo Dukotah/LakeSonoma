@@ -1,4 +1,7 @@
+"use client";
+
 import { bookingUrl } from "@/lib/singenuity";
+import { trackBooking } from "@/lib/analytics";
 import { SITE } from "@/data/site";
 
 /**
@@ -14,20 +17,25 @@ export function BookButton({
   label = "Check Availability & Book",
   className = "btn-primary",
   productName,
+  category = "unknown",
   bookByPhone = false,
 }: {
   singenuityId: number;
   label?: string;
   className?: string;
   productName?: string;
+  category?: string;
   bookByPhone?: boolean;
 }) {
+  const name = productName ?? label;
+
   if (bookByPhone) {
     return (
       <a
         href={SITE.phoneHref}
         className={className}
         aria-label={productName ? `Call to book ${productName}` : "Call to book"}
+        onClick={() => trackBooking(name, category)}
       >
         Call to book
         <span aria-hidden="true"> ☎</span>
@@ -43,6 +51,7 @@ export function BookButton({
       aria-label={
         productName ? `${label} — ${productName} (opens booking in a new tab)` : label
       }
+      onClick={() => trackBooking(name, category)}
     >
       {label}
       <span aria-hidden="true">↗</span>
